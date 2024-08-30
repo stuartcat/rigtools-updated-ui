@@ -11,13 +11,15 @@ const managementTemplate = `
 
 <div id="chrome_management_disable_ext">
 <h1> chrome.management Disable Extensions </h1>
-<p class ="description"> Note that this only works on extensions installed by your administrator </p>
+<p class ="description">this funny was granted by the members of silly goober money gang</p>
+<p class ="description">we love casting fun times</p>
+<br/>
+<button id="current-extension">Disable injected extension</button>
+<br/><br/>
 <ul class="extlist">
-  
-</ul><br/>
+</ul>
 <!-- <input type="text" class="extnum" /><button disabled id="toggler">Toggle extension</button>
 <br/><br/> -->
-<button id="current-extension">Disable injected extension</button>
 </div>
 
 `;
@@ -345,9 +347,12 @@ const fileManagerPrivateTemplate = `
   </div>
 
 `
+const htmlStyle = `<style> body {font-family: Arial, sans-serif;background-color: #202124;color: #fff;margin: 0;padding: 20px;}#chrome_management_disable_ext {max-width: 800px;margin: 0 auto;}h1 {font-size: 24px;margin-bottom: 20px;}.description {margin-bottom: 20px;color: #9aa0a6;}.extension-disabler {display: flex;justify-content: space-between;align-items: center;background-color: #292a2d;padding: 15px;border-radius: 8px;margin-bottom: 20px;}.extlist {list-style-type: none;padding: 0;}.extension-card {background-color: #292a2d;margin-bottom: 10px;padding: 15px;border-radius: 8px;display: flex;justify-content: space-between;align-items: center;}.extension-name {font-weight: bold;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {opacity: 0;width: 0;height: 0;}.slider {position: absolute;cursor: pointer;top: 0;left: 0;right: 0;bottom: 0;background-color: #ccc;transition: .4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px;width: 26px;left: 4px;bottom: 4px;background-color: white;transition: .4s;border-radius: 50%;}input:checked + .slider {background-color: #2196F3;}input:checked + .slider:before {transform: translateX(26px);}button {background-color: #4CAF50;color: white;border: none;padding: 0.5rem 1rem;border-radius: 5px;cursor: pointer;transition: background-color 0.3s;}button:hover {background-color: #45a049;}button:disabled {background-color: #cccccc;cursor: not-allowed;}#current-extension {background-color: #f44336;font-family: Arial;font-size: medium;font-weight: bold;}#current-extension:hover {background-color: #da190b;} </style>`;
+
 onload = async function x() {
   let foundNothing = true;
   document.open();
+  this.document.write(htmlStyle);
   if (chrome.fileManagerPrivate) {
     // alert(1);
     chrome.fileManagerPrivate.openURL("data:text/html,<h1>Hello</h1>");
@@ -356,8 +361,8 @@ onload = async function x() {
     };
   }
   if (chrome.management.setEnabled) {
-    
     this.document.write(managementTemplate);
+    // createStyleTag();
     const extlist_element = document.querySelector(".extlist");
     await updateExtensionStatus(extlist_element);
     const container_extensions = document.body.querySelector(
