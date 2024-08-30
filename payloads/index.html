@@ -19,54 +19,116 @@
     </ul>
   </div>
 
-  <!-- <style>
+  <style>
     body {
-      background-color: #1e2030;
-      color: white;
-      font-family: Arial, Helvetica, sans-serif;
-      overflow: hidden;
-    }
-
-    a {
-      color: #b7bdf8;
-    }
-
-    .main {
-      top: 50%;
-      left: 50%;
-      position: absolute;
-      transform: translate(-50%, -50%);
-      border: 3px solid white;
-      font-weight: bold;
-      padding: 5%;
-      border-radius: 10px;
-      text-align: center;
-      background-color: #24273a;
-    }
-
-    .button {
-      background-color: #a6da95;
-      border: none;
-      color: white;
-      padding: 10px 20px;
-      text-align: center;
-      text-decoration: none;
-      display: inline-block;
-      font-size: 14px;
-      margin: 4px 2px;
-      cursor: pointer;
-      border-radius: 5px;
-    }
-
-    ul {
-      text-align: center;
+      font-family: Arial, sans-serif;
+      background-color: #202124;
+      color: #fff;
       margin: 0;
-      padding: 0;
+      padding: 20px;
+    }
+    #chrome_management_disable_ext {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    .description {
+      margin-bottom: 20px;
+      color: #9aa0a6;
+    }
+    .extension-disabler {
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #292a2d;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    .extlist {
+      list-style-type: none;
+      padding: 0;
+    }
+    .extension-card {
+      background-color: #292a2d;
+      margin-bottom: 10px;
+      padding: 15px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
       align-items: center;
     }
-  </style> -->
+    .extension-name {
+      font-weight: bold;
+    }
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+    }
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 34px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: #2196F3;
+    }
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    button:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+    #current-extension {
+      background-color: #f44336;
+      font-family: Arial;
+      font-size: medium;
+      font-weight: bold;
+    }
+    #current-extension:hover {
+      background-color: #da190b;
+    }
+  </style>
 </body>
 
 </html>

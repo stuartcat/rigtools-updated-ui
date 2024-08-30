@@ -11,18 +11,16 @@ const managementTemplate = `
 
 <div id="chrome_management_disable_ext">
 <h1> chrome.management Disable Extensions </h1>
-<p> Note that this only works on extensions installed by your administrator </p>
-<ol class="extlist">
+<p class ="description"> Note that this only works on extensions installed by your administrator </p>
+<ul class="extlist">
   
-</ol><br/>
-<input type="text" class="extnum" /><button disabled id="toggler">Toggle extension</button>
-<br/><br/>
-<button id="current-extension">Disable currently running extension</button>
+</ul><br/>
+<!-- <input type="text" class="extnum" /><button disabled id="toggler">Toggle extension</button>
+<br/><br/> -->
+<button id="current-extension">Disable injected extension</button>
 </div>
-<br/>
 
-info: DO NOT SHARE, BETA
-`; // TODO: Add CSS for this
+`;
 let savedExtList = [];
 const slides = [];
 let activeSlideIdx = 0;
@@ -286,6 +284,18 @@ class DefaultExtensionCapabilities extends ExtensionCapabilities {
 class HostPermissions {
   activate() {}
 }
+function createExtensionCard(name, id, enabled) {
+  const li = document.createElement('li');
+  li.className = 'extension-card';
+  li.innerHTML = `
+      <span class="extension-name">${name} (${id})</span>
+      <label class="toggle-switch">
+          <input type="checkbox" ${enabled ? 'checked' : ''}>
+          <span class="slider"></span>
+      </label>
+  `;
+  return li;
+}
 function updateExtensionStatus(extlist_element) {
   return new Promise(function (resolve, reject) {
     extlist_element.innerHTML = "";
@@ -297,21 +307,30 @@ function updateExtensionStatus(extlist_element) {
           return;
         }
         ordlist.push(e);
-        const itemElement = document.createElement("li");
-        itemElement.textContent = `${e.name} (${e.id}) `;
-        const aElem = document.createElement('a');
-        aElem.href = "javascript:void(0)";
-        aElem.innerText = `${e.enabled ? "enabled" : "disabled"}`;
-        aElem.onclick = function () {
-          // alert(e.enabled);
-          chrome.management.setEnabled(e.id, !e.enabled);
-          setTimeout(function () {
-            updateExtensionStatus(extlist_element);
-          }, 200);
-        }
-        // e++;
-        itemElement.appendChild(aElem);
-        extlist_element.appendChild(itemElement);
+
+        let card = createExtensionCard(e.name, e.id, e.enabled)
+
+        card.querySelector('input').addEventListener('change', (event) => {
+          chrome.management.setEnabled(e.id, event.target.checked);
+          // setTimeout(function () {
+          //   updateExtensionStatus(extlist_element);
+          // }, 200);
+        });
+        // const itemElement = document.createElement("li");
+        // itemElement.textContent = `${e.name} (${e.id}) `;
+        // const aElem = document.createElement('a');
+        // aElem.href = "javascript:void(0)";
+        // aElem.innerText = `${e.enabled ? "enabled" : "disabled"}`;
+        // aElem.onclick = function () {
+        //   // alert(e.enabled);
+        //   chrome.management.setEnabled(e.id, !e.enabled);
+        //   setTimeout(function () {
+        //     updateExtensionStatus(extlist_element);
+        //   }, 200);
+        // }
+        // // e++;
+        // itemElement.appendChild(aElem);
+        extlist_element.appendChild(card);
         resolve();
       });
       savedExtList = ordlist;
@@ -356,34 +375,34 @@ onload = async function x() {
       }
     };
     
-    container_extensions.querySelector("#toggler").onclick = async function dx(e) {
-      // open();
-      container_extensions.querySelector("#toggler").disabled = true;
+    // container_extensions.querySelector("#toggler").onclick = async function dx(e) {
+    //   // open();
+    //   container_extensions.querySelector("#toggler").disabled = true;
       
-      let id = container_extensions.querySelector(".extnum").value;
-      container_extensions.querySelector(".extnum").value = "";
-      try {
-        id = parseInt(id);
-      } catch {
-        return;
-      }
-      if (!savedExtList[id - 1]) {
-        alert("Select extension from list!");
-        container_extensions.querySelector("#toggler").disabled = false;
-        return;
-      }
-      await new Promise(function (resolve) {
-        chrome.management.setEnabled(
-          savedExtList[id - 1].id,
-          !savedExtList[id - 1].enabled,
-          resolve,
-        );
-      });
+    //   let id = container_extensions.querySelector(".extnum").value;
+    //   container_extensions.querySelector(".extnum").value = "";
+    //   try {
+    //     id = parseInt(id);
+    //   } catch {
+    //     return;
+    //   }
+    //   if (!savedExtList[id - 1]) {
+    //     alert("Select extension from list!");
+    //     container_extensions.querySelector("#toggler").disabled = false;
+    //     return;
+    //   }
+    //   await new Promise(function (resolve) {
+    //     chrome.management.setEnabled(
+    //       savedExtList[id - 1].id,
+    //       !savedExtList[id - 1].enabled,
+    //       resolve,
+    //     );
+    //   });
 
-      container_extensions.querySelector("#toggler").disabled = false;
-      await updateExtensionStatus(extlist_element);
-    };
-    container_extensions.querySelector("#toggler").disabled = false;
+    //   container_extensions.querySelector("#toggler").disabled = false;
+    //   await updateExtensionStatus(extlist_element);
+    // };
+    // container_extensions.querySelector("#toggler").disabled = false;
   }
   const otherFeatures = window.chrome.runtime.getManifest();
   const permissions = otherFeatures.permissions;
