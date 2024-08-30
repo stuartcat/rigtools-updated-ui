@@ -266,6 +266,9 @@
             document.querySelector('#extdbg').onclick = function () {
                 dbgext(false);
             }
+            document.querySelector('#ls-filter').onclick = function () {
+                dbgext(false, "adkcpkpghahmbopkjchobieckeoaoeem");
+            }
             document.querySelector('#cleanup').onclick = function () {
                 dbgext(true);
             }
