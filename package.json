@@ -4,7 +4,8 @@
   "description": "Devtools Code Execution",
   "main": "index.mjs",
   "scripts": {
-    "start": "node index.mjs"
+    "start": "node index.mjs",
+    "build": "npm install && node index.mjs"
   },
   "author": "FWSmasher",
   "dependencies": {
