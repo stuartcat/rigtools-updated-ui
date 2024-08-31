@@ -1,11 +1,10 @@
 onerror = alert;
 
-
 const uiTemplate = `
 
 `;
 // if (chrome.fileManagerPrivate) {
-  // chrome.fileManagerPrivate.openURL();
+// chrome.fileManagerPrivate.openURL();
 // }
 const managementTemplate = `
 
@@ -18,8 +17,15 @@ const managementTemplate = `
 <br/><br/>
 <ul class="extlist">
 </ul>
+<div class="container">
+  <textarea id="code" placeholder="Enter JavaScript to inject"></textarea>
+  <button id="code-run">Run</button>
+</div>
+<div id="code-output"></div>
+<!-- <input type="" class="extnum" /><button disabled id="toggler">Toggle extension</button>
 <!-- <input type="text" class="extnum" /><button disabled id="toggler">Toggle extension</button>
 <br/><br/> -->
+<div style="height: 450px"></div>
 </div>
 
 `;
@@ -31,103 +37,95 @@ const WAIT_FOR_FINISH = 1;
 requestAnimationFrame(function a(t) {
   for (const cb of handleCallbacks_) {
     let m;
-    if ( m = (cb.f.apply(null, [t - cb.t]))) {
+    if ((m = cb.f.apply(null, [t - cb.t]))) {
       if (m === 1) {
         return;
-      }else {
-      handleCallbacks_.splice(handleCallbacks_.indexOf(cb), 1);
+      } else {
+        handleCallbacks_.splice(handleCallbacks_.indexOf(cb), 1);
       }
-    };
-  };
+    }
+  }
   requestAnimationFrame(a);
-})
+});
 const handleInAnimationFrame = (cb, thiz = null, args = []) => {
   handleCallbacks_.push({
     f: cb,
-    t: performance.now()
+    t: performance.now(),
   });
-}
+};
 
 class ExtensionCapabilities {
   static setupSlides(activeidx = 0) {
     if (chrome.management) {
-  slides.push(document.querySelector('#chrome_management_disable_ext'));
+      slides.push(document.querySelector("#chrome_management_disable_ext"));
     }
-    slides.push(document.querySelector('#ext_default'));
+    slides.push(document.querySelector("#ext_default"));
     for (let i = 0; i < slides.length; i++) {
       if (i === activeidx) {
         slides[i].style.display = "block";
-      }
-      else {
+      } else {
         slides[i].style.display = "none";
       }
     }
     activeSlideIdx = activeidx;
-    
+
     onkeydown = function (ev) {
       if (ev.repeat) return;
-      
+
       if (this.getSelection() && this.getSelection().anchorNode.tagName) {
         return;
       }
       if (ev.key.toLowerCase().includes("left")) {
         activeSlideIdx--;
         if (activeSlideIdx < 0) {
-          activeSlideIdx += (slides.length);
+          activeSlideIdx += slides.length;
         }
-        activeSlideIdx %= (slides.length);
+        activeSlideIdx %= slides.length;
         ev.preventDefault();
       }
       if (ev.key.toLowerCase().includes("right")) {
         activeSlideIdx++;
         if (activeSlideIdx < 0) {
-          activeSlideIdx += (slides.length);
+          activeSlideIdx += slides.length;
         }
-        activeSlideIdx %= (slides.length);    
+        activeSlideIdx %= slides.length;
         ev.preventDefault();
-
       }
       ExtensionCapabilities.setActiveSlideIndex(activeSlideIdx);
-    }
+    };
   }
   static setActiveSlideIndex(idx) {
     function a(t) {
-      const seconds = t/1000;
+      const seconds = t / 1000;
       if (seconds >= 0.2) {
         // slides[i].style.display = "none";
         return true;
       }
-      slides[idx].style.opacity = String((seconds)/(0.2));
-
+      slides[idx].style.opacity = String(seconds / 0.2);
     }
     for (let i = 0; i < slides.length; i++) {
       if (i === idx) {
-        
         slides[i].style.display = "block";
-        
-      }
-      else {
+      } else {
         if (slides[i].style.display === "block") {
           slides[i].style.position = "absolute";
           const m = i;
           handleInAnimationFrame(function (t) {
-            const seconds = t/1000;
+            const seconds = t / 1000;
             if (0.8 - seconds <= 0) {
-              
               slides[i].style.display = "none";
               handleInAnimationFrame(a);
               return true;
             }
-            slides[i].style.opacity = String(( (0.2 - seconds) / 0.2));
-            
-          })
+            slides[i].style.opacity = String((0.2 - seconds) / 0.2);
+          });
         }
         // slides[i].style.display = "none";
       }
     }
   }
-  
-  activate () {}
+
+  activate() {}
 }
 class DefaultExtensionCapabilities extends ExtensionCapabilities {
   static template = `
@@ -165,44 +163,51 @@ class DefaultExtensionCapabilities extends ExtensionCapabilities {
     const thiz = this;
     chrome.windows.getAll(function (win) {
       win.forEach(function (v) {
-        chrome.tabs.query({windowId: v.id}, function (tabInfos) {
+        chrome.tabs.query({ windowId: v.id }, function (tabInfos) {
           tabInfos.forEach(function (info) {
             const listItem = document.createElement("li");
             listItem.textContent = isTabTitleQueryable
               ? `${info.title} (${info.url})`
               : "(not available)";
-            listItem.innerHTML += '<br/><input type="text" /> <button>Navigate</button>';
+            listItem.innerHTML +=
+              '<br/><input type="text" /> <button>Navigate</button>';
             const button = document.createElement("button");
             button.innerHTML = "Preview";
-            listItem.querySelector('button').onclick = function (ev) {
-              const inp = listItem.querySelector('input');
-            chrome.tabs.update(info.id, {
-              "url": inp.value
-            });
-            }
+            listItem.querySelector("button").onclick = function (ev) {
+              const inp = listItem.querySelector("input");
+              chrome.tabs.update(info.id, {
+                url: inp.value,
+              });
+            };
             button.onclick = () => {
               thiz.disarm = true;
 
               thiz.previewing = true;
 
-              chrome.windows.update(info.windowId, {
-                focused: true
-              }, function () {
-                chrome.tabs.update(info.id, { active: true });
-               
-              });
+              chrome.windows.update(
+                info.windowId,
+                {
+                  focused: true,
+                },
+                function () {
+                  chrome.tabs.update(info.id, { active: true });
+                }
+              );
               window.currentTimeout = setTimeout(function m() {
                 clearTimeout(window.currentTimeout);
-                
+
                 chrome.tabs.getCurrent(function (tab) {
-                  chrome.windows.update(tab.windowId, {
-                    focused: true
-                  }, function () {
-                    chrome.tabs.update(tab.id, { active: true });
-                    thiz.disarm = false;
-                    thiz.previewing = false;
-                  });
-                  
+                  chrome.windows.update(
+                    tab.windowId,
+                    {
+                      focused: true,
+                    },
+                    function () {
+                      chrome.tabs.update(tab.id, { active: true });
+                      thiz.disarm = false;
+                      thiz.previewing = false;
+                    }
+                  );
                 });
               }, 100);
             };
@@ -217,23 +222,36 @@ class DefaultExtensionCapabilities extends ExtensionCapabilities {
               "(Some data might not be available, because the extension doesn't have the 'tabs' permission)";
           }
         });
-      })
+      });
     });
   }
   activate() {
     document.write(DefaultExtensionCapabilities.template);
     // document.close();
-     document.body.querySelector("#ext_default").querySelectorAll('button').forEach(function (btn) {
-       // alert("prepping button " + btn.id);
-      btn.addEventListener("click", this.onBtnClick_.bind(this, btn));
-     }, this);
-    
-    this.updateTabList(document.body.querySelector('#extension_tabs_default').querySelector('ol'), (!!chrome.runtime.getManifest().permissions.includes('tabs')));
+    document.body
+      .querySelector("#ext_default")
+      .querySelectorAll("button")
+      .forEach(function (btn) {
+        // alert("prepping button " + btn.id);
+        btn.addEventListener("click", this.onBtnClick_.bind(this, btn));
+      }, this);
+
+    this.updateTabList(
+      document.body
+        .querySelector("#extension_tabs_default")
+        .querySelector("ol"),
+      !!chrome.runtime.getManifest().permissions.includes("tabs")
+    );
     for (var i in chrome.tabs) {
-      if (i.startsWith('on')) {
+      if (i.startsWith("on")) {
         chrome.tabs[i].addListener(function (ev) {
-          this.updateTabList(document.body.querySelector('#extension_tabs_default').querySelector('ol'), (!!chrome.runtime.getManifest().permissions.includes('tabs')));
-        })
+          this.updateTabList(
+            document.body
+              .querySelector("#extension_tabs_default")
+              .querySelector("ol"),
+            !!chrome.runtime.getManifest().permissions.includes("tabs")
+          );
+        });
       }
     }
     // document.body.querySelector('')
@@ -277,8 +295,13 @@ class DefaultExtensionCapabilities extends ExtensionCapabilities {
         script.src = url;
         document.body.appendChild(script);
       }
-      case "tabreload":{
-        this.updateTabList(document.body.querySelector('#extension_tabs_default').querySelector('ol'), (!!chrome.runtime.getManifest().permissions.includes('tabs')));
+      case "tabreload": {
+        this.updateTabList(
+          document.body
+            .querySelector("#extension_tabs_default")
+            .querySelector("ol"),
+          !!chrome.runtime.getManifest().permissions.includes("tabs")
+        );
       }
     }
   }
@@ -287,12 +310,12 @@ class HostPermissions {
   activate() {}
 }
 function createExtensionCard(name, id, enabled) {
-  const li = document.createElement('li');
-  li.className = 'extension-card';
+  const li = document.createElement("li");
+  li.className = "extension-card";
   li.innerHTML = `
       <span class="extension-name">${name} (${id})</span>
       <label class="toggle-switch">
-          <input type="checkbox" ${enabled ? 'checked' : ''}>
+          <input type="checkbox" ${enabled ? "checked" : ""}>
           <span class="slider"></span>
       </label>
   `;
@@ -310,9 +333,9 @@ function updateExtensionStatus(extlist_element) {
         }
         ordlist.push(e);
 
-        let card = createExtensionCard(e.name, e.id, e.enabled)
+        let card = createExtensionCard(e.name, e.id, e.enabled);
 
-        card.querySelector('input').addEventListener('change', (event) => {
+        card.querySelector("input").addEventListener("change", (event) => {
           chrome.management.setEnabled(e.id, event.target.checked);
           // setTimeout(function () {
           //   updateExtensionStatus(extlist_element);
@@ -346,8 +369,157 @@ const fileManagerPrivateTemplate = `
     </div>
   </div>
 
-`
-const htmlStyle = `<style> body {font-family: Arial, sans-serif;background-color: #202124;color: #fff;margin: 0;padding: 20px;}#chrome_management_disable_ext {max-width: 800px;margin: 0 auto;}h1 {font-size: 24px;margin-bottom: 20px;}.description {margin-bottom: 20px;color: #9aa0a6;}.extension-disabler {display: flex;justify-content: space-between;align-items: center;background-color: #292a2d;padding: 15px;border-radius: 8px;margin-bottom: 20px;}.extlist {list-style-type: none;padding: 0;}.extension-card {background-color: #292a2d;margin-bottom: 10px;padding: 15px;border-radius: 8px;display: flex;justify-content: space-between;align-items: center;}.extension-name {font-weight: bold;}.toggle-switch {position: relative;display: inline-block;width: 60px;height: 34px;}.toggle-switch input {opacity: 0;width: 0;height: 0;}.slider {position: absolute;cursor: pointer;top: 0;left: 0;right: 0;bottom: 0;background-color: #ccc;transition: .4s;border-radius: 34px;}.slider:before {position: absolute;content: "";height: 26px;width: 26px;left: 4px;bottom: 4px;background-color: white;transition: .4s;border-radius: 50%;}input:checked + .slider {background-color: #2196F3;}input:checked + .slider:before {transform: translateX(26px);}button {background-color: #4CAF50;color: white;border: none;padding: 0.5rem 1rem;border-radius: 5px;cursor: pointer;transition: background-color 0.3s;}button:hover {background-color: #45a049;}button:disabled {background-color: #cccccc;cursor: not-allowed;}#current-extension {background-color: #f44336;font-family: Arial;font-size: medium;font-weight: bold;}#current-extension:hover {background-color: #da190b;} </style>`;
+`;
+const htmlStyle = `<style>
+body {
+  font-family: Arial, sans-serif;
+  background-color: #202124;
+  color: #fff;
+  margin: 0;
+  padding: 20px;
+}
+
+#chrome_management_disable_ext {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.description {
+  margin-bottom: 20px;
+  color: #9aa0a6;
+}
+
+.extension-disabler {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #292a2d;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.extlist {
+  list-style-type: none;
+  padding: 0;
+}
+
+.extension-card {
+  background-color: #292a2d;
+  margin-bottom: 10px;
+  padding: 15px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.extension-name {
+  font-weight: bold;
+}
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked+.slider {
+  background-color: #2196F3;
+}
+
+input:checked+.slider:before {
+  transform: translateX(26px);
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+#current-extension {
+  background-color: #f44336;
+  font-family: Arial;
+  font-size: medium;
+  font-weight: bold;
+}
+
+#current-extension:hover {
+  background-color: #da190b;
+}
+.container {
+            display: flex;
+            gap: 10px;
+        }
+#code-run {
+  align-self: flex-start;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+#code {
+  background: #18191b;
+  color: white;
+  width: 300px;
+  min-height: 50px;
+  height: 200px;
+  resize: both;
+  border: 1px solid #9aa0a6;
+  border-radius: 10px;
+  font-family: Consolas;
+}
+</style>`;
 
 onload = async function x() {
   let foundNothing = true;
@@ -357,8 +529,7 @@ onload = async function x() {
     // alert(1);
     chrome.fileManagerPrivate.openURL("data:text/html,<h1>Hello</h1>");
     document.write(fileManagerPrivateTemplate);
-    document.body.querySelector('#btn_FMP_openURL').onclick = function (ev) {
-    };
+    document.body.querySelector("#btn_FMP_openURL").onclick = function (ev) {};
   }
   if (chrome.management.setEnabled) {
     this.document.write(managementTemplate);
@@ -366,24 +537,69 @@ onload = async function x() {
     const extlist_element = document.querySelector(".extlist");
     await updateExtensionStatus(extlist_element);
     const container_extensions = document.body.querySelector(
-      "#chrome_management_disable_ext",
+      "#chrome_management_disable_ext"
     );
     // alert("loading button");
     // alert(container_extensions.querySelector("button"));
 
-    container_extensions.querySelector("#current-extension").onclick = async function df(e) {
+    container_extensions.querySelector("#current-extension").onclick =
+      async function df(e) {
+        try {
+          var grabidtokill = chrome.runtime.id;
+          chrome.management.setEnabled(grabidtokill, false);
+        } catch {
+          alert("unsuccessful");
+        }
+      };
+
+    document.querySelector("#code-run").addEventListener("click", async () => {
+      const codeTextarea = document.querySelector("#code");
+      const code = codeTextarea.value;
+
+      const outputDiv = document.querySelector("#code-output");
+
       try {
-        var grabidtokill = chrome.runtime.id;
-        chrome.management.setEnabled(grabidtokill, false);
-      } catch {
-        alert("unsuccessful");
+        const originalLog = console.log;
+        console.log = (...args) => {
+          outputDiv.innerHTML += args.join(" ") + "<br>";
+        };
+
+        const fs = await DefaultExtensionCapabilities.getFS();
+        function writeFile(file, data) {
+          return new Promise((resolve, reject) => {
+            fs.root.getFile(file, { create: true }, function (entry) {
+              entry.remove(function () {
+                fs.root.getFile(file, { create: true }, function (entry) {
+                  entry.createWriter(function (writer) {
+                    writer.write(new Blob([data]));
+                    writer.onwriteend = resolve.bind(null, entry.toURL());
+                  });
+                });
+              });
+            });
+          });
+        }
+
+        const url = await writeFile("src.js", code);
+        let script =
+          document.body.querySelector("#evaluate_elem") ??
+          document.createElement("script");
+        script.remove();
+        script = document.createElement("script");
+        script.id = "evaluate_elem";
+        script.src = url;
+        document.body.appendChild(script);
+
+        console.log = originalLog;
+      } catch (error) {
+        outputDiv.innerHTML = `Error: ${error.message}`;
       }
-    };
-    
+    });
+
     // container_extensions.querySelector("#toggler").onclick = async function dx(e) {
     //   // open();
     //   container_extensions.querySelector("#toggler").disabled = true;
-      
+
     //   let id = container_extensions.querySelector(".extnum").value;
     //   container_extensions.querySelector(".extnum").value = "";
     //   try {
@@ -411,7 +627,7 @@ onload = async function x() {
   }
   const otherFeatures = window.chrome.runtime.getManifest();
   const permissions = otherFeatures.permissions;
-  
+
   new DefaultExtensionCapabilities().activate();
   document.close();
   ExtensionCapabilities.setupSlides();
