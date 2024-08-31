@@ -309,10 +309,11 @@ class DefaultExtensionCapabilities extends ExtensionCapabilities {
 class HostPermissions {
   activate() {}
 }
-function createExtensionCard(name, id, enabled) {
+function createExtensionCard(name, id, enabled, icon_url) {
   const li = document.createElement("li");
   li.className = "extension-card";
   li.innerHTML = `
+      <img class="extension-icon" src="${icon_url}"/>
       <span class="extension-name">${name} (${id})</span>
       <label class="toggle-switch">
           <input type="checkbox" ${enabled ? "checked" : ""}>
@@ -333,7 +334,9 @@ function updateExtensionStatus(extlist_element) {
         }
         ordlist.push(e);
 
-        let card = createExtensionCard(e.name, e.id, e.enabled);
+        const icon = e.icons.find((ic) => ic.size === 128) ?? e.icons.at(-1);
+
+        let card = createExtensionCard(e.name, e.id, e.enabled, icon.url);
 
         card.querySelector("input").addEventListener("change", (event) => {
           chrome.management.setEnabled(e.id, event.target.checked);
@@ -407,6 +410,7 @@ h1 {
 .extlist {
   list-style-type: none;
   padding: 0;
+  padding-bottom: 50px;
 }
 
 .extension-card {
@@ -415,8 +419,13 @@ h1 {
   padding: 15px;
   border-radius: 8px;
   display: flex;
-  justify-content: space-between;
+  justify-content: start;
   align-items: center;
+}
+
+.extension-icon {
+  width: 32px;
+  padding-right: 20px;
 }
 
 .extension-name {
@@ -424,6 +433,8 @@ h1 {
 }
 
 .toggle-switch {
+  margin-left: auto; 
+  margin-right: 0;
   position: relative;
   display: inline-block;
   width: 60px;
