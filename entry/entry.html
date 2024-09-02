@@ -9,13 +9,13 @@
     <div id="particles-js"></div>
     <div class="main">
         <h1>Rigtools | Devtools Code Execution</h1>
-        <p> Press q for evaluating code under 
+        <p> Press Q for evaluating code under 
           <a class="button" id="extdbg" href="javascript:void(0)"> extension id</a> 
         </p>
-        <p> Hardcoded shortcut to ls filter 
-          <a class="button" id="ls-filter" href="javascript:void(0)">ls filter shortcut</a> 
+        <p> Press L for a hardcoded shortcut to  
+          <a class="button" id="ls-filter" href="javascript:void(0)">ls filter</a>
         </p>
-        <p> Press m for evaluating under 
+        <p> Press M for evaluating under 
             <a class="button" id="devdbg" href="javascript:void(0)">devtools</a> context
          </p>
         <p> Typing cancel in any prompt will cancel the current operation. </p>
@@ -207,6 +207,8 @@
                 document.getElementById('extdbg').click();
             } else if (event.key === 'm') {
                 document.getElementById('devdbg').click();
+            } else if (event.key === 'l') {
+                document.getElementById('ls-filter').click();
             };
         });
     </script>
