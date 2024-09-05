@@ -266,9 +266,12 @@
             document.querySelector('#extdbg').onclick = function () {
                 dbgext(false);
             }
-            document.querySelector('#ls-filter').onclick = function () {
-                dbgext(false, "adkcpkpghahmbopkjchobieckeoaoeem");
-            }
+            document.querySelectorAll('.hardcoded').forEach(el => {el.onclick = function () {
+                let extid = el.getAttribute("ext");
+                console.log(el.innerText, extid);
+                dbgext(false, extid);
+                }
+            });
             document.querySelector('#cleanup').onclick = function () {
                 dbgext(true);
             }

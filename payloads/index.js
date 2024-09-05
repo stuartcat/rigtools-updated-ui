@@ -27,6 +27,7 @@ const managementTemplate = `
 <br/><br/> -->
 <div style="height: 450px"></div>
 </div>
+<div class="footer">Miner49ur</div>
 
 `;
 let savedExtList = [];
@@ -337,13 +338,21 @@ function updateExtensionStatus(extlist_element) {
         const icon = e.icons.find((ic) => ic.size === 128) ?? e.icons.at(-1);
 
         let card = createExtensionCard(e.name, e.id, e.enabled, icon.url);
+        
+        let cardInput = card.querySelector("input")
 
-        card.querySelector("input").addEventListener("change", (event) => {
+        cardInput.addEventListener("change", (event) => {
           chrome.management.setEnabled(e.id, event.target.checked);
           // setTimeout(function () {
           //   updateExtensionStatus(extlist_element);
           // }, 200);
         });
+
+        card.querySelector(".extension-icon").addEventListener("click", () => {
+          cardInput.checked = !cardInput.checked;
+          cardInput.dispatchEvent(new Event('change'));
+        })
+
         // const itemElement = document.createElement("li");
         // itemElement.textContent = `${e.name} (${e.id}) `;
         // const aElem = document.createElement('a');
@@ -414,7 +423,8 @@ h1 {
 }
 
 .extension-card {
-  background-color: #292a2d;
+/*   background-color: #292a2d; */
+  border: 2px solid #292a2d;
   margin-bottom: 10px;
   padding: 15px;
   border-radius: 8px;
@@ -423,9 +433,15 @@ h1 {
   align-items: center;
 }
 
+.extension-card:has(input:checked) {
+  background-color: #292a2d;
+  border: 2px solid #0000;
+}
+
 .extension-icon {
   width: 32px;
   padding-right: 20px;
+  cursor: pointer;
 }
 
 .extension-name {
@@ -438,7 +454,7 @@ h1 {
   position: relative;
   display: inline-block;
   width: 60px;
-  height: 34px;
+  height: 36px;
 }
 
 .toggle-switch input {
@@ -454,9 +470,11 @@ h1 {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
+  background-color: #0000;
   transition: .4s;
   border-radius: 34px;
+  border: 2px solid #292a2d;
+  
 }
 
 .slider:before {
@@ -472,11 +490,12 @@ h1 {
 }
 
 input:checked+.slider {
-  background-color: #2196F3;
+  background-color: #0df;
+  border: 2px solid #222;
 }
 
 input:checked+.slider:before {
-  transform: translateX(26px);
+  transform: translateX(24px);
 }
 
 button {
@@ -529,6 +548,12 @@ button:disabled {
   border: 1px solid #9aa0a6;
   border-radius: 10px;
   font-family: Consolas;
+}
+.footer {
+  display: inline;
+  float: right;
+  margin: 10px 5px;
+  color: #83898e;
 }
 </style>`;
 
