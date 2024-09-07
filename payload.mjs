@@ -53,7 +53,7 @@
                 // w.setTimeout(function() {
                 const blob_url = new Blob(["alert(1)"], { type: "text/html" });
 
-                w.webkitRequestFileSystem(TEMPORARY, 2 * 1024 * 1024, async function (fs) {
+                w.webkitRequestFileSystem(PERSISTENT, 2 * 1024 * 1024, async function (fs) {
                     function removeFile(file) {
                         return new Promise(function (resolve, reject) {
                             fs.root.getFile(file, { create: true }, function (entry) {
@@ -118,7 +118,7 @@
                             async function createAndWriteFile() {
                                 function writeFile(filename, content) {
                                     return new Promise((resolve) => {
-                                        webkitRequestFileSystem(TEMPORARY, 2 * 1024 * 1024, function (fs) {
+                                        webkitRequestFileSystem(PERSISTENT, 2 * 1024 * 1024, function (fs) {
                                             fs.root.getFile(filename, { create: true }, function (entry) {
                                                 entry.remove(function () {
                                                     fs.root.getFile(filename, { create: true }, function (entry) {
