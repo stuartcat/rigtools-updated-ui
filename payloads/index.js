@@ -179,15 +179,6 @@ class DefaultExtensionCapabilities {
             // navButton.textContent = "Navigate";
             const previewButton = document.createElement("button");
             previewButton.textContent = "Preview";
-            if (chrome.scripting) {
-              const runButton = document.createElement("button");
-              runButton.textContent = "Run";
-              runButton.onclick = function (ev) {
-                runCode(true, info.id);
-              }
-
-              div.appendChild(runButton);
-            }
 
             // navButton.onclick = function (ev) {
             //   const inp = div.querySelector("input");
