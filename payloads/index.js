@@ -582,7 +582,7 @@ const htmlStyle = `
         font-family: Consolas;
       }
       .footer {
-        display: fixed;
+        position: fixed;
         bottom: 5px;
         right: 10px;
         color: #83898e;
