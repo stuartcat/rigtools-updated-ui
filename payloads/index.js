@@ -20,7 +20,7 @@ const managementTemplate = `
 <!-- <input type="" class="extnum" /><button disabled id="toggler">Toggle extension</button>
 <!-- <input type="text" class="extnum" /><button disabled id="toggler">Toggle extension</button>
 <br/><br/> -->
-<div style="height: 450px"></div>
+<div style="height: 50px"></div>
 </div>
 
 `;
