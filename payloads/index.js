@@ -582,9 +582,9 @@ const htmlStyle = `
         font-family: Consolas;
       }
       .footer {
-        display: inline;
-        float: right;
-        margin: 10px 5px;
+        display: fixed;
+        bottom: 5px;
+        right: 10px;
         color: #83898e;
       }
     </style>
@@ -627,7 +627,7 @@ onload = async function x() {
   const permissions = otherFeatures.permissions;
 
   new DefaultExtensionCapabilities().activate();
-  document.body.insertAdjacentHTML("beforeend", `<div class="footer">Miner49ur</div>`);
+  document.body.insertAdjacentHTML("beforeend", `<div class="footer">silly goober money gang inc.</div>`);
 
   document.querySelector("#code-run").addEventListener("click", () => runCode(false));
 };
