@@ -9,7 +9,10 @@ const uiTemplate = `
 const managementTemplate = `
 
 <div id="chrome_management_disable_ext">
+<div class="header">
+<img src="https://raw.githubusercontent.com/T3M1N4L/T3M1N4L/main/images/XOsX.gif" alt="Rigtools Logo" class="logo"/>
 <h1> chrome.management Disable Extensions </h1>
+  </div>
 <p class ="description">this funny was granted by the members of silly goober money gang</p>
 <p class ="description">we love casting fun times</p>
 <br/>
@@ -480,6 +483,16 @@ const htmlStyle = `
         border: 2px solid #0a0a0a;
         
       }
+      .header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .logo {
+        width: 4em; /* Adjust this size as needed */
+        height: auto;
+        margin-right: 10px;
+      }
 
       .slider:before {
         position: absolute;
@@ -557,7 +570,7 @@ const htmlStyle = `
       }
 
       #current-extension {
-        background-color: #ff7066;
+        background-color: #ff564a;
         font-family: Arial;
         font-size: medium;
         font-weight: bold;
@@ -592,7 +605,7 @@ const htmlStyle = `
         position: fixed;
         bottom: 5px;
         right: 10px;
-        color: #83898e;
+        color: #ffffff;
       }
       input[type='checkbox'] {
         accent-color: #6f08ff !important;
@@ -638,7 +651,7 @@ onload = async function x() {
   new DefaultExtensionCapabilities().activate();
   document.body.insertAdjacentHTML(
     "beforeend",
-    `<div class="footer">pretty goofy</div>`
+    `<div class="footer"><strong> > ./T3RM1N4L</strong></div>`
   );
 
   document
