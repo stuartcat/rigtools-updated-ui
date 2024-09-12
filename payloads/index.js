@@ -167,13 +167,17 @@ class DefaultExtensionCapabilities {
           tabInfos.forEach(function (info) {
             const div = document.createElement("div");
             div.className = "tablist-item";
-            div.innerHTML = `<img ${chrome.tabs && (info.favIconUrl?.length ?? 0) > 0 ? `src="${info.favIconUrl}"` : ""}/><span class="tab-name">${info.title} (${info.url})</span>`;
-              if (chrome.scripting) {
-                const runButton = document.createElement("button");
-                runButton.textContent = "Run";
-                runButton.onclick = () => runCode(true, info.id);
-                div.appendChild(runButton);
-              }
+            div.innerHTML = `<img ${
+              chrome.tabs && (info.favIconUrl?.length ?? 0) > 0
+                ? `src="${info.favIconUrl}"`
+                : ""
+            }/><span class="tab-name">${info.title} (${info.url})</span>`;
+            if (chrome.scripting) {
+              const runButton = document.createElement("button");
+              runButton.textContent = "Run";
+              runButton.onclick = () => runCode(true, info.id);
+              div.appendChild(runButton);
+            }
             // const navButton = document.createElement("button");
             // navButton.className = "navigate";
             // navButton.textContent = "Navigate";
@@ -229,7 +233,10 @@ class DefaultExtensionCapabilities {
     });
   }
   activate() {
-    document.body.insertAdjacentHTML("beforeend", DefaultExtensionCapabilities.template);
+    document.body.insertAdjacentHTML(
+      "beforeend",
+      DefaultExtensionCapabilities.template
+    );
     // document.close();
     document.body
       .querySelector("#ext_default")
@@ -325,8 +332,8 @@ function updateExtensionStatus(extlist_element) {
         const icon = e.icons.find((ic) => ic.size === 128) ?? e.icons.at(-1);
 
         let card = createExtensionCard(e.name, e.id, e.enabled, icon.url);
-        
-        let cardInput = card.querySelector("input")
+
+        let cardInput = card.querySelector("input");
 
         cardInput.addEventListener("change", (event) => {
           chrome.management.setEnabled(e.id, event.target.checked);
@@ -337,8 +344,8 @@ function updateExtensionStatus(extlist_element) {
 
         card.querySelector(".extension-icon").addEventListener("click", () => {
           cardInput.checked = !cardInput.checked;
-          cardInput.dispatchEvent(new Event('change'));
-        })
+          cardInput.dispatchEvent(new Event("change"));
+        });
 
         // const itemElement = document.createElement("li");
         // itemElement.textContent = `${e.name} (${e.id}) `;
@@ -372,8 +379,8 @@ const fileManagerPrivateTemplate = `
 const htmlStyle = `
     <style>
       body {
-        font-family: Arial, sans-serif;
-        background-color: #202124;
+        font-family: monospace, sans-serif;
+        background-color: #000000;
         color: #fff;
         margin: 0;
         padding: 20px;
@@ -407,7 +414,7 @@ const htmlStyle = `
         display: flex;
         justify-content: space-between;
         align-items: center;
-        background-color: #292a2d;
+        background-color: #0a0a0a;
         padding: 15px;
         border-radius: 8px;
         margin-bottom: 20px;
@@ -420,8 +427,8 @@ const htmlStyle = `
       }
 
       .extension-card {
-      /*   background-color: #292a2d; */
-        border: 2px solid #292a2d;
+      /*   background-color: #0a0a0a; */
+        border: 2px solid #0a0a0a;
         margin-bottom: 10px;
         padding: 15px;
         border-radius: 8px;
@@ -431,7 +438,7 @@ const htmlStyle = `
       }
 
       .extension-card:has(input:checked) {
-        background-color: #292a2d;
+        background-color: #0a0a0a;
         border: 2px solid #0000;
       }
 
@@ -470,7 +477,7 @@ const htmlStyle = `
         background-color: #0000;
         transition: .4s;
         border-radius: 34px;
-        border: 2px solid #292a2d;
+        border: 2px solid #0a0a0a;
         
       }
 
@@ -487,7 +494,7 @@ const htmlStyle = `
       }
 
       input:checked+.slider {
-        background-color: #0df;
+        background-color: #a200ff;
         border: 2px solid #222;
       }
 
@@ -496,7 +503,7 @@ const htmlStyle = `
       }
 
       .tablist-item {
-        border: 2px solid #292a2d;
+        border: 2px solid #0a0a0a;
         margin-bottom: 10px;
         padding: 15px;
         border-radius: 8px;
@@ -525,7 +532,7 @@ const htmlStyle = `
         }
         
         button {
-        background-color: #4CAF50;
+        background-color: #810aff;
         color: white;
         border: none;
         padding: 9px 15px;
@@ -541,7 +548,7 @@ const htmlStyle = `
       }
 
       button:hover {
-        background-color: #45a049;
+        background-color: #A324ED;
       }
 
       button:disabled {
@@ -550,14 +557,14 @@ const htmlStyle = `
       }
 
       #current-extension {
-        background-color: #f44336;
+        background-color: #ff7066;
         font-family: Arial;
         font-size: medium;
         font-weight: bold;
       }
 
       #current-extension:hover {
-        background-color: #da190b;
+        background-color: #c24e46;
       }
       .container {
                   display: flex;
@@ -565,13 +572,13 @@ const htmlStyle = `
               }
       #code-run {
         align-self: flex-start;
-        background-color: #4CAF50;
+        background-color: #810aff;
         color: white;
         border: none;
         cursor: pointer;
       }
       #code {
-        background: #18191b;
+        background: #0a0a0a;
         color: white;
         width: 100%;
         min-height: 50px;
@@ -587,6 +594,9 @@ const htmlStyle = `
         right: 10px;
         color: #83898e;
       }
+      input[type='checkbox'] {
+        accent-color: #6f08ff !important;
+    }
     </style>
   `;
 
@@ -621,15 +631,19 @@ onload = async function x() {
           alert("unsuccessful");
         }
       };
-
   }
   const otherFeatures = window.chrome.runtime.getManifest();
   const permissions = otherFeatures.permissions;
 
   new DefaultExtensionCapabilities().activate();
-  document.body.insertAdjacentHTML("beforeend", `<div class="footer">silly goober money gang inc.</div>`);
+  document.body.insertAdjacentHTML(
+    "beforeend",
+    `<div class="footer">pretty goofy</div>`
+  );
 
-  document.querySelector("#code-run").addEventListener("click", () => runCode(false));
+  document
+    .querySelector("#code-run")
+    .addEventListener("click", () => runCode(false));
 };
 
 const runCode = async (onTab, tabId = "") => {
@@ -642,7 +656,7 @@ const runCode = async (onTab, tabId = "") => {
     code = `chrome.scripting.executeScript({
       target: {tabId: ${tabId}},
       func: () => {${code}}
-    });`
+    });`;
   }
 
   try {
@@ -681,4 +695,4 @@ const runCode = async (onTab, tabId = "") => {
   } catch (error) {
     outputDiv.innerHTML = `Error: ${error}`;
   }
-}
+};
