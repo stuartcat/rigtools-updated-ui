@@ -129,8 +129,10 @@ class DefaultExtensionCapabilities {
   static template = `
   <div id="ext_default">
   <div id="default_extension_capabilities">
+  <div class="header">
+<img src="https://raw.githubusercontent.com/T3M1N4L/T3M1N4L/main/images/XOsX.gif" alt="Rigtools Logo" class="logo"/>
     <h1> Default Extension Capabilities </h1>
-
+</div>
     <h2>Evaluate code</h1>
     <div class="container">
       <textarea id="code" placeholder="Enter JavaScript to inject"></textarea>
@@ -577,7 +579,7 @@ const htmlStyle = `
       }
 
       #current-extension:hover {
-        background-color: #c24e46;
+        background-color: #e04338;
       }
       .container {
                   display: flex;
@@ -598,7 +600,7 @@ const htmlStyle = `
         height: 200px;
         resize: both;
         border: 1px solid #9aa0a6;
-        border-radius: 10px;
+        border-radius: 5px;
         font-family: Consolas;
       }
       .footer {
