@@ -23,13 +23,19 @@
           extension id</a
         >
       </p>
-      <p>Or press 1-5 for some hardcoded extensions</p>
+      <p>Or press 1-6 for some hardcoded extensions</p>
       <p>
         <a
           class="button hardcoded"
           ext="adkcpkpghahmbopkjchobieckeoaoeem"
           href="javascript:void(0)"
           >ls filter</a
+        >
+        <a
+          class="button hardcoded"
+          ext="hpkdokakjglppeekfeekmebfahadnflp"
+          href="javascript:void(0)"
+          >ls alert</a
         >
         <a
           class="button hardcoded"
@@ -177,7 +183,7 @@
         color: white;
       }
     </style>
-    <
+
     <script defer>
       /* -----------------------------------------------
         /* Author : Vincent Garreau  - vincentgarreau.com
@@ -1327,7 +1333,6 @@
         }
       );
     </script>
-    >
 
     <script defer>
       document.addEventListener("keydown", function (event) {
@@ -1335,7 +1340,7 @@
           document.getElementById("extdbg").click();
         } else if (event.key === "m") {
           document.getElementById("devdbg").click();
-        } else if (["1", "2", "3", "4", "5"].includes(event.key)) {
+        } else if (["1", "2", "3", "4", "5", "6"].includes(event.key)) {
           console.log(event.key);
           document
             .querySelector(`p .hardcoded:nth-child(${parseInt(event.key)})`)
