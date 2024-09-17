@@ -655,7 +655,7 @@ onload = async function x() {
           alert("unsuccessful");
         }
       };
-    container_extensions.querySelector("#rmv-cmn-blt").onclick =
+    container_extensions.querySelector("#rmv-cmn-bltre").onclick =
       async function df(e) {
         try {
           chrome.runtime.getBackgroundPage(function (p) {
