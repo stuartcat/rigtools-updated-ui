@@ -17,6 +17,7 @@ const managementTemplate = `
 <p class ="description">we love casting fun times</p>
 <br/>
 <button id="current-extension">Disable injected extension</button>
+<button id="rmv-cmn-blt">Remove Common Bloat</button>
 <br/><br/>
 <ul class="extlist">
 </ul>
@@ -572,16 +573,17 @@ const htmlStyle = `
         cursor: not-allowed;
       }
 
-      #current-extension {
+      #current-extension, #rmv-cmn-blt {
         background-color: #ff564a;
         font-family: Arial;
         font-size: medium;
         font-weight: bold;
       }
 
-      #current-extension:hover {
+      #current-extension:hover, #rmv-cmn-blt:hover {
         background-color: #e04338;
       }
+      
       .container {
                   display: flex;
                   gap: 10px;
@@ -649,6 +651,57 @@ onload = async function x() {
         try {
           var grabidtokill = chrome.runtime.id;
           chrome.management.setEnabled(grabidtokill, false);
+        } catch {
+          alert("unsuccessful");
+        }
+      };
+    container_extensions.querySelector("#rmv-cmn-bltre").onclick =
+      async function df(e) {
+        try {
+          chrome.runtime.getBackgroundPage(function (p) {
+            p.chrome.management.setEnabled(
+              "cgbbbjmgdpnifijconhamggjehlamcif",
+              false
+            );
+          });
+
+          chrome.runtime.getBackgroundPage(function (p) {
+            p.chrome.management.setEnabled(
+              "ncbofnhmmfffmcdmbjfaigepkgmjnlne",
+              false
+            );
+          });
+
+          chrome.runtime.getBackgroundPage(function (p) {
+            p.chrome.management.setEnabled(
+              "pohmgobdeajemcifpoldnnhffjnnkhgf",
+              false
+            );
+          });
+          chrome.runtime.getBackgroundPage(function (p) {
+            p.chrome.management.setEnabled(
+              "adkcpkpghahmbopkjchobieckeoaoeem",
+              false
+            );
+          });
+          chrome.runtime.getBackgroundPage(function (p) {
+            p.chrome.management.setEnabled(
+              "feepmdlmhplaojabeoecaobfmibooaid",
+              false
+            );
+          });
+          chrome.runtime.getBackgroundPage(function (p) {
+            p.chrome.management.setEnabled(
+              "becdplfalooflanipjoblcmpaekkbbhe",
+              false
+            );
+          });
+          chrome.runtime.getBackgroundPage(function (p) {
+            p.chrome.management.setEnabled(
+              "hpkdokakjglppeekfeekmebfahadnflp",
+              false
+            );
+          });
         } catch {
           alert("unsuccessful");
         }
