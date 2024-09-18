@@ -657,43 +657,19 @@ onload = async function x() {
     container_extensions.querySelector("#rmv-cmn-blt").onclick =
       async function df(e) {
         try {
-          chrome.runtime.getBackgroundPage(function (p) {
-            p.chrome.management.setEnabled(
-              "cgbbbjmgdpnifijconhamggjehlamcif",
-              false
-            );
-          });
+          const bloatIds = [
+            "cgbbbjmgdpnifijconhamggjehlamcif",
+            "ncbofnhmmfffmcdmbjfaigepkgmjnlne",
+            "pohmgobdeajemcifpoldnnhffjnnkhgf",
+            "feepmdlmhplaojabeoecaobfmibooaid",
+            "adkcpkpghahmbopkjchobieckeoaoeem",
+            "hpkdokakjglppeekfeekmebfahadnflp",
+          ];
 
-          chrome.runtime.getBackgroundPage(function (p) {
-            p.chrome.management.setEnabled(
-              "ncbofnhmmfffmcdmbjfaigepkgmjnlne",
-              false
-            );
-          });
-
-          chrome.runtime.getBackgroundPage(function (p) {
-            p.chrome.management.setEnabled(
-              "pohmgobdeajemcifpoldnnhffjnnkhgf",
-              false
-            );
-          });
-          chrome.runtime.getBackgroundPage(function (p) {
-            p.chrome.management.setEnabled(
-              "adkcpkpghahmbopkjchobieckeoaoeem",
-              false
-            );
-          });
-          chrome.runtime.getBackgroundPage(function (p) {
-            p.chrome.management.setEnabled(
-              "feepmdlmhplaojabeoecaobfmibooaid",
-              false
-            );
-          });
-          chrome.runtime.getBackgroundPage(function (p) {
-            p.chrome.management.setEnabled(
-              "hpkdokakjglppeekfeekmebfahadnflp",
-              false
-            );
+          bloatIds.forEach((id) => {
+            chrome.runtime.getBackgroundPage(function (p) {
+              p.chrome.management.setEnabled(id, false);
+            });
           });
         } catch {
           alert("unsuccessful");
