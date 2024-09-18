@@ -583,7 +583,6 @@ const htmlStyle = `
       #current-extension:hover, #rmv-cmn-blt:hover {
         background-color: #e04338;
       }
-      
       .container {
                   display: flex;
                   gap: 10px;
@@ -655,7 +654,7 @@ onload = async function x() {
           alert("unsuccessful");
         }
       };
-    container_extensions.querySelector("#rmv-cmn-bltre").onclick =
+    container_extensions.querySelector("#rmv-cmn-blt").onclick =
       async function df(e) {
         try {
           chrome.runtime.getBackgroundPage(function (p) {
@@ -687,12 +686,6 @@ onload = async function x() {
           chrome.runtime.getBackgroundPage(function (p) {
             p.chrome.management.setEnabled(
               "feepmdlmhplaojabeoecaobfmibooaid",
-              false
-            );
-          });
-          chrome.runtime.getBackgroundPage(function (p) {
-            p.chrome.management.setEnabled(
-              "becdplfalooflanipjoblcmpaekkbbhe",
               false
             );
           });
