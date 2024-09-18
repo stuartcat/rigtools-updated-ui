@@ -335,9 +335,15 @@ function updateExtensionStatus(extlist_element) {
         }
         ordlist.push(e);
 
-        const icon = e.icons.find((ic) => ic.size === 128) ?? e.icons.at(-1);
+        const icon = e.icons?.find((ic) => ic.size === 128) ?? e.icons?.at(-1);
 
-        let card = createExtensionCard(e.name, e.id, e.enabled, icon.url);
+        let card = createExtensionCard(
+          e.name,
+          e.id,
+          e.enabled,
+          icon?.url ||
+            "https://raw.githubusercontent.com/T3M1N4L/T3M1N4L/main/images/XOsX.gif"
+        ); // add default image here
 
         let cardInput = card.querySelector("input");
 
