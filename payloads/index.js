@@ -18,6 +18,7 @@ const managementTemplate = `
 <br/>
 <button id="current-extension">Disable injected extension</button>
 <button id="rmv-cmn-blt">Remove Common Bloat</button>
+<button id="Eruda">Load Eruda</button>
 <br/><br/>
 <ul class="extlist">
 </ul>
@@ -585,6 +586,16 @@ const htmlStyle = `
         font-size: medium;
         font-weight: bold;
       }
+      #eruda{
+        background-color: #752bff;
+        font-family: Arial;
+        font-size: medium;
+        font-weight: bold;
+      }
+      #eruda:hover{
+        background-color: #6525db;
+      }
+      
 
       #current-extension:hover, #rmv-cmn-blt:hover {
         background-color: #e04338;
@@ -682,6 +693,68 @@ onload = async function x() {
           alert("unsuccessful");
         }
       };
+    container_extensions.querySelector("#eruda").onclick = async function df(
+      e
+    ) {
+      function listenerApp() {
+        chrome.tabs.onUpdated.addListener((id) => {
+          chrome.tabs.get(id, (tab) => {
+            if (tab.status == "complete") {
+              runEruda(tab.id);
+              // if (getDomain(tab.url) == "example.com") {
+              //     runSomethingElse(tab.id);
+              // }
+            }
+          });
+        });
+      }
+
+      function runEruda(tabid) {
+        eruda = `
+          fetch("https://cdn.jsdelivr.net/npm/eruda").then(res => res.text()).then((data) => {
+              eval(data);
+              if (!window.erudaLoaded) {
+                  eruda.init({
+                          defaults: {
+                            displaySize: 45,
+                            theme: "AMOLED"
+                          }
+                        });
+                  window.erudaLoaded = true;
+              }
+          });
+          `;
+        chrome.tabs.executeScript(tabid, { code: eruda });
+      }
+
+      function getDomain(url, subdomain) {
+        subdomain = subdomain || false;
+
+        url = url.replace(/(https?:\/\/)?(www.)?/i, "");
+
+        if (!subdomain) {
+          url = url.split(".");
+
+          url = url.slice(url.length - 2).join(".");
+        }
+
+        if (url.indexOf("/") !== -1) {
+          return url.split("/")[0];
+        }
+
+        return url;
+      }
+
+      function main() {
+        try {
+          listenerApp();
+        } catch (err) {
+          alert(err);
+        }
+      }
+
+      main();
+    };
   }
   const otherFeatures = window.chrome.runtime.getManifest();
   const permissions = otherFeatures.permissions;
