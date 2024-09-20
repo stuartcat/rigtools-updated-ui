@@ -17,8 +17,9 @@ const managementTemplate = `
 <p class ="description">we love casting fun times</p>
 <br/>
 <button id="current-extension">Disable injected extension</button>
-<button id="rmv-cmn-blt">Remove Common Bloat</button>
-<button id="Eruda">Load Eruda</button>
+<button id="rmv-cmn-blt">Remove Bloat</button>
+<button id="eruda">Load Eruda</button>
+<button id="ed-hax">Edpuzzle hax</button>
 <br/><br/>
 <ul class="extlist">
 </ul>
@@ -595,6 +596,15 @@ const htmlStyle = `
       #eruda:hover{
         background-color: #6525db;
       }
+       #ed-hax{
+        background-color: #ffce2e;
+        font-family: Arial;
+        font-size: medium;
+        font-weight: bold;
+      }
+      #ed-hax:hover{
+        background-color: #e3b622;
+      }
       
 
       #current-extension:hover, #rmv-cmn-blt:hover {
@@ -745,6 +755,43 @@ onload = async function x() {
         return url;
       }
 
+      function main() {
+        try {
+          listenerApp();
+        } catch (err) {
+          alert(err);
+        }
+      }
+
+      main();
+    };
+
+    container_extensions.querySelector("#ed-hax").onclick = async function df(
+      e
+    ) {
+      function listenerApp() {
+        chrome.tabs.onUpdated.addListener((id) => {
+          chrome.tabs.get(id, (tab) => {
+            if (tab.status == "complete") {
+              if (tab.url.match(/edpuzzle\.com\/assignments/g)) {
+                runEdpuzzle(tab.id);
+              }
+            }
+          });
+        });
+      }
+
+      function runEdpuzzle(tabid) {
+        edpuzzle = `
+fetch("https://cdn.jsdelivr.net/gh/Miner49ur/shorthand@main/edpuzzlingscript.js").then(r => r.text()).then(r => {
+    if (!window.edpuzzlesLoaded) {
+        eval(r);
+        window.edpuzzlesLoaded = true;
+    }
+})
+`;
+        chrome.tabs.executeScript(tabid, { code: edpuzzle });
+      }
       function main() {
         try {
           listenerApp();
