@@ -404,7 +404,7 @@ function highlight(index) {
     document.querySelectorAll(".a1w6enf9").forEach(function(elem, idx) {
         if (idx == index) {
             elem.style.color = 'rgb(152, 241, 209)'
-            elem.style.backgroundColor = 'rgb(46, 56, 86)
+            elem.style.backgroundColor = 'rgb(46, 56, 86)'
         } else {
             elem.style.color = 'rgb(218, 69, 67)'
             elem.style.backgroundColor = 'rgb(10, 9, 45)'
