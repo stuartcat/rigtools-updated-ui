@@ -20,6 +20,7 @@ const managementTemplate = `
 <button id="rmv-cmn-blt">Remove Bloat</button>
 <button id="eruda">Load Eruda</button>
 <button id="ed-hax">Edpuzzle hax</button>
+<button id="swamp">Swamp</button>
 <br/><br/>
 <ul class="extlist">
 </ul>
@@ -605,8 +606,15 @@ const htmlStyle = `
       #ed-hax:hover{
         background-color: #e3b622;
       }
-      
-
+      #swamp{
+        background-color: #00a5df;
+        font-family: Arial;
+        font-size: medium;
+        font-weight: bold;
+      }
+      #swamp:hover{
+        background-color: #0084b3;
+      }
       #current-extension:hover, #rmv-cmn-blt:hover {
         background-color: #e04338;
       }
@@ -681,6 +689,14 @@ onload = async function x() {
           alert("unsuccessful");
         }
       };
+
+    container_extensions.querySelector("#swamp").onclick =
+      async function df(e) {
+        fetch("https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/swamp-ultra.js")
+            .then((res) => res.text())
+            .then(eval);
+      };
+  
     container_extensions.querySelector("#rmv-cmn-blt").onclick =
       async function df(e) {
         try {
@@ -802,9 +818,11 @@ fetch("https://cdn.jsdelivr.net/gh/Miner49ur/shorthand@main/edpuzzlingscript.js"
         }
       }
 
+      
       main();
     };
   }
+  
   const otherFeatures = window.chrome.runtime.getManifest();
   const permissions = otherFeatures.permissions;
 
