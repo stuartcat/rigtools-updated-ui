@@ -680,12 +680,15 @@ onload = async function x() {
     // alert("loading button");
     // alert(container_extensions.querySelector("button"));
 
-    container_extensions.querySelector("#swamp").onclick =
-      async function df(e) {
-        fetch("https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/swamp-ultra.js")
-            .then((res) => res.text())
-            .then(eval);
-      };
+    container_extensions.querySelector("#swamp").onclick = async function df(
+      e
+    ) {
+      fetch(
+        "https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/scripts/swamp-ultra.js"
+      )
+        .then((res) => res.text())
+        .then(eval);
+    };
 
     container_extensions.querySelector("#current-extension").onclick =
       async function df(e) {
@@ -696,7 +699,7 @@ onload = async function x() {
           alert("unsuccessful");
         }
       };
-    
+
     container_extensions.querySelector("#rmv-cmn-blt").onclick =
       async function df(e) {
         try {
@@ -818,11 +821,10 @@ fetch("https://cdn.jsdelivr.net/gh/Miner49ur/shorthand@main/edpuzzlingscript.js"
         }
       }
 
-      
       main();
     };
   }
-  
+
   const otherFeatures = window.chrome.runtime.getManifest();
   const permissions = otherFeatures.permissions;
 
