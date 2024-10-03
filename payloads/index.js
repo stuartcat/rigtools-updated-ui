@@ -19,6 +19,7 @@ const managementTemplate = `
 <button id="current-extension">Disable injected extension</button>
 <button id="rmv-cmn-blt">Remove Bloat</button>
 <button id="eruda">Load Eruda</button>
+<button id="chii">Load Chii</button>
 <button id="ed-hax">Edpuzzle hax</button>
 <button id="swamp">Swamp</button>
 <br/><br/>
@@ -597,6 +598,12 @@ const htmlStyle = `
       #eruda:hover{
         background-color: #6525db;
       }
+      #chii{
+        background-color: #9bdb25;
+      }
+      #chii:hover{
+        background-color: #abeb35;
+      }
        #ed-hax{
         background-color: #ffce2e;
         font-family: Arial;
@@ -756,6 +763,31 @@ onload = async function x() {
           });
           `;
         chrome.tabs.executeScript(tabid, { code: eruda });
+      }
+
+      container_extensions.querySelector("#chii").onclick = async function df(
+      e
+    ) {
+      function listenerApp() {
+        chrome.tabs.onUpdated.addListener((id) => {
+          chrome.tabs.get(id, (tab) => {
+            if (tab.status == "complete") {
+              runChii(tab.id);
+              // if (getDomain(tab.url) == "example.com") {
+              //     runSomethingElse(tab.id);
+              // }
+            }
+          });
+        });
+      }
+
+      function runChii(tabid) {
+        chii = `
+          fetch("https://cdn.jsdelivr.net/npm/chii").then(res => res.text()).then((data) => {
+              eval(data);
+          });
+          `;
+        chrome.tabs.executeScript(tabid, { code: chii });
       }
 
       function getDomain(url, subdomain) {
