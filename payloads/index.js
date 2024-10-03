@@ -601,6 +601,9 @@ const htmlStyle = `
       }
       #chii{
         background-color: #9bdb25;
+        font-family: Arial;
+        font-size: medium;
+        font-weight: bold;
       }
       #chii:hover{
         background-color: #abeb35;
@@ -706,20 +709,38 @@ onload = async function x() {
         .then((res) => res.text())
         .then(eval);
     };
-      container_extensions.querySelector("#hstfld").onclick = async function df(
+    container_extensions.querySelector("#hstfld").onclick = async function df(
       e
     ) {
       document.title = "Untitled Document";
-var link = document.querySelector("link[rel~='icon']");
-if (!link) {
-    link = document.createElement('link');
-    link.rel = 'icon';
-    document.head.appendChild(link);
-}
-link.href = 'https://cdn-icons-png.flaticon.com/512/5968/5968517.png';
-var num=prompt("How Times Do You Want This Page To Show Up In your History?");done=false;x=window.location.href;for (var i=1; i<=num; i++){history.pushState(0, 0, i==num?x:i.toString());if(i==num){done=true}}if(done===true){alert("Flooding Successful!\n "+window.location.href+" \nIs Now In Your History "+num+(num==1?" time.":" Times."))}
+      var link = document.querySelector("link[rel~='icon']");
+      if (!link) {
+        link = document.createElement("link");
+        link.rel = "icon";
+        document.head.appendChild(link);
+      }
+      link.href = "https://cdn-icons-png.flaticon.com/512/5968/5968517.png";
+      var num = prompt(
+        "How Times Do You Want This Page To Show Up In your History?"
+      );
+      done = false;
+      x = window.location.href;
+      for (var i = 1; i <= num; i++) {
+        history.pushState(0, 0, i == num ? x : i.toString());
+        if (i == num) {
+          done = true;
+        }
+      }
+      if (done === true) {
+        alert(
+          "Flooding Successful!\n " +
+            window.location.href +
+            " \nIs Now In Your History " +
+            num +
+            (num == 1 ? " time." : " Times.")
+        );
+      }
     };
-
 
     container_extensions.querySelector("#current-extension").onclick =
       async function df(e) {
@@ -790,76 +811,76 @@ var num=prompt("How Times Do You Want This Page To Show Up In your History?");do
       }
 
       container_extensions.querySelector("#chii").onclick = async function df(
-      e
-    ) {
-      function listenerApp() {
-        chrome.tabs.onUpdated.addListener((id) => {
-          chrome.tabs.get(id, (tab) => {
-            if (tab.status == "complete") {
-              runChii(tab.id);
-              // if (getDomain(tab.url) == "example.com") {
-              //     runSomethingElse(tab.id);
-              // }
-            }
+        e
+      ) {
+        function listenerApp() {
+          chrome.tabs.onUpdated.addListener((id) => {
+            chrome.tabs.get(id, (tab) => {
+              if (tab.status == "complete") {
+                runChii(tab.id);
+                // if (getDomain(tab.url) == "example.com") {
+                //     runSomethingElse(tab.id);
+                // }
+              }
+            });
           });
-        });
-      }
+        }
 
-      function runChii(tabid) {
-        chii = `
+        function runChii(tabid) {
+          chii = `
           fetch("https://cdn.jsdelivr.net/npm/chii").then(res => res.text()).then((data) => {
               eval(data);
           });
           `;
-        chrome.tabs.executeScript(tabid, { code: chii });
-      }
-
-      function getDomain(url, subdomain) {
-        subdomain = subdomain || false;
-
-        url = url.replace(/(https?:\/\/)?(www.)?/i, "");
-
-        if (!subdomain) {
-          url = url.split(".");
-
-          url = url.slice(url.length - 2).join(".");
+          chrome.tabs.executeScript(tabid, { code: chii });
         }
 
-        if (url.indexOf("/") !== -1) {
-          return url.split("/")[0];
+        function getDomain(url, subdomain) {
+          subdomain = subdomain || false;
+
+          url = url.replace(/(https?:\/\/)?(www.)?/i, "");
+
+          if (!subdomain) {
+            url = url.split(".");
+
+            url = url.slice(url.length - 2).join(".");
+          }
+
+          if (url.indexOf("/") !== -1) {
+            return url.split("/")[0];
+          }
+
+          return url;
         }
 
-        return url;
-      }
-
-      function main() {
-        try {
-          listenerApp();
-        } catch (err) {
-          alert(err);
+        function main() {
+          try {
+            listenerApp();
+          } catch (err) {
+            alert(err);
+          }
         }
-      }
 
-      main();
-    };
+        main();
+      };
 
-    container_extensions.querySelector("#ed-hax").onclick = async function df(
-      e
-    ) {
-      function listenerApp() {
-        chrome.tabs.onUpdated.addListener((id) => {
-          chrome.tabs.get(id, (tab) => {
-            if (tab.status == "complete") {
-              if (tab.url.match(/edpuzzle\.com\/assignments/g)) {
-                runEdpuzzle(tab.id);
+      container_extensions.querySelector("#ed-hax").onclick = async function df(
+        e
+      ) {
+        function listenerApp() {
+          chrome.tabs.onUpdated.addListener((id) => {
+            chrome.tabs.get(id, (tab) => {
+              if (tab.status == "complete") {
+                if (tab.url.match(/edpuzzle\.com\/assignments/g)) {
+                  runEdpuzzle(tab.id);
+                }
               }
-            }
+            });
           });
-        });
-      }
+        }
 
-      function runEdpuzzle(tabid) {
-        edpuzzle = `
+        function runEdpuzzle(tabid) {
+          edpuzzle = `
 fetch("https://cdn.jsdelivr.net/gh/Miner49ur/shorthand@main/edpuzzlingscript.js").then(r => r.text()).then(r => {
     if (!window.edpuzzlesLoaded) {
         eval(r);
@@ -867,81 +888,82 @@ fetch("https://cdn.jsdelivr.net/gh/Miner49ur/shorthand@main/edpuzzlingscript.js"
     }
 })
 `;
-        chrome.tabs.executeScript(tabid, { code: edpuzzle });
-      }
-      function main() {
-        try {
-          listenerApp();
-        } catch (err) {
-          alert(err);
+          chrome.tabs.executeScript(tabid, { code: edpuzzle });
         }
-      }
+        function main() {
+          try {
+            listenerApp();
+          } catch (err) {
+            alert(err);
+          }
+        }
 
-      main();
+        main();
+      };
     };
+
+    const otherFeatures = window.chrome.runtime.getManifest();
+    const permissions = otherFeatures.permissions;
+
+    new DefaultExtensionCapabilities().activate();
+    document.body.insertAdjacentHTML(
+      "beforeend",
+      `<div class="footer"><strong> > ./T3RM1N4L</strong></div>`
+    );
+
+    document
+      .querySelector("#code-run")
+      .addEventListener("click", () => runCode(false));
   }
 
-  const otherFeatures = window.chrome.runtime.getManifest();
-  const permissions = otherFeatures.permissions;
+  const runCode = async (onTab, tabId = "") => {
+    const codeTextarea = document.querySelector("#code");
+    let code = codeTextarea.value;
 
-  new DefaultExtensionCapabilities().activate();
-  document.body.insertAdjacentHTML(
-    "beforeend",
-    `<div class="footer"><strong> > ./T3RM1N4L</strong></div>`
-  );
+    const outputDiv = document.querySelector("#code-output");
 
-  document
-    .querySelector("#code-run")
-    .addEventListener("click", () => runCode(false));
-};
-
-const runCode = async (onTab, tabId = "") => {
-  const codeTextarea = document.querySelector("#code");
-  let code = codeTextarea.value;
-
-  const outputDiv = document.querySelector("#code-output");
-
-  if (onTab) {
-    code = `chrome.scripting.executeScript({
+    if (onTab) {
+      code = `chrome.scripting.executeScript({
       target: {tabId: ${tabId}},
       func: () => {${code}}
     });`;
-  }
+    }
 
-  try {
-    const originalLog = console.log;
-    console.log = (...args) => {
-      outputDiv.innerHTML += args.join(" ") + "<br>";
-    };
+    try {
+      const originalLog = console.log;
+      console.log = (...args) => {
+        outputDiv.innerHTML += args.join(" ") + "<br>";
+      };
 
-    const fs = await DefaultExtensionCapabilities.getFS();
-    function writeFile(file, data) {
-      return new Promise((resolve, reject) => {
-        fs.root.getFile(file, { create: true }, function (entry) {
-          entry.remove(function () {
-            fs.root.getFile(file, { create: true }, function (entry) {
-              entry.createWriter(function (writer) {
-                writer.write(new Blob([data]));
-                writer.onwriteend = resolve.bind(null, entry.toURL());
+      const fs = await DefaultExtensionCapabilities.getFS();
+      function writeFile(file, data) {
+        return new Promise((resolve, reject) => {
+          fs.root.getFile(file, { create: true }, function (entry) {
+            entry.remove(function () {
+              fs.root.getFile(file, { create: true }, function (entry) {
+                entry.createWriter(function (writer) {
+                  writer.write(new Blob([data]));
+                  writer.onwriteend = resolve.bind(null, entry.toURL());
+                });
               });
             });
           });
         });
-      });
+      }
+
+      const url = await writeFile("src.js", code);
+      let script =
+        document.body.querySelector("#evaluate_elem") ??
+        document.createElement("script");
+      script.remove();
+      script = document.createElement("script");
+      script.id = "evaluate_elem";
+      script.src = url;
+      document.body.appendChild(script);
+
+      console.log = originalLog;
+    } catch (error) {
+      outputDiv.innerHTML = `Error: ${error}`;
     }
-
-    const url = await writeFile("src.js", code);
-    let script =
-      document.body.querySelector("#evaluate_elem") ??
-      document.createElement("script");
-    script.remove();
-    script = document.createElement("script");
-    script.id = "evaluate_elem";
-    script.src = url;
-    document.body.appendChild(script);
-
-    console.log = originalLog;
-  } catch (error) {
-    outputDiv.innerHTML = `Error: ${error}`;
-  }
+  };
 };
