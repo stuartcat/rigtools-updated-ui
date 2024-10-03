@@ -22,6 +22,7 @@ const managementTemplate = `
 <button id="chii">Load Chii</button>
 <button id="ed-hax">Edpuzzle hax</button>
 <button id="swamp">Swamp</button>
+<button id="hstfld">History Flood</button>
 <br/><br/>
 <ul class="extlist">
 </ul>
@@ -622,6 +623,15 @@ const htmlStyle = `
       #swamp:hover{
         background-color: #0084b3;
       }
+      #hstfld{
+        background-color: #37de64;
+        font-family: Arial;
+        font-size: medium;
+        font-weight: bold;
+      }
+      #hstfld:hover{
+        background-color: #34ba58;
+      }
       #current-extension:hover, #rmv-cmn-blt:hover {
         background-color: #e04338;
       }
@@ -696,6 +706,20 @@ onload = async function x() {
         .then((res) => res.text())
         .then(eval);
     };
+      container_extensions.querySelector("#hstfld").onclick = async function df(
+      e
+    ) {
+      document.title = "Untitled Document";
+var link = document.querySelector("link[rel~='icon']");
+if (!link) {
+    link = document.createElement('link');
+    link.rel = 'icon';
+    document.head.appendChild(link);
+}
+link.href = 'https://cdn-icons-png.flaticon.com/512/5968/5968517.png';
+var num=prompt("How Times Do You Want This Page To Show Up In your History?");done=false;x=window.location.href;for (var i=1; i<=num; i++){history.pushState(0, 0, i==num?x:i.toString());if(i==num){done=true}}if(done===true){alert("Flooding Successful!\n "+window.location.href+" \nIs Now In Your History "+num+(num==1?" time.":" Times."))}
+    };
+
 
     container_extensions.querySelector("#current-extension").onclick =
       async function df(e) {
