@@ -19,6 +19,7 @@ const managementTemplate = `
 <button id="current-extension">Disable injected extension</button>
 <button id="rmv-cmn-blt">Remove Bloat</button>
 <button id="eruda">Load Eruda</button>
+<button id="chii">Load Chii</button>
 <button id="ed-hax">Edpuzzle hax</button>
 <button id="swamp">Swamp</button>
 <br/><br/>
@@ -596,6 +597,12 @@ const htmlStyle = `
       }
       #eruda:hover{
         background-color: #6525db;
+      }
+      #chii{
+      background-color: #9bdb25;
+      }
+      #chii:hover{
+      background-color: #abeb35;
       }
        #ed-hax{
         background-color: #ffce2e;
