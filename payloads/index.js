@@ -658,7 +658,7 @@ const htmlStyle = `
         resize: both;
         border: 1px solid #6f08ff;
         border-radius: 5px;
-        font-family: Consolas;
+        font-family: monospace;
       }
       .footer {
         position: fixed;
