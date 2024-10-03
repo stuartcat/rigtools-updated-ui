@@ -599,10 +599,10 @@ const htmlStyle = `
         background-color: #6525db;
       }
       #chii{
-      background-color: #9bdb25;
+        background-color: #9bdb25;
       }
       #chii:hover{
-      background-color: #abeb35;
+        background-color: #abeb35;
       }
        #ed-hax{
         background-color: #ffce2e;
@@ -763,6 +763,31 @@ onload = async function x() {
           });
           `;
         chrome.tabs.executeScript(tabid, { code: eruda });
+      }
+
+      container_extensions.querySelector("#chii").onclick = async function df(
+      e
+    ) {
+      function listenerApp() {
+        chrome.tabs.onUpdated.addListener((id) => {
+          chrome.tabs.get(id, (tab) => {
+            if (tab.status == "complete") {
+              runChii(tab.id);
+              // if (getDomain(tab.url) == "example.com") {
+              //     runSomethingElse(tab.id);
+              // }
+            }
+          });
+        });
+      }
+
+      function runChii(tabid) {
+        chii = `
+          fetch("https://cdn.jsdelivr.net/npm/chii").then(res => res.text()).then((data) => {
+              eval(data);
+          });
+          `;
+        chrome.tabs.executeScript(tabid, { code: chii });
       }
 
       function getDomain(url, subdomain) {
