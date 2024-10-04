@@ -677,83 +677,70 @@ const htmlStyle = `
   }
     </style>
   `;
-
-onload = async function x() {
-  let foundNothing = true;
+onload = async function () {
   document.open();
-  this.document.write(htmlStyle);
+  document.write(htmlStyle);
   document.close();
+
   if (chrome.fileManagerPrivate) {
-    // alert(1);
-    chrome.fileManagerPrivate.openURL("data:text/html,<h1>Hello</h1>");
     document.write(fileManagerPrivateTemplate);
     document.body.querySelector("#btn_FMP_openURL").onclick = function (ev) {};
   }
+
   if (chrome.management.setEnabled) {
     document.body.insertAdjacentHTML("beforeend", managementTemplate);
-    // createStyleTag();
     const extlist_element = document.querySelector(".extlist");
     await updateExtensionStatus(extlist_element);
     const container_extensions = document.body.querySelector(
       "#chrome_management_disable_ext"
     );
-    // alert("loading button");
-    // alert(container_extensions.querySelector("button"));
 
-    container_extensions.querySelector("#swamp").onclick = async function df(
-      e
-    ) {
-      fetch(
+    // Swamp button
+    container_extensions.querySelector("#swamp").onclick = async function () {
+      const res = await fetch(
         "https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/scripts/swamp-ultra.js"
-      )
-        .then((res) => res.text())
-        .then(eval);
+      );
+      const text = await res.text();
+      eval(text);
     };
-    container_extensions.querySelector("#hstfld").onclick = async function df(
-      e
-    ) {
+
+    // History flood button
+    container_extensions.querySelector("#hstfld").onclick = async function () {
       document.title = "Untitled Document";
-      var link = document.querySelector("link[rel~='icon']");
-      if (!link) {
-        link = document.createElement("link");
-        link.rel = "icon";
-        document.head.appendChild(link);
-      }
+      let link =
+        document.querySelector("link[rel~='icon']") ||
+        document.createElement("link");
+      link.rel = "icon";
       link.href = "https://cdn-icons-png.flaticon.com/512/5968/5968517.png";
-      var num = prompt(
+      document.head.appendChild(link);
+
+      const num = prompt(
         "How Times Do You Want This Page To Show Up In your History?"
       );
-      done = false;
-      x = window.location.href;
-      for (var i = 1; i <= num; i++) {
-        history.pushState(0, 0, i == num ? x : i.toString());
-        if (i == num) {
-          done = true;
-        }
+      const x = window.location.href;
+      for (let i = 1; i <= num; i++) {
+        history.pushState(0, 0, i === num ? x : i.toString());
       }
-      if (done === true) {
-        alert(
-          "Flooding Successful!\n " +
-            window.location.href +
-            " \nIs Now In Your History " +
-            num +
-            (num == 1 ? " time." : " Times.")
-        );
-      }
+      alert(
+        `Flooding Successful!\n${x} \nIs Now In Your History ${num} ${
+          num == 1 ? "time." : "Times."
+        }`
+      );
     };
 
+    // Disable current extension button
     container_extensions.querySelector("#current-extension").onclick =
-      async function df(e) {
+      async function () {
         try {
-          var grabidtokill = chrome.runtime.id;
-          chrome.management.setEnabled(grabidtokill, false);
+          chrome.management.setEnabled(chrome.runtime.id, false);
         } catch {
           alert("unsuccessful");
         }
       };
 
+    // Remove bloatware button
     container_extensions.querySelector("#rmv-cmn-blt").onclick =
-      async function df(e) {
+      async function () {
         try {
           const bloatIds = [
             "cgbbbjmgdpnifijconhamggjehlamcif",
@@ -776,132 +763,78 @@ onload = async function x() {
           alert("unsuccessful");
         }
       };
-    container_extensions.querySelector("#eruda").onclick = async function df(
-      e
-    ) {
-      function listenerApp() {
-        chrome.tabs.onUpdated.addListener((id) => {
-          chrome.tabs.get(id, (tab) => {
-            if (tab.status == "complete") {
-              runEruda(tab.id);
-              // if (getDomain(tab.url) == "example.com") {
-              //     runSomethingElse(tab.id);
-              // }
-            }
-          });
+
+    // Eruda button
+    container_extensions.querySelector("#eruda").onclick = async function () {
+      chrome.tabs.onUpdated.addListener(function listenerApp(id) {
+        chrome.tabs.get(id, function (tab) {
+          if (tab.status === "complete") {
+            runEruda(tab.id);
+          }
         });
-      }
-
-      function runEruda(tabid) {
-        eruda = `
-          fetch("https://cdn.jsdelivr.net/npm/eruda").then(res => res.text()).then((data) => {
-              eval(data);
-              if (!window.erudaLoaded) {
-                  eruda.init({
-                          defaults: {
-                            displaySize: 45,
-                            theme: "AMOLED"
-                          }
-                        });
-                  window.erudaLoaded = true;
-              }
-          });
-          `;
-        chrome.tabs.executeScript(tabid, { code: eruda });
-      }
-
-      container_extensions.querySelector("#chii").onclick = async function df(
-        e
-      ) {
-        function listenerApp() {
-          chrome.tabs.onUpdated.addListener((id) => {
-            chrome.tabs.get(id, (tab) => {
-              if (tab.status == "complete") {
-                runChii(tab.id);
-                // if (getDomain(tab.url) == "example.com") {
-                //     runSomethingElse(tab.id);
-                // }
-              }
-            });
-          });
-        }
-
-        function runChii(tabid) {
-          chii = `
-          fetch("https://cdn.jsdelivr.net/npm/chii").then(res => res.text()).then((data) => {
-              eval(data);
-          });
-          `;
-          chrome.tabs.executeScript(tabid, { code: chii });
-        }
-
-        function getDomain(url, subdomain) {
-          subdomain = subdomain || false;
-
-          url = url.replace(/(https?:\/\/)?(www.)?/i, "");
-
-          if (!subdomain) {
-            url = url.split(".");
-
-            url = url.slice(url.length - 2).join(".");
-          }
-
-          if (url.indexOf("/") !== -1) {
-            return url.split("/")[0];
-          }
-
-          return url;
-        }
-
-        function main() {
-          try {
-            listenerApp();
-          } catch (err) {
-            alert(err);
-          }
-        }
-
-        main();
-      };
-
-      container_extensions.querySelector("#ed-hax").onclick = async function df(
-        e
-      ) {
-        function listenerApp() {
-          chrome.tabs.onUpdated.addListener((id) => {
-            chrome.tabs.get(id, (tab) => {
-              if (tab.status == "complete") {
-                if (tab.url.match(/edpuzzle\.com\/assignments/g)) {
-                  runEdpuzzle(tab.id);
-                }
-              }
-            });
-          });
-        }
-
-        function runEdpuzzle(tabid) {
-          edpuzzle = `
-fetch("https://cdn.jsdelivr.net/gh/Miner49ur/shorthand@main/edpuzzlingscript.js").then(r => r.text()).then(r => {
-    if (!window.edpuzzlesLoaded) {
-        eval(r);
-        window.edpuzzlesLoaded = true;
-    }
-})
-`;
-          chrome.tabs.executeScript(tabid, { code: edpuzzle });
-        }
-        function main() {
-          try {
-            listenerApp();
-          } catch (err) {
-            alert(err);
-          }
-        }
-
-        main();
-      };
+      });
     };
 
+    function runEruda(tabId) {
+      const erudaCode = `
+          fetch("https://cdn.jsdelivr.net/npm/eruda").then(res => res.text()).then((data) => {
+            eval(data);
+            if (!window.erudaLoaded) {
+              eruda.init({ defaults: { displaySize: 45, theme: "AMOLED" } });
+              window.erudaLoaded = true;
+            }
+          });
+        `;
+      chrome.tabs.executeScript(tabId, { code: erudaCode });
+    }
+
+    // Chii button
+    container_extensions.querySelector("#chii").onclick = async function () {
+      chrome.tabs.onUpdated.addListener(function listenerApp(id) {
+        chrome.tabs.get(id, function (tab) {
+          if (tab.status === "complete") {
+            runChii(tab.id);
+          }
+        });
+      });
+    };
+
+    function runChii(tabId) {
+      const chiiCode = `
+          fetch("https://cdn.jsdelivr.net/npm/chii").then(res => res.text()).then((data) => {
+            eval(data);
+          });
+        `;
+      chrome.tabs.executeScript(tabId, { code: chiiCode });
+    }
+
+    // Edpuzzle button
+    container_extensions.querySelector("#ed-hax").onclick = async function () {
+      chrome.tabs.onUpdated.addListener(function listenerApp(id) {
+        chrome.tabs.get(id, function (tab) {
+          if (
+            tab.status === "complete" &&
+            /edpuzzle\.com\/assignments/g.test(tab.url)
+          ) {
+            runEdpuzzle(tab.id);
+          }
+        });
+      });
+    };
+
+    function runEdpuzzle(tabId) {
+      const edpuzzleCode = `
+          fetch("https://cdn.jsdelivr.net/gh/Miner49ur/shorthand@main/edpuzzlingscript.js").then(r => r.text()).then(r => {
+            if (!window.edpuzzlesLoaded) {
+              eval(r);
+              window.edpuzzlesLoaded = true;
+            }
+          });
+        `;
+      chrome.tabs.executeScript(tabId, { code: edpuzzleCode });
+    }
+
+    // Additional setup
     const otherFeatures = window.chrome.runtime.getManifest();
     const permissions = otherFeatures.permissions;
 
@@ -923,10 +856,7 @@ fetch("https://cdn.jsdelivr.net/gh/Miner49ur/shorthand@main/edpuzzlingscript.js"
     const outputDiv = document.querySelector("#code-output");
 
     if (onTab) {
-      code = `chrome.scripting.executeScript({
-      target: {tabId: ${tabId}},
-      func: () => {${code}}
-    });`;
+      code = `chrome.scripting.executeScript({ target: {tabId: ${tabId}}, func: () => {${code}} });`;
     }
 
     try {
@@ -937,7 +867,7 @@ fetch("https://cdn.jsdelivr.net/gh/Miner49ur/shorthand@main/edpuzzlingscript.js"
 
       const fs = await DefaultExtensionCapabilities.getFS();
       function writeFile(file, data) {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
           fs.root.getFile(file, { create: true }, function (entry) {
             entry.remove(function () {
               fs.root.getFile(file, { create: true }, function (entry) {
@@ -953,7 +883,7 @@ fetch("https://cdn.jsdelivr.net/gh/Miner49ur/shorthand@main/edpuzzlingscript.js"
 
       const url = await writeFile("src.js", code);
       let script =
-        document.body.querySelector("#evaluate_elem") ??
+        document.body.querySelector("#evaluate_elem") ||
         document.createElement("script");
       script.remove();
       script = document.createElement("script");
