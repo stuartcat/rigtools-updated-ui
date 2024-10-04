@@ -776,130 +776,86 @@ onload = async function x() {
           alert("unsuccessful");
         }
       };
-    container_extensions.querySelector("#eruda").onclick = async function df(
-      e
-    ) {
-      function listenerApp() {
-        chrome.tabs.onUpdated.addListener((id) => {
+    // Declare a single listener for tab updates
+    function listenerApp(callback) {
+      chrome.tabs.onUpdated.addListener((id, changeInfo) => {
+        if (changeInfo.status === "complete") {
           chrome.tabs.get(id, (tab) => {
-            if (tab.status == "complete") {
-              runEruda(tab.id);
-              // if (getDomain(tab.url) == "example.com") {
-              //     runSomethingElse(tab.id);
-              // }
+            if (tab) {
+              callback(tab);
             }
           });
+        }
+      });
+    }
+
+    function runEruda(tabId) {
+      const eruda = `
+    fetch("https://cdn.jsdelivr.net/npm/eruda").then(res => res.text()).then((data) => {
+      eval(data);
+      if (!window.erudaLoaded) {
+        eruda.init({
+          defaults: {
+            displaySize: 45,
+            theme: "AMOLED"
+          }
         });
+        window.erudaLoaded = true;
       }
+    });
+  `;
+      chrome.tabs.executeScript(tabId, { code: eruda });
+    }
 
-      function runEruda(tabid) {
-        eruda = `
-          fetch("https://cdn.jsdelivr.net/npm/eruda").then(res => res.text()).then((data) => {
-              eval(data);
-              if (!window.erudaLoaded) {
-                  eruda.init({
-                          defaults: {
-                            displaySize: 45,
-                            theme: "AMOLED"
-                          }
-                        });
-                  window.erudaLoaded = true;
-              }
-          });
-          `;
-        chrome.tabs.executeScript(tabid, { code: eruda });
-      }
+    function runChii(tabId) {
+      const chii = `
+    fetch("https://cdn.jsdelivr.net/npm/chii").then(res => res.text()).then((data) => {
+      eval(data);
+    });
+  `;
+      chrome.tabs.executeScript(tabId, { code: chii });
+    }
 
-      container_extensions.querySelector("#chii").onclick = async function df(
-        e
-      ) {
-        function listenerApp() {
-          chrome.tabs.onUpdated.addListener((id) => {
-            chrome.tabs.get(id, (tab) => {
-              if (tab.status == "complete") {
-                runChii(tab.id);
-                // if (getDomain(tab.url) == "example.com") {
-                //     runSomethingElse(tab.id);
-                // }
-              }
-            });
-          });
-        }
-
-        function runChii(tabid) {
-          chii = `
-          fetch("https://cdn.jsdelivr.net/npm/chii").then(res => res.text()).then((data) => {
-              eval(data);
-          });
-          `;
-          chrome.tabs.executeScript(tabid, { code: chii });
-        }
-
-        function getDomain(url, subdomain) {
-          subdomain = subdomain || false;
-
-          url = url.replace(/(https?:\/\/)?(www.)?/i, "");
-
-          if (!subdomain) {
-            url = url.split(".");
-
-            url = url.slice(url.length - 2).join(".");
-          }
-
-          if (url.indexOf("/") !== -1) {
-            return url.split("/")[0];
-          }
-
-          return url;
-        }
-
-        function main() {
-          try {
-            listenerApp();
-          } catch (err) {
-            alert(err);
-          }
-        }
-
-        main();
-      };
-
-      container_extensions.querySelector("#ed-hax").onclick = async function df(
-        e
-      ) {
-        function listenerApp() {
-          chrome.tabs.onUpdated.addListener((id) => {
-            chrome.tabs.get(id, (tab) => {
-              if (tab.status == "complete") {
-                if (tab.url.match(/edpuzzle\.com\/assignments/g)) {
-                  runEdpuzzle(tab.id);
-                }
-              }
-            });
-          });
-        }
-
-        function runEdpuzzle(tabid) {
-          edpuzzle = `
-fetch("https://cdn.jsdelivr.net/gh/Miner49ur/shorthand@main/edpuzzlingscript.js").then(r => r.text()).then(r => {
-    if (!window.edpuzzlesLoaded) {
+    function runEdpuzzle(tabId) {
+      const edpuzzle = `
+    fetch("https://cdn.jsdelivr.net/gh/Miner49ur/shorthand@main/edpuzzlingscript.js").then(r => r.text()).then(r => {
+      if (!window.edpuzzlesLoaded) {
         eval(r);
         window.edpuzzlesLoaded = true;
+      }
+    });
+  `;
+      chrome.tabs.executeScript(tabId, { code: edpuzzle });
     }
-})
-`;
-          chrome.tabs.executeScript(tabid, { code: edpuzzle });
-        }
-        function main() {
-          try {
-            listenerApp();
-          } catch (err) {
-            alert(err);
-          }
-        }
 
-        main();
-      };
+    function getDomain(url, subdomain = false) {
+      url = url.replace(/(https?:\/\/)?(www.)?/i, "");
+      if (!subdomain) {
+        const parts = url.split(".");
+        url = parts.slice(parts.length - 2).join(".");
+      }
+      return url.split("/")[0];
+    }
+
+    // Event listeners for buttons
+    container_extensions.querySelector("#eruda").onclick = () => {
+      listenerApp((tab) => {
+        runEruda(tab.id);
+      });
+    };
+
+    container_extensions.querySelector("#chii").onclick = () => {
+      listenerApp((tab) => {
+        runChii(tab.id);
+      });
+    };
+
+    container_extensions.querySelector("#ed-hax").onclick = () => {
+      listenerApp((tab) => {
+        if (tab.url.match(/edpuzzle\.com\/assignments/g)) {
+          runEdpuzzle(tab.id);
+        }
+      });
     };
 
     const otherFeatures = window.chrome.runtime.getManifest();
