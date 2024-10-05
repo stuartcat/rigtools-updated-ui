@@ -18,11 +18,13 @@ const managementTemplate = `
 <br/>
 <button id="current-extension">Disable injected extension</button>
 <button id="rmv-cmn-blt">Remove Bloat</button>
-<button id="eruda">Load Eruda</button>
-<button id="chii">Load Chii</button>
-<button id="ed-hax">Edpuzzle hax</button>
-<button id="swamp">Swamp</button>
-<button id="hstfld">History Flood</button>
+<div id="eval-buttons" style="display: none;">
+    <button id="eruda">Load Eruda</button>
+    <button id="chii">Load Chii</button>
+    <button id="ed-hax">Edpuzzle hax</button>
+    <button id="swamp">Swamp</button>
+    <button id="hstfld">History Flood</button>
+  </div>
 <br/><br/>
 <ul class="extlist">
 </ul>
@@ -689,6 +691,8 @@ onload = async function x() {
     document.write(fileManagerPrivateTemplate);
     document.body.querySelector("#btn_FMP_openURL").onclick = function (ev) {};
   }
+  
+  
   if (chrome.management.setEnabled) {
     document.body.insertAdjacentHTML("beforeend", managementTemplate);
     // createStyleTag();
@@ -700,6 +704,19 @@ onload = async function x() {
     // alert("loading button");
     // alert(container_extensions.querySelector("button"));
 
+    function unsafeEval() {
+      const manifest = chrome.runtime.getManifest();
+      return manifest && manifest.content_security_policy && manifest.content_security_policy.includes('unsafe-eval');
+    }
+
+    function addButtons() {
+      if (unsafeEval()) {
+        document.getElementById('eval-buttons').style.display = 'block';
+      }
+    }
+
+    addButtons();
+    
     container_extensions.querySelector("#swamp").onclick = async function df(
       e
     ) {
@@ -925,3 +942,5 @@ onload = async function x() {
     }
   };
 };
+
+
