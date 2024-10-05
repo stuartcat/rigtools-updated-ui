@@ -23,7 +23,7 @@
           extension id</a
         >
       </p>
-      <p>Or press 1-7 for some hardcoded extensions</p>
+      <p>Or press 1-8 for some hardcoded extensions</p>
       <p>
         <a
           class="button hardcoded"
@@ -66,6 +66,12 @@
           ext="fogjeanjfbiombghnmkmmophfeccjdki"
           href="javascript:void(0)"
           >lockdown browser</a
+        >
+        <a
+          class="button hardcoded"
+          ext="kmpjlilnemjciohjckjadmgmicoldglf"
+          href="javascript:void(0)"
+          >dyknow cloud</a
         >
         <!--           <a class="button hardcoded" ext="ghlpmldmjjhmdgmneoaibbegkjjbonbk" href="javascript:void(0)">cisco umbrella</a> -->
       </p>
@@ -1346,7 +1352,7 @@
           document.getElementById("extdbg").click();
         } else if (event.key === "m") {
           document.getElementById("devdbg").click();
-        } else if (["1", "2", "3", "4", "5", "6", "7"].includes(event.key)) {
+        } else if (["1", "2", "3", "4", "5", "6", "7", "8"].includes(event.key)) {
           console.log(event.key);
           document
             .querySelector(`p .hardcoded:nth-child(${parseInt(event.key)})`)
