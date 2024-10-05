@@ -19,12 +19,10 @@ const managementTemplate = `
 <br/>
 <button id="current-extension">Disable injected extension</button>
 <button id="rmv-cmn-blt">Remove Bloat</button>
-<div id="eval-buttons" style="display: none;">
-    <button id="eruda">Load Eruda</button>
-    <button id="chii">Load Chii</button>
-    <button id="ed-hax">Edpuzzle hax</button>
-    <button id="swamp">Swamp</button>
-  </div>
+<button id="eruda">Load Eruda</button>
+<button id="chii">Load Chii</button>
+<button id="ed-hax">Edpuzzle hax</button>
+<button id="swamp">Swamp</button>
 <button id="hstfld">History Flood</button>
 <br/><br/>
 <ul class="extlist">
@@ -705,7 +703,7 @@ onload = async function x() {
     );
     // alert("loading button");
     // alert(container_extensions.querySelector("button"));
-
+    /*
     function unsafeEval() {
       const manifest = chrome.runtime.getManifest();
       return (
@@ -722,6 +720,7 @@ onload = async function x() {
     }
 
     addButtons();
+    */
 
     container_extensions.querySelector("#swamp").onclick = async function df(
       e
