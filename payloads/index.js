@@ -25,10 +25,10 @@ const managementTemplate = `
 <button id="swamp">Swamp</button>
 <button id="hstfld">History Flood</button>
 <br/><br/>
-<ul class="extlist">
 <button id="enball">
 Enable All Extensions
 </button>
+<ul class="extlist">
 </ul>
 <!-- <input type="" class="extnum" /><button disabled id="toggler">Toggle extension</button>
 <!-- <input type="text" class="extnum" /><button disabled id="toggler">Toggle extension</button>
@@ -334,37 +334,66 @@ function createExtensionCard(name, id, enabled, icon_url) {
   `;
   return li;
 }
+
+function createExtensionCardAll() {
+  const li = document.createElement("li");
+  li.className = "extension-card-all";
+  li.innerHTML = `
+      <img class="extension-icon" src="https://raw.githubusercontent.com/T3M1N4L/T3M1N4L/main/images/XOsX.gif"/>
+      <span class="extension-name">All Extensions</span>
+      <label class="toggle-switch">
+          <input type="checkbox" ${enabled ? "checked" : ""}>
+          <span class="slider"></span>
+      </label>
+  `;
+  return li;
+}
 function updateExtensionStatus(extlist_element) {
   return new Promise(function (resolve, reject) {
     extlist_element.innerHTML = "";
-    
     chrome.management.getAll(function (extlist) {
       const ordlist = [];
-      
-      // Get the "id enball" element at the beginning of extlist_element
-      const enballElement = extlist_element.querySelector("#enball");
-
+      let e = 0;
       extlist.forEach(function (e) {
-        // Skip if this is the current extension
         if (e.id === new URL(new URL(location.href).origin).host) {
           return;
         }
         ordlist.push(e);
 
-        // Find the icon for the extension, use default if none
         const icon = e.icons?.find((ic) => ic.size === 128) ?? e.icons?.at(-1);
+
+        let cardAll = createExtensionCardAll();
+
+        let cardInputAll = cardAll.querySelector("input");
+
+        cardInputAll.addEventListener("change", (event) => {
+          chrome.management.getSelf(function(self) {
+            chrome.management.getAll(function(extensions) {
+              for (let i = 0; i < extensions.length; i++) {
+                let extId = extensions[i].id;
+                if (extId !== self.id) {
+                  chrome.management.setEnabled(extId, event.target.checked);
+                }
+              }
+            });
+          });
+        });
+
         let card = createExtensionCard(
           e.name,
           e.id,
           e.enabled,
-          icon?.url || "https://raw.githubusercontent.com/T3M1N4L/T3M1N4L/main/images/XOsX.gif"
+          icon?.url ||
+            "https://raw.githubusercontent.com/T3M1N4L/T3M1N4L/main/images/XOsX.gif"
         ); // add default image here
 
-        // Attach event listeners for enabling/disabling the extension
         let cardInput = card.querySelector("input");
 
         cardInput.addEventListener("change", (event) => {
           chrome.management.setEnabled(e.id, event.target.checked);
+          // setTimeout(function () {
+          //   updateExtensionStatus(extlist_element);
+          // }, 200);
         });
 
         card.querySelector(".extension-icon").addEventListener("click", () => {
@@ -372,22 +401,27 @@ function updateExtensionStatus(extlist_element) {
           cardInput.dispatchEvent(new Event("change"));
         });
 
-        // Insert the card after the "id enball" element at the top
-        if (enballElement) {
-          enballElement.insertAdjacentElement('afterend', card);
-        } else {
-          // If "id enball" element is not found, just append to extlist_element
-          extlist_element.appendChild(card);
-        }
-
-        resolve(); // Resolve the promise once all extensions are processed
+        // const itemElement = document.createElement("li");
+        // itemElement.textContent = `${e.name} (${e.id}) `;
+        // const aElem = document.createElement('a');
+        // aElem.href = "javascript:void(0)";
+        // aElem.innerText = `${e.enabled ? "enabled" : "disabled"}`;
+        // aElem.onclick = function () {
+        //   // alert(e.enabled);
+        //   chrome.management.setEnabled(e.id, !e.enabled);
+        //   setTimeout(function () {
+        //     updateExtensionStatus(extlist_element);
+        //   }, 200);
+        // }
+        // // e++;
+        // itemElement.appendChild(aElem);
+        extlist_element.appendChild(card);
+        resolve();
       });
-
-      savedExtList = ordlist; // Save the ordered extension list
+      savedExtList = ordlist;
     });
   });
 }
-
 const fileManagerPrivateTemplate = `
   <div id="fileManagerPrivate_cap">
     <div id="FMP_openURL">
@@ -458,6 +492,22 @@ const htmlStyle = `
       }
 
       .extension-card:has(input:checked) {
+        background-color: #0a0a0a;
+        border: 2px solid #0000;
+      }
+
+      .extension-card-all {
+      /*   background-color: #0a0a0a; */
+        border: 2px solid #0a0a0a;
+        margin-bottom: 10px;
+        padding: 15px;
+        border-radius: 8px;
+        display: flex;
+        justify-content: start;
+        align-items: center;
+      }
+
+      .extension-card-all:has(input:checked) {
         background-color: #0a0a0a;
         border: 2px solid #0000;
       }
@@ -641,6 +691,18 @@ const htmlStyle = `
       #current-extension:hover, #rmv-cmn-blt:hover {
         background-color: #e04338;
       }
+      #enball {
+        background-color: #008080;
+        font-family: Arial;
+  font-size: medium;
+  font-weight: bold;
+}
+#enball:hover {
+  background-color: #009090;
+  font-family: Arial;
+  font-size: medium;
+  font-weight: bold;
+}
       .container {
                   display: flex;
                   gap: 10px;
