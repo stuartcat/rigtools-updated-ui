@@ -17,6 +17,14 @@ const managementTemplate = `
 <p class ="description">we love casting fun times</p>
 <br/>
 <button id="current-extension">Disable injected extension</button>
+<button id="rmv-cmn-blt">Remove Bloat</button>
+<div id="eval-buttons" style="display: none;">
+    <button id="eruda">Load Eruda</button>
+    <button id="chii">Load Chii</button>
+    <button id="ed-hax">Edpuzzle hax</button>
+    <button id="swamp">Swamp</button>
+    <button id="hstfld">History Flood</button>
+  </div>
 <br/><br/>
 <ul class="extlist">
 </ul>
@@ -703,24 +711,7 @@ onload = async function x() {
 
     function addButtons() {
       if (unsafeEval()) {
-        const buttonData = [
-          { id: 'rmv-cmn-blt', text: 'Remove Bloat' },
-          { id: 'eruda', text: 'Load Eruda' },
-          { id: 'chii', text: 'Load Chii' },
-          { id: 'ed-hax', text: 'Edpuzzle hax' },
-          { id: 'swamp', text: 'Swamp' },
-          { id: 'hstfld', text: 'History Flood' }
-        ];
-
-        const brElements = document.querySelectorAll('br');
-        const secondBr = brElements[1]; // target the second <br/>
-
-        buttonData.forEach(buttonInfo => {
-          const button = document.createElement('button');
-          button.id = buttonInfo.id;
-          button.textContent = buttonInfo.text;
-          secondBr.insertAdjacentElement('beforebegin', button); // Insert before the second <br/>
-        });
+        document.getElementById('eval-buttons').style.display = 'block';
       }
     }
 
