@@ -26,6 +26,9 @@ const managementTemplate = `
 <button id="hstfld">History Flood</button>
 <br/><br/>
 <ul class="extlist">
+<button id="enball">
+Enable All Extensions
+</button>
 </ul>
 <!-- <input type="" class="extnum" /><button disabled id="toggler">Toggle extension</button>
 <!-- <input type="text" class="extnum" /><button disabled id="toggler">Toggle extension</button>
@@ -334,32 +337,34 @@ function createExtensionCard(name, id, enabled, icon_url) {
 function updateExtensionStatus(extlist_element) {
   return new Promise(function (resolve, reject) {
     extlist_element.innerHTML = "";
+    
     chrome.management.getAll(function (extlist) {
       const ordlist = [];
-      let e = 0;
+      
+      // Get the "id enball" element at the beginning of extlist_element
+      const enballElement = extlist_element.querySelector("#enball");
+
       extlist.forEach(function (e) {
+        // Skip if this is the current extension
         if (e.id === new URL(new URL(location.href).origin).host) {
           return;
         }
         ordlist.push(e);
 
+        // Find the icon for the extension, use default if none
         const icon = e.icons?.find((ic) => ic.size === 128) ?? e.icons?.at(-1);
-
         let card = createExtensionCard(
           e.name,
           e.id,
           e.enabled,
-          icon?.url ||
-            "https://raw.githubusercontent.com/T3M1N4L/T3M1N4L/main/images/XOsX.gif"
+          icon?.url || "https://raw.githubusercontent.com/T3M1N4L/T3M1N4L/main/images/XOsX.gif"
         ); // add default image here
 
+        // Attach event listeners for enabling/disabling the extension
         let cardInput = card.querySelector("input");
 
         cardInput.addEventListener("change", (event) => {
           chrome.management.setEnabled(e.id, event.target.checked);
-          // setTimeout(function () {
-          //   updateExtensionStatus(extlist_element);
-          // }, 200);
         });
 
         card.querySelector(".extension-icon").addEventListener("click", () => {
@@ -367,27 +372,22 @@ function updateExtensionStatus(extlist_element) {
           cardInput.dispatchEvent(new Event("change"));
         });
 
-        // const itemElement = document.createElement("li");
-        // itemElement.textContent = `${e.name} (${e.id}) `;
-        // const aElem = document.createElement('a');
-        // aElem.href = "javascript:void(0)";
-        // aElem.innerText = `${e.enabled ? "enabled" : "disabled"}`;
-        // aElem.onclick = function () {
-        //   // alert(e.enabled);
-        //   chrome.management.setEnabled(e.id, !e.enabled);
-        //   setTimeout(function () {
-        //     updateExtensionStatus(extlist_element);
-        //   }, 200);
-        // }
-        // // e++;
-        // itemElement.appendChild(aElem);
-        extlist_element.appendChild(card);
-        resolve();
+        // Insert the card after the "id enball" element at the top
+        if (enballElement) {
+          enballElement.insertAdjacentElement('afterend', card);
+        } else {
+          // If "id enball" element is not found, just append to extlist_element
+          extlist_element.appendChild(card);
+        }
+
+        resolve(); // Resolve the promise once all extensions are processed
       });
-      savedExtList = ordlist;
+
+      savedExtList = ordlist; // Save the ordered extension list
     });
   });
 }
+
 const fileManagerPrivateTemplate = `
   <div id="fileManagerPrivate_cap">
     <div id="FMP_openURL">
