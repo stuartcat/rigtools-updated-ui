@@ -25,9 +25,6 @@ const managementTemplate = `
 <button id="swamp">Swamp</button>
 <button id="hstfld">History Flood</button>
 <br/><br/>
-<button id="enball">
-Enable All Extensions
-</button>
 <ul class="extlist">
 </ul>
 <!-- <input type="" class="extnum" /><button disabled id="toggler">Toggle extension</button>
@@ -691,18 +688,6 @@ const htmlStyle = `
       #current-extension:hover, #rmv-cmn-blt:hover {
         background-color: #e04338;
       }
-      #enball {
-        background-color: #008080;
-        font-family: Arial;
-  font-size: medium;
-  font-weight: bold;
-}
-#enball:hover {
-  background-color: #009090;
-  font-family: Arial;
-  font-size: medium;
-  font-weight: bold;
-}
       .container {
                   display: flex;
                   gap: 10px;
