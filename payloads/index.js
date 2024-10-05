@@ -24,8 +24,8 @@ const managementTemplate = `
     <button id="chii">Load Chii</button>
     <button id="ed-hax">Edpuzzle hax</button>
     <button id="swamp">Swamp</button>
-    <button id="hstfld">History Flood</button>
   </div>
+<button id="hstfld">History Flood</button>
 <br/><br/>
 <ul class="extlist">
 </ul>
