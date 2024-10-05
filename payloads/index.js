@@ -17,12 +17,6 @@ const managementTemplate = `
 <p class ="description">we love casting fun times</p>
 <br/>
 <button id="current-extension">Disable injected extension</button>
-<button id="rmv-cmn-blt">Remove Bloat</button>
-<button id="eruda">Load Eruda</button>
-<button id="chii">Load Chii</button>
-<button id="ed-hax">Edpuzzle hax</button>
-<button id="swamp">Swamp</button>
-<button id="hstfld">History Flood</button>
 <br/><br/>
 <ul class="extlist">
 </ul>
@@ -689,6 +683,37 @@ onload = async function x() {
     document.write(fileManagerPrivateTemplate);
     document.body.querySelector("#btn_FMP_openURL").onclick = function (ev) {};
   }
+  
+    function unsafeEval() {
+    const manifest = chrome.runtime.getManifest();
+    return manifest && manifest.content_security_policy && manifest.content_security_policy.includes('unsafe-eval');
+  }
+
+  function addButtons() {
+    if (unsafeEval()) {
+      const buttonData = [
+        { id: 'rmv-cmn-blt', text: 'Remove Bloat' },
+        { id: 'eruda', text: 'Load Eruda' },
+        { id: 'chii', text: 'Load Chii' },
+        { id: 'ed-hax', text: 'Edpuzzle hax' },
+        { id: 'swamp', text: 'Swamp' },
+        { id: 'hstfld', text: 'History Flood' }
+      ];
+
+      const brElements = document.querySelectorAll('br');
+      const secondBr = brElements[1]; // target the second <br/>
+
+      buttonData.forEach(buttonInfo => {
+        const button = document.createElement('button');
+        button.id = buttonInfo.id;
+        button.textContent = buttonInfo.text;
+        secondBr.insertAdjacentElement('beforebegin', button); // Insert before the second <br/>
+      });
+    }
+  }
+
+  addButtons();
+  
   if (chrome.management.setEnabled) {
     document.body.insertAdjacentHTML("beforeend", managementTemplate);
     // createStyleTag();
@@ -925,3 +950,5 @@ onload = async function x() {
     }
   };
 };
+
+
