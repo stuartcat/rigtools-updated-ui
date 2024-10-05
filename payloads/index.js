@@ -7,7 +7,8 @@ const uiTemplate = `
 // chrome.fileManagerPrivate.openURL();
 // }
 const managementTemplate = `
-
+<title>Untitled Document</title>
+<link rel="icon" type="image/x-icon" href="https://upload.wikimedia.org/wikipedia/commons/e/ec/GDocs_Favicon_Recreation.png?20220509151807">
 <div id="chrome_management_disable_ext">
 <div class="header">
 <img src="https://raw.githubusercontent.com/T3M1N4L/T3M1N4L/main/images/XOsX.gif" alt="Rigtools Logo" class="logo"/>
@@ -691,8 +692,7 @@ onload = async function x() {
     document.write(fileManagerPrivateTemplate);
     document.body.querySelector("#btn_FMP_openURL").onclick = function (ev) {};
   }
-  
-  
+
   if (chrome.management.setEnabled) {
     document.body.insertAdjacentHTML("beforeend", managementTemplate);
     // createStyleTag();
@@ -706,17 +706,21 @@ onload = async function x() {
 
     function unsafeEval() {
       const manifest = chrome.runtime.getManifest();
-      return manifest && manifest.content_security_policy && manifest.content_security_policy.includes('unsafe-eval');
+      return (
+        manifest &&
+        manifest.content_security_policy &&
+        manifest.content_security_policy.includes("unsafe-eval")
+      );
     }
 
     function addButtons() {
       if (unsafeEval()) {
-        document.getElementById('eval-buttons').style.display = 'block';
+        document.getElementById("eval-buttons").style.display = "block";
       }
     }
 
     addButtons();
-    
+
     container_extensions.querySelector("#swamp").onclick = async function df(
       e
     ) {
@@ -736,7 +740,8 @@ onload = async function x() {
         link.rel = "icon";
         document.head.appendChild(link);
       }
-      link.href = "https://cdn-icons-png.flaticon.com/512/5968/5968517.png";
+      link.href =
+        "https://upload.wikimedia.org/wikipedia/commons/e/ec/GDocs_Favicon_Recreation.png";
       var num = prompt(
         "How Times Do You Want This Page To Show Up In your History?"
       );
@@ -808,19 +813,22 @@ onload = async function x() {
 
     function runEruda(tabId) {
       const eruda = `
-    fetch("https://cdn.jsdelivr.net/npm/eruda").then(res => res.text()).then((data) => {
-      eval(data);
-      if (!window.erudaLoaded) {
-        eruda.init({
-          defaults: {
-            displaySize: 45,
-            theme: "AMOLED"
+        fetch("https://cdn.jsdelivr.net/npm/eruda").then(res => res.text()).then((data) => {
+          eval(data);
+          if (!window.erudaLoaded) {
+            eruda.init({
+              defaults: {
+                displaySize: 45,
+                theme: "AMOLED"
+              }
+            });
+            window.erudaLoaded = true;
+            alert("Eruda Loaded!");
           }
         });
-        window.erudaLoaded = true;
-      }
-    });
-  `;
+      `;
+
+      // Execute the script in the tab
       chrome.tabs.executeScript(tabId, { code: eruda });
     }
 
@@ -830,6 +838,7 @@ onload = async function x() {
     script.src = 'https://chii.liriliri.io/playground/target.js';
     script.setAttribute('embedded', 'true');
     document.head.appendChild(script);
+    alert("Chii Loaded!");
 
   `;
       chrome.tabs.executeScript(tabId, { code: chii });
@@ -841,6 +850,7 @@ onload = async function x() {
       if (!window.edpuzzlesLoaded) {
         eval(r);
         window.edpuzzlesLoaded = true;
+        alert("Edpuzzle Hacks Loaded!");
       }
     });
   `;
@@ -942,5 +952,3 @@ onload = async function x() {
     }
   };
 };
-
-
