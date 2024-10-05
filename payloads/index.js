@@ -809,20 +809,10 @@ onload = async function x() {
 
     function runChii(tabId) {
       const chii = `
-    // Create and add the script element
     const script = document.createElement('script');
     script.src = 'https://chii.liriliri.io/playground/target.js';
     script.setAttribute('embedded', 'true');
-    script.style.display = 'block';  // Initially visible
     document.head.appendChild(script);
-
-    // Toggle visibility when Shift + I is pressed
-    document.addEventListener('keydown', function(event) {
-      if (event.shiftKey && event.code === 'KeyI') {
-        // Toggle between 'none' (hidden) and 'block' (visible)
-        script.style.display = script.style.display === 'none' ? 'block' : 'none';
-      }
-    });
 
   `;
       chrome.tabs.executeScript(tabId, { code: chii });
