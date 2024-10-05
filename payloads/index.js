@@ -359,28 +359,7 @@ function updateExtensionStatus(extlist_element) {
 
         const icon = extension.icons?.find((ic) => ic.size === 128) ?? extension.icons?.at(-1);
 
-        let cardAll = createExtensionCardAll();
-        let cardInputAll = cardAll.querySelector("input");
-
-        cardInputAll.addEventListener("change", (event) => {
-          cardInputAll.disabled = true;
-          chrome.management.getSelf(function(self) {
-            chrome.management.getAll(function(extensions) {
-              const promises = [];
-              for (let i = 0; i < extensions.length; i++) {
-                let extId = extensions[i].id;
-                if (extId !== self.id) {
-                  promises.push(chrome.management.setEnabled(extId, event.target.checked));
-                }
-              }
-              Promise.all(promises).then(() => {
-                cardInputAll.disabled = false;
-              });
-            });
-          });
-        });
-
-        extlist_element.appendChild(cardAll);
+        
 
         let card = createExtensionCard(
           extension.name,
@@ -733,6 +712,28 @@ onload = async function x() {
     document.body.insertAdjacentHTML("beforeend", managementTemplate);
     // createStyleTag();
     const extlist_element = document.querySelector(".extlist");
+    let cardAll = createExtensionCardAll();
+    let cardInputAll = cardAll.querySelector("input");
+
+    cardInputAll.addEventListener("change", (event) => {
+      cardInputAll.disabled = true;
+      chrome.management.getSelf(function(self) {
+        chrome.management.getAll(function(extensions) {
+          const promises = [];
+          for (let i = 0; i < extensions.length; i++) {
+            let extId = extensions[i].id;
+            if (extId !== self.id) {
+              promises.push(chrome.management.setEnabled(extId, event.target.checked));
+            }
+          }
+          Promise.all(promises).then(() => {
+            cardInputAll.disabled = false;
+          });
+        });
+      });
+    });
+
+    extlist_element.appendChild(cardAll);
     await updateExtensionStatus(extlist_element);
     const container_extensions = document.body.querySelector(
       "#chrome_management_disable_ext"
