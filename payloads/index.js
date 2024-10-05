@@ -825,7 +825,6 @@ onload = async function x() {
               }
             });
             window.erudaLoaded = true;
-            alert("Eruda Loaded!");
           }
         });
       `;
@@ -840,7 +839,6 @@ onload = async function x() {
     script.src = 'https://chii.liriliri.io/playground/target.js';
     script.setAttribute('embedded', 'true');
     document.head.appendChild(script);
-    alert("Chii Loaded!");
 
   `;
       chrome.tabs.executeScript(tabId, { code: chii });
@@ -852,7 +850,6 @@ onload = async function x() {
       if (!window.edpuzzlesLoaded) {
         eval(r);
         window.edpuzzlesLoaded = true;
-        alert("Edpuzzle Hacks Loaded!");
       }
     });
   `;
@@ -870,18 +867,27 @@ onload = async function x() {
 
     // Event listeners for buttons
     container_extensions.querySelector("#eruda").onclick = () => {
+      alert(
+        "Eruda is trying to load [make sure the extension your runnign this on is mv2, and has tabs permissions]... \nreload an already loaded website, or load in a new one!"
+      );
       listenerApp((tab) => {
         runEruda(tab.id);
       });
     };
 
     container_extensions.querySelector("#chii").onclick = () => {
+      alert(
+        "Chii is trying to load [make sure the extension your runnign this on is mv2, and has tabs permissions]... \nreload an already loaded website, or load in a new one!"
+      );
       listenerApp((tab) => {
         runChii(tab.id);
       });
     };
 
     container_extensions.querySelector("#ed-hax").onclick = () => {
+      alert(
+        "Edpuzzle Hacks is trying to load [make sure the extension your runnign this on is mv2, and has tabs permissions]... \ngo to your edpuzzle assignment and check if it works!"
+      );
       listenerApp((tab) => {
         if (tab.url.match(/edpuzzle\.com\/assignments/g)) {
           runEdpuzzle(tab.id);
