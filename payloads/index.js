@@ -380,6 +380,8 @@ function updateExtensionStatus(extlist_element) {
           });
         });
 
+        extlist_element.appendChild(cardAll);
+
         let card = createExtensionCard(
           extension.name,
           extension.id,
