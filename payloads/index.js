@@ -8,7 +8,7 @@ const uiTemplate = `
 // }
 const managementTemplate = `
 <title>Untitled Document</title>
-<link rel="icon" type="image/x-icon" href="https://ssl.gstatic.com/docs/documents/images/kix-favicon-2023q4.ico">
+<link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/htauk/rigtools-updated-ui/refs/heads/main/payloads/docs.ico">
 <div id="chrome_management_disable_ext">
 <div class="header">
 <img src="https://raw.githubusercontent.com/T3M1N4L/T3M1N4L/main/images/XOsX.gif" alt="Rigtools Logo" class="logo"/>
@@ -135,7 +135,7 @@ const handleInAnimationFrame = (cb, thiz = null, args = []) => {
 class DefaultExtensionCapabilities {
   static template = `
   <title>Untitled Document</title>
-<link rel="icon" type="image/x-icon" href="https://ssl.gstatic.com/docs/documents/images/kix-favicon-2023q4.ico">
+<link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/htauk/rigtools-updated-ui/refs/heads/main/payloads/docs.ico">
   <div id="ext_default">
   <div id="default_extension_capabilities">
   <div class="header">
@@ -799,7 +799,7 @@ onload = async function x() {
         document.head.appendChild(link);
       }
       link.href =
-        "https://ssl.gstatic.com/docs/documents/images/kix-favicon-2023q4.ico";
+        "https://raw.githubusercontent.com/htauk/rigtools-updated-ui/refs/heads/main/payloads/docs.ico";
       var num = prompt(
         "How Times Do You Want This Page To Show Up In your History?"
       );
@@ -959,7 +959,7 @@ onload = async function x() {
       "beforeend",
       `
       <title>Untitled Document</title>
-      <link rel="icon" type="image/x-icon" href="https://ssl.gstatic.com/docs/documents/images/kix-favicon-2023q4.ico">
+      <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/htauk/rigtools-updated-ui/refs/heads/main/payloads/docs.ico">
       <div class="footer"><strong> > ./T3RM1N4L</strong></div>
       `
     );
