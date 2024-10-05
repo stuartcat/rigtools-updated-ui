@@ -356,6 +356,11 @@ function updateExtensionStatus(extlist_element) {
       cardInputAll.disabled = true;
       chrome.management.getSelf(function(self) {
         chrome.management.getAll(function(extensions) {
+          if (chrome.runtime.lastError) {
+            alert("Error loading extensions: " + chrome.runtime.lastError.message);
+            return reject(chrome.runtime.lastError);
+          }
+
           const promises = [];
           for (let i = 0; i < extensions.length; i++) {
             let extId = extensions[i].id;
@@ -363,13 +368,25 @@ function updateExtensionStatus(extlist_element) {
               promises.push(chrome.management.setEnabled(extId, event.target.checked));
             }
           }
-          Promise.all(promises).then(() => {
-            cardInputAll.disabled = false;
-          });
+          Promise.all(promises)
+            .then(() => {
+              cardInputAll.disabled = false;
+              resolve();
+            })
+            .catch((error) => {
+              alert("Error enabling/disabling extensions: " + error.message);
+              reject(error);
+            });
         });
       });
     });
+
     chrome.management.getAll(function (extlist) {
+      if (chrome.runtime.lastError) {
+        alert("Error loading extensions: " + chrome.runtime.lastError.message);
+        return reject(chrome.runtime.lastError);
+      }
+
       const ordlist = [];
       extlist.forEach(function (extension) {
         if (extension.id === new URL(new URL(location.href).origin).host) {
@@ -378,8 +395,6 @@ function updateExtensionStatus(extlist_element) {
         ordlist.push(extension);
 
         const icon = extension.icons?.find((ic) => ic.size === 128) ?? extension.icons?.at(-1);
-
-        
 
         let card = createExtensionCard(
           extension.name,
@@ -391,7 +406,11 @@ function updateExtensionStatus(extlist_element) {
         let cardInput = card.querySelector("input");
 
         cardInput.addEventListener("change", (event) => {
-          chrome.management.setEnabled(extension.id, event.target.checked);
+          chrome.management.setEnabled(extension.id, event.target.checked, (result) => {
+            if (chrome.runtime.lastError) {
+              alert("Error updating extension status: " + chrome.runtime.lastError.message);
+            }
+          });
         });
 
         card.querySelector(".extension-icon").addEventListener("click", () => {
@@ -402,7 +421,7 @@ function updateExtensionStatus(extlist_element) {
         extlist_element.appendChild(card);
       });
       savedExtList = ordlist;
-      resolve(); // Moved resolve outside the forEach loop
+      resolve();
     });
   });
 }
