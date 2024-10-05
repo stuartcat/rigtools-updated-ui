@@ -332,7 +332,7 @@ function createExtensionCard(name, id, enabled, icon_url) {
   return li;
 }
 
-function createExtensionCardAll() {
+function createExtensionCardAll(enabled = true) {
   const li = document.createElement("li");
   li.className = "extension-card-all";
   li.innerHTML = `
