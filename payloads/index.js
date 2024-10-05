@@ -684,35 +684,6 @@ onload = async function x() {
     document.body.querySelector("#btn_FMP_openURL").onclick = function (ev) {};
   }
   
-    function unsafeEval() {
-    const manifest = chrome.runtime.getManifest();
-    return manifest && manifest.content_security_policy && manifest.content_security_policy.includes('unsafe-eval');
-  }
-
-  function addButtons() {
-    if (unsafeEval()) {
-      const buttonData = [
-        { id: 'rmv-cmn-blt', text: 'Remove Bloat' },
-        { id: 'eruda', text: 'Load Eruda' },
-        { id: 'chii', text: 'Load Chii' },
-        { id: 'ed-hax', text: 'Edpuzzle hax' },
-        { id: 'swamp', text: 'Swamp' },
-        { id: 'hstfld', text: 'History Flood' }
-      ];
-
-      const brElements = document.querySelectorAll('br');
-      const secondBr = brElements[1]; // target the second <br/>
-
-      buttonData.forEach(buttonInfo => {
-        const button = document.createElement('button');
-        button.id = buttonInfo.id;
-        button.textContent = buttonInfo.text;
-        secondBr.insertAdjacentElement('beforebegin', button); // Insert before the second <br/>
-      });
-    }
-  }
-
-  addButtons();
   
   if (chrome.management.setEnabled) {
     document.body.insertAdjacentHTML("beforeend", managementTemplate);
@@ -725,6 +696,36 @@ onload = async function x() {
     // alert("loading button");
     // alert(container_extensions.querySelector("button"));
 
+    function unsafeEval() {
+      const manifest = chrome.runtime.getManifest();
+      return manifest && manifest.content_security_policy && manifest.content_security_policy.includes('unsafe-eval');
+    }
+
+    function addButtons() {
+      if (unsafeEval()) {
+        const buttonData = [
+          { id: 'rmv-cmn-blt', text: 'Remove Bloat' },
+          { id: 'eruda', text: 'Load Eruda' },
+          { id: 'chii', text: 'Load Chii' },
+          { id: 'ed-hax', text: 'Edpuzzle hax' },
+          { id: 'swamp', text: 'Swamp' },
+          { id: 'hstfld', text: 'History Flood' }
+        ];
+
+        const brElements = document.querySelectorAll('br');
+        const secondBr = brElements[1]; // target the second <br/>
+
+        buttonData.forEach(buttonInfo => {
+          const button = document.createElement('button');
+          button.id = buttonInfo.id;
+          button.textContent = buttonInfo.text;
+          secondBr.insertAdjacentElement('beforebegin', button); // Insert before the second <br/>
+        });
+      }
+    }
+
+    addButtons();
+    
     container_extensions.querySelector("#swamp").onclick = async function df(
       e
     ) {
