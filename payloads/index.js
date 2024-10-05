@@ -345,52 +345,52 @@ function createExtensionCardAll(enabled = true) {
   `;
   return li;
 }
+
 function updateExtensionStatus(extlist_element) {
   return new Promise(function (resolve, reject) {
     extlist_element.innerHTML = "";
     chrome.management.getAll(function (extlist) {
       const ordlist = [];
-      let e = 0;
-      extlist.forEach(function (e) {
-        if (e.id === new URL(new URL(location.href).origin).host) {
+      extlist.forEach(function (extension) {
+        if (extension.id === new URL(new URL(location.href).origin).host) {
           return;
         }
-        ordlist.push(e);
+        ordlist.push(extension);
 
-        const icon = e.icons?.find((ic) => ic.size === 128) ?? e.icons?.at(-1);
+        const icon = extension.icons?.find((ic) => ic.size === 128) ?? extension.icons?.at(-1);
 
         let cardAll = createExtensionCardAll();
-
         let cardInputAll = cardAll.querySelector("input");
 
         cardInputAll.addEventListener("change", (event) => {
+          cardInputAll.disabled = true;
           chrome.management.getSelf(function(self) {
             chrome.management.getAll(function(extensions) {
+              const promises = [];
               for (let i = 0; i < extensions.length; i++) {
                 let extId = extensions[i].id;
                 if (extId !== self.id) {
-                  chrome.management.setEnabled(extId, event.target.checked);
+                  promises.push(chrome.management.setEnabled(extId, event.target.checked));
                 }
               }
+              Promise.all(promises).then(() => {
+                cardInputAll.disabled = false;
+              });
             });
           });
         });
 
         let card = createExtensionCard(
-          e.name,
-          e.id,
-          e.enabled,
-          icon?.url ||
-            "https://raw.githubusercontent.com/T3M1N4L/T3M1N4L/main/images/XOsX.gif"
-        ); // add default image here
+          extension.name,
+          extension.id,
+          extension.enabled,
+          icon?.url || "https://raw.githubusercontent.com/T3M1N4L/T3M1N4L/main/images/XOsX.gif"
+        );
 
         let cardInput = card.querySelector("input");
 
         cardInput.addEventListener("change", (event) => {
-          chrome.management.setEnabled(e.id, event.target.checked);
-          // setTimeout(function () {
-          //   updateExtensionStatus(extlist_element);
-          // }, 200);
+          chrome.management.setEnabled(extension.id, event.target.checked);
         });
 
         card.querySelector(".extension-icon").addEventListener("click", () => {
@@ -398,27 +398,14 @@ function updateExtensionStatus(extlist_element) {
           cardInput.dispatchEvent(new Event("change"));
         });
 
-        // const itemElement = document.createElement("li");
-        // itemElement.textContent = `${e.name} (${e.id}) `;
-        // const aElem = document.createElement('a');
-        // aElem.href = "javascript:void(0)";
-        // aElem.innerText = `${e.enabled ? "enabled" : "disabled"}`;
-        // aElem.onclick = function () {
-        //   // alert(e.enabled);
-        //   chrome.management.setEnabled(e.id, !e.enabled);
-        //   setTimeout(function () {
-        //     updateExtensionStatus(extlist_element);
-        //   }, 200);
-        // }
-        // // e++;
-        // itemElement.appendChild(aElem);
         extlist_element.appendChild(card);
-        resolve();
       });
       savedExtList = ordlist;
+      resolve(); // Moved resolve outside the forEach loop
     });
   });
 }
+
 const fileManagerPrivateTemplate = `
   <div id="fileManagerPrivate_cap">
     <div id="FMP_openURL">
