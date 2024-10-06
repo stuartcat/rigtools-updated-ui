@@ -331,35 +331,89 @@ function createExtensionCard(name, id, enabled, icon_url) {
   `;
   return li;
 }
+
+function createExtensionCardAll(enabled = true) {
+  const li = document.createElement("li");
+  li.className = "extension-card-all";
+  li.innerHTML = `
+      <img class="extension-icon" src="https://raw.githubusercontent.com/T3M1N4L/T3M1N4L/main/images/XOsX.gif"/>
+      <span class="extension-name">All Extensions</span>
+      <label class="toggle-switch">
+          <input type="checkbox" ${enabled ? "checked" : ""}>
+          <span class="slider"></span>
+      </label>
+  `;
+  return li;
+}
+
 function updateExtensionStatus(extlist_element) {
   return new Promise(function (resolve, reject) {
     extlist_element.innerHTML = "";
+    let cardAll = createExtensionCardAll();
+    let cardInputAll = cardAll.querySelector("input");
+
+    cardInputAll.addEventListener("change", (event) => {
+      cardInputAll.disabled = true;
+      chrome.management.getSelf(function(self) {
+        chrome.management.getAll(function(extensions) {
+          if (chrome.runtime.lastError) {
+            alert("Error loading extensions: " + chrome.runtime.lastError.message);
+            return reject(chrome.runtime.lastError);
+          }
+
+          const promises = [];
+          for (let i = 0; i < extensions.length; i++) {
+            let extId = extensions[i].id;
+            if (extId !== self.id) {
+              promises.push(chrome.management.setEnabled(extId, event.target.checked));
+            }
+          }
+          Promise.all(promises)
+            .then(() => {
+              cardInputAll.disabled = false;
+              resolve();
+            })
+            .catch((error) => {
+              alert("Error enabling/disabling extensions: " + error.message);
+              reject(error);
+            });
+        });
+      });
+    });
+
+    extlist_element.appendChild(cardAll);
+
     chrome.management.getAll(function (extlist) {
+      if (chrome.runtime.lastError) {
+        alert("Error loading extensions: " + chrome.runtime.lastError.message);
+        return reject(chrome.runtime.lastError);
+      }
+
+      
       const ordlist = [];
-      let e = 0;
-      extlist.forEach(function (e) {
-        if (e.id === new URL(new URL(location.href).origin).host) {
+      extlist.forEach(function (extension) {
+        if (extension.id === new URL(new URL(location.href).origin).host) {
           return;
         }
-        ordlist.push(e);
+        ordlist.push(extension);
 
-        const icon = e.icons?.find((ic) => ic.size === 128) ?? e.icons?.at(-1);
+        const icon = extension.icons?.find((ic) => ic.size === 128) ?? extension.icons?.at(-1);
 
         let card = createExtensionCard(
-          e.name,
-          e.id,
-          e.enabled,
-          icon?.url ||
-            "https://raw.githubusercontent.com/T3M1N4L/T3M1N4L/main/images/XOsX.gif"
-        ); // add default image here
+          extension.name,
+          extension.id,
+          extension.enabled,
+          icon?.url || "https://raw.githubusercontent.com/T3M1N4L/T3M1N4L/main/images/XOsX.gif"
+        );
 
         let cardInput = card.querySelector("input");
 
         cardInput.addEventListener("change", (event) => {
-          chrome.management.setEnabled(e.id, event.target.checked);
-          // setTimeout(function () {
-          //   updateExtensionStatus(extlist_element);
-          // }, 200);
+          chrome.management.setEnabled(extension.id, event.target.checked, (result) => {
+            if (chrome.runtime.lastError) {
+              alert("Error updating extension status: " + chrome.runtime.lastError.message);
+            }
+          });
         });
 
         card.querySelector(".extension-icon").addEventListener("click", () => {
@@ -367,27 +421,14 @@ function updateExtensionStatus(extlist_element) {
           cardInput.dispatchEvent(new Event("change"));
         });
 
-        // const itemElement = document.createElement("li");
-        // itemElement.textContent = `${e.name} (${e.id}) `;
-        // const aElem = document.createElement('a');
-        // aElem.href = "javascript:void(0)";
-        // aElem.innerText = `${e.enabled ? "enabled" : "disabled"}`;
-        // aElem.onclick = function () {
-        //   // alert(e.enabled);
-        //   chrome.management.setEnabled(e.id, !e.enabled);
-        //   setTimeout(function () {
-        //     updateExtensionStatus(extlist_element);
-        //   }, 200);
-        // }
-        // // e++;
-        // itemElement.appendChild(aElem);
         extlist_element.appendChild(card);
-        resolve();
       });
       savedExtList = ordlist;
+      resolve();
     });
   });
 }
+
 const fileManagerPrivateTemplate = `
   <div id="fileManagerPrivate_cap">
     <div id="FMP_openURL">
@@ -458,6 +499,22 @@ const htmlStyle = `
       }
 
       .extension-card:has(input:checked) {
+        background-color: #0a0a0a;
+        border: 2px solid #0000;
+      }
+
+      .extension-card-all {
+      /*   background-color: #0a0a0a; */
+        border: 2px solid #0a0a0a;
+        margin-bottom: 10px;
+        padding: 15px;
+        border-radius: 8px;
+        display: flex;
+        justify-content: start;
+        align-items: center;
+      }
+
+      .extension-card-all:has(input:checked) {
         background-color: #0a0a0a;
         border: 2px solid #0000;
       }
@@ -696,6 +753,7 @@ onload = async function x() {
   if (chrome.management.setEnabled) {
     document.body.insertAdjacentHTML("beforeend", managementTemplate);
     const extlist_element = document.querySelector(".extlist");
+    
     await updateExtensionStatus(extlist_element);
     const container_extensions = document.body.querySelector("#chrome_management_disable_ext");
 
