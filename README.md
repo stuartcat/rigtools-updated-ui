@@ -1,3 +1,5 @@
+![Rigtools Logo Bouncing](https://github.com/T3M1N4L/rigtools-updated-ui/blob/main/rigtools-bounce.gif?raw=true)
+
 # Rigtools
 Extension/Devtools code execution  
 ## How to use
