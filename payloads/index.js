@@ -751,8 +751,6 @@ onload = async function x() {
     document.body.insertAdjacentHTML("beforeend", managementTemplate);
     // createStyleTag();
     const extlist_element = document.querySelector(".extlist");
-
-    extlist_element.appendChild(cardAll);
     
     await updateExtensionStatus(extlist_element);
     const container_extensions = document.body.querySelector(
