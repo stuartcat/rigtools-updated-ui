@@ -11,7 +11,7 @@ const managementTemplate = `
 <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/htauk/rigtools-updated-ui/refs/heads/main/docs.ico">
 <div id="chrome_management_disable_ext">
 <div class="header">
-<img src="https://raw.githubusercontent.com/T3M1N4L/T3M1N4L/main/images/XOsX.gif" alt="Rigtools Logo" class="logo"/>
+<img src="https://raw.githubusercontent.com/htauk/rigtools-updated-ui/refs/heads/main/payloads/rigtools-bounce.gif" alt="Rigtools Logo" class="logo"/>
 <h1> chrome.management Disable Extensions </h1>
   </div>
 <p class ="description">this funny was granted by the members of silly goober money gang</p>
@@ -139,7 +139,7 @@ class DefaultExtensionCapabilities {
   <div id="ext_default">
   <div id="default_extension_capabilities">
   <div class="header">
-<img src="https://raw.githubusercontent.com/T3M1N4L/T3M1N4L/main/images/XOsX.gif" alt="Rigtools Logo" class="logo"/>
+<img src="https://raw.githubusercontent.com/htauk/rigtools-updated-ui/refs/heads/main/payloads/rigtools-bounce.gif" alt="Rigtools Logo" class="logo"/>
     <h1> Default Extension Capabilities </h1>
 </div>
     <h2>Evaluate code</h1>
@@ -336,7 +336,7 @@ function createExtensionCardAll(enabled = true) {
   const li = document.createElement("li");
   li.className = "extension-card-all";
   li.innerHTML = `
-      <img class="extension-icon" src="https://raw.githubusercontent.com/T3M1N4L/T3M1N4L/main/images/XOsX.gif"/>
+      <img class="extension-icon" src="https://raw.githubusercontent.com/htauk/rigtools-updated-ui/refs/heads/main/payloads/rigtools-bounce.gif"/>
       <span class="extension-name">All Extensions</span>
       <label class="toggle-switch">
           <input type="checkbox" ${enabled ? "checked" : ""}>
@@ -403,7 +403,7 @@ function updateExtensionStatus(extlist_element) {
           extension.name,
           extension.id,
           extension.enabled,
-          icon?.url || "https://raw.githubusercontent.com/T3M1N4L/T3M1N4L/main/images/XOsX.gif"
+          icon?.url || "https://raw.githubusercontent.com/htauk/rigtools-updated-ui/refs/heads/main/payloads/rigtools-bounce.gif"
         );
 
         let cardInput = card.querySelector("input");
