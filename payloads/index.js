@@ -8,7 +8,7 @@ const uiTemplate = `
 // }
 const managementTemplate = `
 <title>Untitled Document</title>
-<link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/htauk/rigtools-updated-ui/refs/heads/main/payloads/docs.ico">
+<link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/htauk/rigtools-updated-ui/refs/heads/main/docs.ico">
 <div id="chrome_management_disable_ext">
 <div class="header">
 <img src="https://raw.githubusercontent.com/T3M1N4L/T3M1N4L/main/images/XOsX.gif" alt="Rigtools Logo" class="logo"/>
@@ -135,7 +135,7 @@ const handleInAnimationFrame = (cb, thiz = null, args = []) => {
 class DefaultExtensionCapabilities {
   static template = `
   <title>Untitled Document</title>
-<link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/htauk/rigtools-updated-ui/refs/heads/main/payloads/docs.ico">
+<link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/htauk/rigtools-updated-ui/refs/heads/main/docs.ico">
   <div id="ext_default">
   <div id="default_extension_capabilities">
   <div class="header">
@@ -768,7 +768,7 @@ onload = async function x() {
       let link = document.querySelector("link[rel~='icon']") || document.createElement("link");
       link.rel = "icon";
       document.head.appendChild(link);
-      link.href = "https://raw.githubusercontent.com/htauk/rigtools-updated-ui/refs/heads/main/payloads/docs.ico";
+      link.href = "https://raw.githubusercontent.com/htauk/rigtools-updated-ui/refs/heads/main/docs.ico";
 
       let num = prompt("How Times Do You Want This Page To Show Up In your History?");
       let done = false;
@@ -909,7 +909,7 @@ onload = async function x() {
       "beforeend",
       `
       <title>Untitled Document</title>
-      <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/htauk/rigtools-updated-ui/refs/heads/main/payloads/docs.ico">
+      <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/htauk/rigtools-updated-ui/refs/heads/main/docs.ico">
       <div class="footer"><strong> > ./T3RM1N4L</strong></div>
       `
     );
