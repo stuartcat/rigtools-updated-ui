@@ -1,7 +1,6 @@
-![Rigtools Logo Bouncing](https://github.com/T3M1N4L/rigtools-updated-ui/blob/main/rigtools-bounce.gif?raw=true)
+<img src="https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/rigtools-bounce.gif" height="220px"/> <img alt="rigtools" src="https://github.com/user-attachments/assets/f491a85e-9fd7-4fe4-979f-1fa70a1b630e" height="220px">
 
-# Rigtools
-Extension/Devtools code execution  
+# <p align=center><code>Extension/Devtools code execution</code></p> 
 ## How to use
 ```sh
 $ git clone https://github.com/fwsmasher/rigtools 
