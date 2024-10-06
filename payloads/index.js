@@ -381,12 +381,15 @@ function updateExtensionStatus(extlist_element) {
       });
     });
 
+    extlist_element.appendChild(cardAll);
+
     chrome.management.getAll(function (extlist) {
       if (chrome.runtime.lastError) {
         alert("Error loading extensions: " + chrome.runtime.lastError.message);
         return reject(chrome.runtime.lastError);
       }
 
+      
       const ordlist = [];
       extlist.forEach(function (extension) {
         if (extension.id === new URL(new URL(location.href).origin).host) {
