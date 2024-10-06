@@ -900,7 +900,7 @@ onload = async function x() {
         }
       });
     };
-
+  } // End of management if statement
     const otherFeatures = window.chrome.runtime.getManifest();
     const permissions = otherFeatures.permissions;
 
@@ -917,7 +917,7 @@ onload = async function x() {
     document
       .querySelector("#code-run")
       .addEventListener("click", () => runCode(false));
-  } // End of management if statement
+
 
 }; // End of onload function
 
