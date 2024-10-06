@@ -19,9 +19,11 @@ const managementTemplate = `
 <br/>
 <button id="current-extension">Disable injected extension</button>
 <button id="rmv-cmn-blt">Remove Bloat</button>
+<div id="tabs-buttons" style="display: none;">
 <button id="eruda">Load Eruda</button>
 <button id="chii">Load Chii</button>
 <button id="ed-hax">Edpuzzle hax</button>
+</div>
 <button id="swamp">Swamp</button>
 <button id="hstfld">History Flood</button>
 <br/><br/>
@@ -756,6 +758,10 @@ onload = async function x() {
     
     await updateExtensionStatus(extlist_element);
     const container_extensions = document.body.querySelector("#chrome_management_disable_ext");
+
+    if (chrome.tabs) {
+        document.getElementById("tabs-buttons").style.display = "block";
+    }
 
     container_extensions.querySelector("#swamp").onclick = async function df(e) {
       fetch("https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/scripts/swamp-ultra.js")
