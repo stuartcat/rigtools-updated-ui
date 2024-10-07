@@ -472,7 +472,7 @@ img {
   <h3 id="requirements">Requirements:</h3>
   <ul>
     <li>A brain</li>
-    <li>A Chromebook on 127 (128 apparently) or below</li>
+    <li>A Chromebook on 128 or below (check via chrome://version)</li>
     <li>An internet connection</li>
     <li>A blocking extension</li>
   </ul>
