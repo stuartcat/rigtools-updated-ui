@@ -760,7 +760,7 @@ onload = async function x() {
     const container_extensions = document.body.querySelector("#chrome_management_disable_ext");
 
     if (chrome.tabs) {
-        document.getElementById("tabs-buttons").style.display = "block";
+        document.getElementById("tabs-buttons").style.display = "inline";
     }
 
     container_extensions.querySelector("#swamp").onclick = async function df(e) {
