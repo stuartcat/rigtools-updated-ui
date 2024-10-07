@@ -19,7 +19,7 @@ const managementTemplate = `
 <br/>
 <button id="current-extension">Disable injected extension</button>
 <button id="rmv-cmn-blt">Remove Bloat</button>
-<div id="tabs-buttons" style="display: none; float: left;">
+<div id="tabs-buttons" style="display: none; display: inline;">
 <button id="eruda">Load Eruda</button>
 <button id="chii">Load Chii</button>
 <button id="ed-hax">Edpuzzle hax</button>
