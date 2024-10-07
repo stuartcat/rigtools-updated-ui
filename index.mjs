@@ -14,8 +14,65 @@ const serve = serveStatic("./");
 
 // Custom HTML page to show when visiting WebSocket port as a regular HTTP request
 const customHtmlPage = `
-    <h1>read the documentation you fucking idiot</h1>
-    <p>you arent supposed to open this page as a regular http site</p>
+    <head>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<style>
+h1,
+h3,
+p,
+ul,
+ol {
+  text-align: center;
+}
+ul,
+ol {
+  list-style-position: inside; /* This makes bullets/numbers align with the text */
+  padding-left: 0; /* Remove left padding */
+}
+li {
+  display: block; /* Ensure list items are centered as block elements */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+</style>
+</head>
+
+<h1 id="how-to-use-rigtools-updated">How to use RigTools (UPDATED)</h1> <hr>
+<h3 id="requirements">Requirements:</h3>
+<ul>
+<li>A brain</li>
+<li>A Chromebook on 127 (128 apparently) or below</li>
+<li>An internet connection</li>
+<li>A blocking extension</li>
+</ul>
+<hr>
+<h3 id="links">Links:</h3>
+<ul>
+<li><code>devtools://devtools/bundled/devtools_app.html?experiments=true&amp;ws=rigtools.appleflyer.xyz:5506</code> (5 payload UI)</li>
+<li><code>devtools://devtools/bundled/devtools_app.html?experiments=true&amp;wss=rig.ccsd.store</code> </li>
+<li><code>devtools://devtools/bundled/devtools_app.html?experiments=true&amp;ws=sincereham222.cc:8080</code> (old UI)</li>
+<li><code>devtools://devtools/bundled/devtools_app.html?experiments=true&amp;wss=rwpk9g-8080.csb.app</code> <br><br>
+<em><strong>Note</strong>: For links with the updated UI, only go to step 4 bc the rest is self-explanatory. Also, the images are not relevant for the updated UI.</em>
+<strong>WARNING:</strong> Links may sometimes be down. If so, try a different one.</li>
+</ul>
+<hr>
+<h3 id="instructions">Instructions:</h3>
+<ol>
+<li>Open <code>devtools://devtools/bundled/devtools_app.html</code></li>
+<li>Open one of the links above in a new tab (I recommend <code>rig.ccsd.store</code>, it has the new UI and is almost always up)</li>
+<li>Double click the gray box (image below)</li>
+<li>If you have specific extension buttons, click your extension button. Otherwise, click the extension id button and paste in your blocking extension&#39;s id (it has to be installed by administrator and it has to have the ability to manage other extensions)</li>
+<li><em><strong>For people using older UI ONLY:</strong></em> Click the fifth button (P5) <strong>OR</strong> Click &quot;Disable currently running extension&quot;</li>
+</ol>
+<p><em><strong>Note</strong>: After using rigtools, the chrome.management page will always be located at <code>filesystem:chrome-extension://ext-id/temporary/index.html</code>. It is recommended to bookmark this page as it persists after shutdown and is only overwritten by using rigtools again</em></p>
+<hr>
+<h3 id="good-scripts">Good Scripts:</h3>
+<p><a href="https://discord.com/channels/419123358698045453/1275095763919306812/1286434785199390863">Swamp ULTRA</a></p>
+<hr>
+<h3 id="repo">Repo:</h3>
+<p><a href="https://github.com/FWSmasher/rigtools">https://github.com/FWSmasher/rigtools</a></p>
+
 `;
 
 let globalUID = 0;
