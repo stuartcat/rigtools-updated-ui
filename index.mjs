@@ -497,11 +497,9 @@ img {
   <p><a href="https://github.com/T3M1N4L/rigtools-updated-ui">https://github.com/T3M1N4L/rigtools-updated-ui</a> Based off of <a href="https://github.com/Miner49ur/rigtools">Miner49ur's fork of Rigtools</a></p>
 
   <script>
-    // Get the current page URL without the protocol (https://)
+    // Correctly assigning the URL for 'generated-link'
     const currentUrl = window.location.hostname + window.location.pathname;
-    
-    // Update the link with the current URL
-    document.getElementById('generated-link').textContent = "devtools://devtools/bundled/devtools_app.html?experiments=true&ws=${currentUrl}";
+    document.getElementById('generated-link').textContent = "devtools://devtools/bundled/devtools_app.html?experiments=true&ws=" + currentUrl;
   </script>
 </body>
 
