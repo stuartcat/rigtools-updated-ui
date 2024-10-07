@@ -9,11 +9,10 @@ import path from "path";
 const WebSocket_port = 8080;
 const HTTP_port = 9123;
 
-// Serve static files
+// serve static files
 const serve = serveStatic("./");
 
-// Custom HTML page to show when visiting WebSocket port as a regular HTTP request
-const customHtmlPage = `
+const WhalePage = `
 <head>
 <style>
 /* Import Inter font */
@@ -23,16 +22,16 @@ const customHtmlPage = `
 :root {
 	--nc-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 	--nc-font-mono: Consolas, monaco, 'Ubuntu Mono', 'Liberation Mono', 'Courier New', Courier, monospace;
-	--nc-tx-1: #000000;
-	--nc-tx-2: #1A1A1A;
-	--nc-bg-1: #FFFFFF;
-	--nc-bg-2: #F6F8FA;
-	--nc-bg-3: #E5E7EB;
-	--nc-lk-1: #0070F3;
-	--nc-lk-2: #0366D6;
+	--nc-tx-1: #ffffff;
+	--nc-tx-2: #eeeeee;
+	--nc-bg-1: #000000;
+	--nc-bg-2: #111111;
+	--nc-bg-3: #222222;
+	--nc-lk-1: #3291FF;
+	--nc-lk-2: #0070F3;
 	--nc-lk-tx: #FFFFFF;
-	--nc-ac-1: #79FFE1;
-	--nc-ac-tx: #0C4047;
+	--nc-ac-1: #7928CA;
+	--nc-ac-tx: #FFFFFF;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -467,7 +466,8 @@ img {
 </head>
 
 <body>
-  <h1 id="how-to-use-rigtools-updated">How to use RigTools (UPDATED)</h1>
+<p align=center><img src="https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/rigtools-bounce.gif" height="170vh"/> <img alt="rigtools" src="https://github.com/user-attachments/assets/f491a85e-9fd7-4fe4-979f-1fa70a1b630e" height="170vh"></p>
+  <h1 id="how-to-use-rigtools-updated">How to use RigTools</h1>
   <hr>
   <h3 id="requirements">Requirements:</h3>
   <ul>
@@ -516,9 +516,8 @@ try {
     console.log(`Using default update url ${JSON.parse(serverConfig).updater_url} because it failed to read the file: \n${e}`);
 }
 
-// Create a single server to handle both HTTP and WebSocket
+
 const server = createServer((req, res) => {
-    // Check if the request is a WebSocket upgrade request
     if (req.headers.upgrade && req.headers.upgrade.toLowerCase() === 'websocket') {
         return;
     }
@@ -527,7 +526,7 @@ const server = createServer((req, res) => {
     res.setHeader("Content-Type", "text/html");
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.writeHead(200);
-    res.end(customHtmlPage);
+    res.end(WhalePage);
 });
 
 // WebSocket server
@@ -570,7 +569,6 @@ wss.on("connection", function connection(wss_con) {
     });
 });
 
-// Start the server for both WebSocket and HTTP
 server.listen(WebSocket_port, () => {
     console.log(`Server running and WebSocket accessible at ws://localhost:${WebSocket_port}`);
 });
