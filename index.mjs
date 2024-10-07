@@ -34,21 +34,6 @@ const WhalePage = `
 	--nc-ac-tx: #FFFFFF;
 }
 
-@media (prefers-color-scheme: dark) {
-	:root {
-		--nc-tx-1: #ffffff;
-		--nc-tx-2: #eeeeee;
-		--nc-bg-1: #000000;
-		--nc-bg-2: #111111;
-		--nc-bg-3: #222222;
-		--nc-lk-1: #3291FF;
-		--nc-lk-2: #0070F3;
-		--nc-lk-tx: #FFFFFF;
-		--nc-ac-1: #7928CA;
-		--nc-ac-tx: #FFFFFF;
-	}
-}
-
 * {
 	/* Reset margins and padding */
 	margin: 0;
@@ -466,7 +451,13 @@ img {
 </head>
 
 <body>
-<p align=center><img src="https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/rigtools-bounce.gif" height="170vh"/> <img alt="rigtools" src="https://github.com/user-attachments/assets/f491a85e-9fd7-4fe4-979f-1fa70a1b630e" height="170vh"></p>
+
+<div style="text-align: center;">
+    <div style="display: flex; justify-content: center; align-items: flex-start;">
+    <img src="https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/rigtools-bounce.gif" height="170vh" style="margin-right: 10px;" />
+    <img alt="rigtools" src="https://github.com/user-attachments/assets/f491a85e-9fd7-4fe4-979f-1fa70a1b630e" height="170vh" />
+</div>
+
   <h1 id="how-to-use-rigtools-updated">How to use RigTools</h1>
   <hr>
   <h3 id="requirements">Requirements:</h3>
