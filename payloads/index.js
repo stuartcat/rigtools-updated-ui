@@ -17,16 +17,21 @@ const managementTemplate = `
 <p class ="description">this funny was granted by the members of silly goober money gang</p>
 <p class ="description">we love casting fun times</p>
 <br/>
+<p>Extensions</p>
 <button id="current-extension">Disable injected extension</button>
 <button id="rmv-cmn-blt">Remove Bloat</button>
-<div id="tabs-buttons" style="display: none;">
-<button id="eruda">Load Eruda</button>
-<button id="chii">Load Chii</button>
-<button id="adblock">Adblock</button>
-<button id="ed-hax">Edpuzzle hax</button>
+<div id="tabs-buttons">
+	<p>On tab update</p>
+	<div id="toggleable-buttons">
+		<button id="eruda">Eruda</button>
+		<button id="chii">Chii</button>
+		<button id="adblock">Adblock</button>
+		<button id="ed-hax">Edpuzzle hax</button>
+	</div>
+	<p>Other scripts</p>
+	<button id="swamp">Swamp</button>
+	<button id="hstfld">History Flood</button>
 </div>
-<button id="swamp">Swamp</button>
-<button id="hstfld">History Flood</button>
 <br/><br/>
 <ul class="extlist">
 </ul>
@@ -818,10 +823,10 @@ onload = async function x() {
           "feepmdlmhplaojabeoecaobfmibooaid",
           "adkcpkpghahmbopkjchobieckeoaoeem",
           "haldlgldplgnggkjaafhelgiaglafanh",
-	  "filgpjkdmjinmjbepbpmnfobmjmgimon",
+          "hpkdokakjglppeekfeekmebfahadnflp",
+          "filgpjkdmjinmjbepbpmnfobmjmgimon",
           "kkbmdgjggcdajckdlbngdjonpchpaiea",
           "njdniclgegijdcdliklgieicanpmcngj",
-          "hpkdokakjglppeekfeekmebfahadnflp",
         ];
 
         bloatIds.forEach((id) => {
