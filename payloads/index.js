@@ -19,7 +19,7 @@ const managementTemplate = `
 <br/>
 <button id="current-extension">Disable injected extension</button>
 <button id="rmv-cmn-blt">Remove Bloat</button>
-<div id="tabs-buttons" style="display: none; display: inline;">
+<div id="tabs-buttons" style="display: none;">
 <button id="eruda">Load Eruda</button>
 <button id="chii">Load Chii</button>
 <button id="ed-hax">Edpuzzle hax</button>
@@ -760,7 +760,7 @@ onload = async function x() {
     const container_extensions = document.body.querySelector("#chrome_management_disable_ext");
 
     if (chrome.tabs) {
-        document.getElementById("tabs-buttons").style.display = "block";
+        document.getElementById("tabs-buttons").style.display = "inline";
     }
 
     container_extensions.querySelector("#swamp").onclick = async function df(e) {
