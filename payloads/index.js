@@ -679,7 +679,7 @@ const htmlStyle = `
         transform: translateY(-50%);
         width: 40px;
         height: 20px;
-        background-color: #ffffff;
+        background-color: #000;
         border-radius: 10px;
         transition: background-color 0.3s;
       }
@@ -692,7 +692,7 @@ const htmlStyle = `
         transform: translateY(-50%);
         width: 16px;
         height: 16px;
-        background-color: #cccccc;
+        background-color: #1c1c1c;
         border-radius: 50%;
         transition: left 0.3s, background-color 0.3s;
       }
@@ -701,7 +701,7 @@ const htmlStyle = `
       }
 
       #toggleable-buttons button[toggled="true"]::before {
-        background-color: #44ccff;
+        background-color: #a200ff;
       }
 
       #toggleable-buttons button[toggled="true"]::after {
