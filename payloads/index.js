@@ -10,36 +10,24 @@ const managementTemplate = `
 <title>Untitled Document</title>
 <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/docs.ico">
 <div id="chrome_management_disable_ext">
-<div class="header">
-<img src="https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/rigtools-bounce.gif" alt="Rigtools Logo" class="logo"/>
-<h1> chrome.management Disable Extensions </h1>
+  <div class="header">
+    <img src="https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/rigtools-bounce.gif" alt="Rigtools Logo" class="logo" />
+    <h1> chrome.management Disable Extensions </h1>
   </div>
-<p class ="description">this funny was granted by the members of silly goober money gang</p>
-<p class ="description">we love casting fun times</p>
-<br/>
-<p>Extensions</p>
-<button id="current-extension">Disable injected extension</button>
-<button id="rmv-cmn-blt">Remove Bloat</button>
-<div id="tabs-buttons">
-	<p>On tab update</p>
-	<div id="toggleable-buttons">
-		<button id="eruda">Eruda</button>
-		<button id="chii">Chii</button>
-		<button id="adblock">Adblock</button>
-		<button id="edpuzzle">Edpuzzle hax</button>
-	</div>
-	<p>Other scripts</p>
-	<button id="swamp">Swamp</button>
-  <button id="update">Update Rigtools</button>
-	<button id="hstfld">History Flood</button>
-</div>
-<br/><br/>
-<ul class="extlist">
-</ul>
-<!-- <input type="" class="extnum" /><button disabled id="toggler">Toggle extension</button>
+  <p class="description">this funny was granted by the members of silly goober money gang</p>
+  <p class="description">we love casting fun times</p>
+  <br />
+  <p>Extensions</p>
+  <button id="current-extension">Disable injected extension</button>
+  <button id="rmv-cmn-blt">Remove Bloat</button>
+  <!-- Moved tab buttons to default capabilities with a conditon of chrome.tabs.executescript -->
+  <br /><br />
+  <ul class="extlist">
+  </ul>
+  <!-- <input type="" class="extnum" /><button disabled id="toggler">Toggle extension</button>
 <!-- <input type="text" class="extnum" /><button disabled id="toggler">Toggle extension</button>
 <br/><br/> -->
-<div style="height: 50px"></div>
+  <div style="height: 50px"></div>
 </div>
 
 `;
@@ -144,29 +132,44 @@ const handleInAnimationFrame = (cb, thiz = null, args = []) => {
 class DefaultExtensionCapabilities {
   static template = `
   <title>Untitled Document</title>
-<link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/docs.ico">
+  <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/docs.ico">
   <div id="ext_default">
-  <div id="default_extension_capabilities">
-  <div class="header">
-<img src="https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/rigtools-bounce.gif" alt="Rigtools Logo" class="logo"/>
-    <h1> Default Extension Capabilities </h1>
-</div>
-    <h2>Evaluate code</h1>
-    <div class="container">
-      <textarea id="code" placeholder=" Enter JavaScript to inject"></textarea>
+    <div id="default_extension_capabilities">
+      <div class="header">
+        <img src="https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/rigtools-bounce.gif" alt="Rigtools Logo" class="logo" />
+        <h1> Default Extension Capabilities </h1>
+      </div>
+      <div id="tabs-buttons">
+        <p>On tab update</p>
+        <div id="toggleable-buttons"> <!-- do not change these ids, used in button listener -->
+          <button id="eruda">Eruda</button>
+          <button id="chii">Chii</button>
+          <button id="adblock">Adblock</button>
+          <button id="edpuzzle">Edpuzzle hax</button>
+        </div>
+      </div>
+      <div id="other-buttons">
+        <p>Other scripts</p>
+        <button id="swamp">Swamp</button>
+        <button id="update">Update Rigtools</button>
+        <button id="hstfld">History Flood</button>
+      </div>
+      <h2>Evaluate code</h1>
+        <div class="container">
+          <textarea id="code" placeholder=" Enter JavaScript to inject"></textarea>
+        </div>
+        <button id="code-run">Run</button>
+        <div id="code-output"></div>
+
     </div>
-    <button id="code-run">Run</button>
-    <div id="code-output"></div>
-    
-  </div>
-  <div id="extension_tabs_default">
-  <button id="tabreload">Refresh Tabs</button>
-    <ul>
-    
-    </ul>
-    <input id="TabURLInput" /> <button id="TabURLSubmit">Create</button>
-    
-  </div>
+    <div id="extension_tabs_default">
+      <button id="tabreload">Refresh Tabs</button>
+      <ul>
+
+      </ul>
+      <input id="TabURLInput" /> <button id="TabURLSubmit">Create</button>
+
+    </div>
   </div>
   `; // TODO: Fix Navigator (For now I removed it)
   updateTabList() {
@@ -842,66 +845,6 @@ onload = async function x() {
     await updateExtensionStatus(extlist_element);
     const container_extensions = document.body.querySelector("#chrome_management_disable_ext");
 
-    if (chrome.tabs) {
-      document.getElementById("tabs-buttons").style.display = "inline";
-    }
-
-    container_extensions.querySelector("#swamp").onclick = async function df(e) {
-      fetch("https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/scripts/swamp-ultra.js")
-        .then((res) => res.text())
-        .then(eval);
-    };
-    container_extensions.querySelector("#update").onclick = async function df(e) {
-      (async () => {
- 
-        const fs = await new Promise(function (resolve) {
-              webkitRequestFileSystem(PERSISTENT, 2 * 1024 * 1024, resolve);
-            });
-        
-        function writeFile(file, data) {
-              return new Promise((resolve, reject) => {
-                fs.root.getFile(file, { create: true }, function (entry) {
-                  entry.remove(function () {
-                    fs.root.getFile(file, { create: true }, function (entry) {
-                      entry.createWriter(function (writer) {
-                        writer.write(new Blob([data]));
-                        writer.onwriteend = resolve.bind(null, entry.toURL());
-                      });
-                    });
-                  });
-                });
-              });
-            }
-        
-        const url = await writeFile("rigtools.html",`${await fetch("https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/payloads/index.html").then(res => res.text())}<script src="./rigtools.js"></script>`);
-        
-        await writeFile("rigtools.js", await fetch("https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/payloads/index.js").then(res => res.text()));
-        
-        chrome.tabs.create({ url });
-        
-        })();
-    };
-
-
-    container_extensions.querySelector("#hstfld").onclick = async function df(e) {
-      document.title = "Untitled Document";
-      let link = document.querySelector("link[rel~='icon']") || document.createElement("link");
-      link.rel = "icon";
-      document.head.appendChild(link);
-      link.href = "https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/docs.ico";
-
-      let num = prompt("How Times Do You Want This Page To Show Up In your History?");
-      let done = false;
-      const x = window.location.href;
-      for (let i = 1; i <= num; i++) {
-        history.pushState(0, 0, i === num ? x : i.toString());
-        if (i === num) done = true;
-      }
-      if (done) {
-        alert("Flooding Successful!\n " + window.location.href + " \nIs Now In Your History " + num + (num == 1 ? " time." : " Times."));
-      }
-    };
-
     container_extensions.querySelector("#current-extension").onclick = async function df(e) {
       try {
         const grabidtokill = chrome.runtime.id;
@@ -922,7 +865,7 @@ onload = async function x() {
           "feepmdlmhplaojabeoecaobfmibooaid",
           "adkcpkpghahmbopkjchobieckeoaoeem",
           "haldlgldplgnggkjaafhelgiaglafanh",
-	  "filgpjkdmjinmjbepbpmnfobmjmgimon",
+          "filgpjkdmjinmjbepbpmnfobmjmgimon",
           "kkbmdgjggcdajckdlbngdjonpchpaiea",
           "njdniclgegijdcdliklgieicanpmcngj",
           "hpkdokakjglppeekfeekmebfahadnflp"
@@ -939,6 +882,79 @@ onload = async function x() {
       }
     };
 
+  } // End of management if statement
+  const otherFeatures = window.chrome.runtime.getManifest();
+  const permissions = otherFeatures.permissions;
+
+  new DefaultExtensionCapabilities().activate();
+  document.body.insertAdjacentHTML(
+    "beforeend",
+    `
+      <title>Untitled Document</title>
+      <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/docs.ico">
+      <div class="footer"><strong>silly goober money gang</strong></div>
+      `
+  );
+
+  const ScriptButtons = document.querySelector("#other-buttons");
+
+  ScriptButtons.querySelector("#swamp").onclick = async function df(e) {
+    fetch("https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/scripts/swamp-ultra.js")
+      .then((res) => res.text())
+      .then(eval);
+  };
+
+  ScriptButtons.querySelector("#update").onclick = async function df(e) {
+    (async () => {
+
+      const fs = await new Promise(function (resolve) {
+        webkitRequestFileSystem(PERSISTENT, 2 * 1024 * 1024, resolve);
+      });
+
+      function writeFile(file, data) {
+        return new Promise((resolve, reject) => {
+          fs.root.getFile(file, { create: true }, function (entry) {
+            entry.remove(function () {
+              fs.root.getFile(file, { create: true }, function (entry) {
+                entry.createWriter(function (writer) {
+                  writer.write(new Blob([data]));
+                  writer.onwriteend = resolve.bind(null, entry.toURL());
+                });
+              });
+            });
+          });
+        });
+      }
+
+      const url = await writeFile("rigtools.html", `${await fetch("https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/payloads/index.html").then(res => res.text())}<script src="./rigtools.js"></script>`);
+
+      await writeFile("rigtools.js", await fetch("https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/payloads/index.js").then(res => res.text()));
+
+      chrome.tabs.create({ url });
+
+    })();
+  };
+
+  ScriptButtons.querySelector("#hstfld").onclick = async function df(e) {
+    document.title = "Untitled Document";
+    let link = document.querySelector("link[rel~='icon']") || document.createElement("link");
+    link.rel = "icon";
+    document.head.appendChild(link);
+    link.href = "https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/docs.ico";
+
+    let num = prompt("How Times Do You Want This Page To Show Up In your History?");
+    let done = false;
+    const x = window.location.href;
+    for (let i = 1; i <= num; i++) {
+      history.pushState(0, 0, i === num ? x : i.toString());
+      if (i === num) done = true;
+    }
+    if (done) {
+      alert("Flooding Successful!\n " + window.location.href + " \nIs Now In Your History " + num + (num == 1 ? " time." : " Times."));
+    }
+  };
+
+  if (chrome.tabs.executeScript) {
     // Declare a single listener for tab updates
     function listenerApp(callback) {
       const func = (id, changeInfo) => {
@@ -959,78 +975,80 @@ onload = async function x() {
     const listeners = {}; // map for removing listeners
 
     scripts.eruda = `
-      fetch("https://cdn.jsdelivr.net/npm/eruda").then(res => res.text()).then((data) => {
-        eval(data);
-        if (!window.erudaLoaded) {
-          eruda.init({
-            defaults: {
-              displaySize: 45,
-              theme: "AMOLED"
-            }
-          });
-          window.erudaLoaded = true;
-        }
-      });
-    `;
+    fetch("https://cdn.jsdelivr.net/npm/eruda").then(res => res.text()).then((data) => {
+      eval(data);
+      if (!window.erudaLoaded) {
+        eruda.init({
+          defaults: {
+            displaySize: 45,
+            theme: "AMOLED"
+          }
+        });
+        window.erudaLoaded = true;
+      }
+    });
+  `;
 
     scripts.chii = `
-      const script = document.createElement('script');
-      script.src = 'https://chii.liriliri.io/playground/target.js';
-      script.setAttribute('embedded', 'true');
-      document.head.appendChild(script);
-    `;
+    const script = document.createElement('script');
+    script.src = 'https://chii.liriliri.io/playground/target.js';
+    script.setAttribute('embedded', 'true');
+    document.head.appendChild(script);
+  `;
 
     scripts.adblock = `
-      (function(){
-        /* Ad-B-Gone: Bookmarklet that removes obnoxious ads from pages */
-        var selectors = [
-        /* By ID: */
-        '#sidebar-wrap', '#advert', '#xrail', '#middle-article-advert-container',
-        '#sponsored-recommendations', '#around-the-web', '#sponsored-recommendations',
-        '#taboola-content', '#taboola-below-taboola-native-thumbnails', '#inarticle_wrapper_div',
-        '#rc-row-container', '#ads', '#at-share-dock', '#at4-share', '#at4-follow', '#right-ads-rail',
-        'div#ad-interstitial', 'div#advert-article', 'div#ac-lre-player-ph',
-        /* By Class: */
-        '.ad', '.avert', '.avert__wrapper', '.middle-banner-ad', '.advertisement',
-        '.GoogleActiveViewClass', '.advert', '.cns-ads-stage', '.teads-inread', '.ad-banner',
-        '.ad-anchored', '.js_shelf_ads', '.ad-slot', '.antenna', '.xrail-content',
-        '.advertisement__leaderboard', '.ad-leaderboard', '.trc_rbox_outer', '.ks-recommended',
-        '.article-da', 'div.sponsored-stories-component', 'div.addthis-smartlayers',
-        'div.article-adsponsor', 'div.signin-prompt', 'div.article-bumper', 'div.video-placeholder',
-        'div.top-ad-container', 'div.header-ad', 'div.ad-unit', 'div.demo-block', 'div.OUTBRAIN',
-        'div.ob-widget', 'div.nwsrm-wrapper', 'div.announcementBar', 'div.partner-resources-block',
-        'div.arrow-down', 'div.m-ad', 'div.story-interrupt', 'div.taboola-recommended',
-        'div.ad-cluster-container', 'div.ctx-sidebar', 'div.incognito-modal', '.OUTBRAIN', '.subscribe-button',
-        '.ads9', '.leaderboards', '.GoogleActiveViewElement', '.mpu-container', '.ad-300x600', '.tf-ad-block',
-        '.sidebar-ads-holder-top', '.ads-one', '.FullPageModal__scroller',
-        '.content-ads-holder', '.widget-area', '.social-buttons', '.ac-player-ph',
-        /* Other: */
-        'aside#sponsored-recommendations', 'aside[role="banner"]', 'aside',
-        'amp-ad', 'span[id^=ad_is_]', 'div[class*="indianapolis-optin"]', 'div[id^=google_ads_iframe]',
-        'div[data-google-query-id]', 'section[data-response]', 'ins.adsbygoogle', 'div[data-google-query-id]',
-        'div[data-test-id="fullPageSignupModal"]', 'div[data-test-id="giftWrap"]' ];
-        for(let i in selectors) {
-            let nodesList = document.querySelectorAll(selectors[i]);
-            for(let i = 0; i < nodesList.length; i++) {
-                let el = nodesList[i];
-                if(el && el.parentNode)
-                el.parentNode.removeChild(el);
-            }
-        }
-      })();
-    `;
+    (function(){
+      /* Ad-B-Gone: Bookmarklet that removes obnoxious ads from pages */
+      var selectors = [
+      /* By ID: */
+      '#sidebar-wrap', '#advert', '#xrail', '#middle-article-advert-container',
+      '#sponsored-recommendations', '#around-the-web', '#sponsored-recommendations',
+      '#taboola-content', '#taboola-below-taboola-native-thumbnails', '#inarticle_wrapper_div',
+      '#rc-row-container', '#ads', '#at-share-dock', '#at4-share', '#at4-follow', '#right-ads-rail',
+      'div#ad-interstitial', 'div#advert-article', 'div#ac-lre-player-ph',
+      /* By Class: */
+      '.ad', '.avert', '.avert__wrapper', '.middle-banner-ad', '.advertisement',
+      '.GoogleActiveViewClass', '.advert', '.cns-ads-stage', '.teads-inread', '.ad-banner',
+      '.ad-anchored', '.js_shelf_ads', '.ad-slot', '.antenna', '.xrail-content',
+      '.advertisement__leaderboard', '.ad-leaderboard', '.trc_rbox_outer', '.ks-recommended',
+      '.article-da', 'div.sponsored-stories-component', 'div.addthis-smartlayers',
+      'div.article-adsponsor', 'div.signin-prompt', 'div.article-bumper', 'div.video-placeholder',
+      'div.top-ad-container', 'div.header-ad', 'div.ad-unit', 'div.demo-block', 'div.OUTBRAIN',
+      'div.ob-widget', 'div.nwsrm-wrapper', 'div.announcementBar', 'div.partner-resources-block',
+      'div.arrow-down', 'div.m-ad', 'div.story-interrupt', 'div.taboola-recommended',
+      'div.ad-cluster-container', 'div.ctx-sidebar', 'div.incognito-modal', '.OUTBRAIN', '.subscribe-button',
+      '.ads9', '.leaderboards', '.GoogleActiveViewElement', '.mpu-container', '.ad-300x600', '.tf-ad-block',
+      '.sidebar-ads-holder-top', '.ads-one', '.FullPageModal__scroller',
+      '.content-ads-holder', '.widget-area', '.social-buttons', '.ac-player-ph',
+      /* Other: */
+      'aside#sponsored-recommendations', 'aside[role="banner"]', 'aside',
+      'amp-ad', 'span[id^=ad_is_]', 'div[class*="indianapolis-optin"]', 'div[id^=google_ads_iframe]',
+      'div[data-google-query-id]', 'section[data-response]', 'ins.adsbygoogle', 'div[data-google-query-id]',
+      'div[data-test-id="fullPageSignupModal"]', 'div[data-test-id="giftWrap"]' ];
+      for(let i in selectors) {
+          let nodesList = document.querySelectorAll(selectors[i]);
+          for(let i = 0; i < nodesList.length; i++) {
+              let el = nodesList[i];
+              if(el && el.parentNode)
+              el.parentNode.removeChild(el);
+          }
+      }
+    })();
+  `;
 
     scripts.edpuzzle = `
-      fetch("https://cdn.jsdelivr.net/gh/Miner49ur/shorthand@main/edpuzzlingscript.js").then(r => r.text()).then(r => {
-        if (!window.edpuzzlesLoaded) {
-          eval(r);
-          window.edpuzzlesLoaded = true;
-        }
-      });
-    `;
+    fetch("https://cdn.jsdelivr.net/gh/Miner49ur/shorthand@main/edpuzzlingscript.js").then(r => r.text()).then(r => {
+      if (!window.edpuzzlesLoaded) {
+        eval(r);
+        window.edpuzzlesLoaded = true;
+      }
+    });
+  `;
     conditions.edpuzzle = (tab) => (tab.url.match(/edpuzzle\.com\/assignments/g));
 
-    container_extensions.querySelectorAll("#toggleable-buttons button").forEach(b => b.onclick = () => {
+    const ToggleButtons = document.querySelector("#tabs-buttons");
+
+    ToggleButtons.querySelectorAll("button").forEach(b => b.onclick = () => {
       const id = b.id;
 
       if (b.hasAttribute("toggled")) { // toggle off
@@ -1051,20 +1069,7 @@ onload = async function x() {
       }
 
     })
-
-  } // End of management if statement
-  const otherFeatures = window.chrome.runtime.getManifest();
-  const permissions = otherFeatures.permissions;
-
-  new DefaultExtensionCapabilities().activate();
-  document.body.insertAdjacentHTML(
-    "beforeend",
-    `
-      <title>Untitled Document</title>
-      <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/docs.ico">
-      <div class="footer"><strong>silly goober money gang</strong></div>
-      `
-  );
+  }
 
   document
     .querySelector("#code-run")
