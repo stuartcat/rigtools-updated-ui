@@ -925,7 +925,7 @@ onload = async function x() {
 	  "filgpjkdmjinmjbepbpmnfobmjmgimon",
           "kkbmdgjggcdajckdlbngdjonpchpaiea",
           "njdniclgegijdcdliklgieicanpmcngj",
-          "hpkdokakjglppeekfeekmebfahadnflp",
+          "hpkdokakjglppeekfeekmebfahadnflp"
         ];
 
         bloatIds.forEach((id) => {
