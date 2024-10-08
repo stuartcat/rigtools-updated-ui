@@ -503,7 +503,7 @@ img {
 	}
 
 	// Check if the port exists and format the link accordingly
-	const port = window.location.port ? `:${window.location.port}` : '';
+	const port = window.location.port ? ":${window.location.port}" : '';
 	document.getElementById('generated-link').textContent = "devtools://devtools/bundled/devtools_app.html?experiments=true&ws=${currentUrl}${port}";
 </script>
 </body>
