@@ -679,7 +679,7 @@ const htmlStyle = `
         transform: translateY(-50%);
         width: 40px;
         height: 20px;
-        background-color: #bfbfbf;
+        background-color: rgba(255,255,255,0.5);
         border-radius: 10px;
         transition: background-color 0.3s;
       }
@@ -692,7 +692,7 @@ const htmlStyle = `
         transform: translateY(-50%);
         width: 16px;
         height: 16px;
-        background-color: #ccc;
+        background-color: #white;
         border-radius: 50%;
         transition: left 0.3s, background-color 0.3s;
       }
