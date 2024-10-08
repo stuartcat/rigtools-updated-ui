@@ -498,7 +498,7 @@ img {
   <script>
     // Correctly assigning the URL for 'generated-link'
     const currentUrl = window.location.hostname + window.location.pathname;
-    document.getElementById('generated-link').textContent = "devtools://devtools/bundled/devtools_app.html?experiments=true&ws=" + currentUrl;
+    document.getElementById('generated-link').textContent = "devtools://devtools/bundled/devtools_app.html?experiments=true&ws=" + currentUrl + ":" + window.location.port;
   </script>
 </body>
 
