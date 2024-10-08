@@ -460,54 +460,53 @@ img {
 	</div>
 </div>
 
-  <h1 id="how-to-use-rigtools-updated">How to use RigTools</h1>
-  <hr>
-  <h3 id="requirements">Requirements:</h3>
-  <ul>
+<h1 id="how-to-use-rigtools-updated">How to use RigTools</h1>
+<hr>
+<h3 id="requirements">Requirements:</h3>
+<ul>
     <li>A brain</li>
     <li>A Chromebook on 128 or below (check via chrome://version)</li>
     <li>An internet connection</li>
     <li>A blocking extension</li>
-  </ul>
-  <hr>
-  <h3 id="links">Link:</h3>
-  <ul>
+</ul>
+<hr>
+<h3 id="links">Link:</h3>
+<ul>
     <li>
-      <code id="generated-link"></code>
+        <code id="generated-link"></code>
     </li>
-  </ul>
-  <hr>
-  <h3 id="instructions">Instructions:</h3>
-  <ol>
+</ul>
+<hr>
+<h3 id="instructions">Instructions:</h3>
+<ol>
     <li>Open <code>devtools://devtools/bundled/devtools_app.html</code></li>
     <li>Open up the link above</li>
     <li>Double click the gray box</li>
-    <li>If you have specific extension buttons, click your extension button. Otherwise, click the extension id button and paste in your blocking extension&#39;s id (it has to be installed by administrator and it has to have the ability to manage other extensions)</li>
-  </ol>
-  <blockquote>
+    <li>If you have specific extension buttons, click your extension button. Otherwise, click the extension id button and paste in your blocking extension's id (it has to be installed by administrator and it has to have the ability to manage other extensions)</li>
+</ol>
+<blockquote>
 <p><strong>Note</strong>: After using rigtools, the chrome.management page will always be located at <code>filesystem:chrome-extension://ext-id/temporary/index.html</code>. It is recommended to bookmark this page as it persists after shutdown and is only overwritten by using rigtools again.</p>
 </blockquote>
 <blockquote>
 <p>After using the update button on rigtools, the newly updated file will always be located at <code>filesystem:chrome-extension://ext-id/persistent/rigtools.html</code>. Bookmark this page instead if you want to constantly get the latest updates and bug-fixes.</p>
 </blockquote>
 
-  <hr>
-  <h3 id="repo">Repo:</h3>
-  <p><a href="https://github.com/T3M1N4L/rigtools-updated-ui">https://github.com/T3M1N4L/rigtools-updated-ui</a> Based off of <a href="https://github.com/Miner49ur/rigtools">Miner49ur's fork of Rigtools</a></p>
+<hr>
+<h3 id="repo">Repo:</h3>
+<p><a href="https://github.com/T3M1N4L/rigtools-updated-ui">https://github.com/T3M1N4L/rigtools-updated-ui</a> Based off of <a href="https://github.com/Miner49ur/rigtools">Miner49ur's fork of Rigtools</a></p>
 
-  <script>
-	let currentUrl = window.location.hostname + window.location.pathname;
+<script>
+let currentUrl = window.location.hostname + window.location.pathname;
 
-	if (currentUrl.charAt(currentUrl.length - 1) === '/') {
-	    currentUrl = currentUrl.slice(0, -1);
-	}
+if (currentUrl.charAt(currentUrl.length - 1) === '/') {
+    currentUrl = currentUrl.slice(0, -1);
+}
 
-	// Check if the port exists and format the link accordingly
-	const port = window.location.port ? ":${window.location.port}" : '';
-	document.getElementById('generated-link').textContent = "devtools://devtools/bundled/devtools_app.html?experiments=true&ws=${currentUrl}${port}";
+// Check if the port exists and format the link accordingly
+const port = window.location.port ? ':' + window.location.port : '';
+document.getElementById('generated-link').textContent = 'devtools://devtools/bundled/devtools_app.html?experiments=true&ws=' + currentUrl + port;
 </script>
 </body>
-
 `;
 
 let globalUID = 0;
