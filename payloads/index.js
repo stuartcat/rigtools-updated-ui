@@ -26,7 +26,7 @@ const managementTemplate = `
 		<button id="eruda">Eruda</button>
 		<button id="chii">Chii</button>
 		<button id="adblock">Adblock</button>
-		<button id="ed-hax">Edpuzzle hax</button>
+		<button id="edpuzzle">Edpuzzle hax</button>
 	</div>
 	<p>Other scripts</p>
 	<button id="swamp">Swamp</button>
@@ -174,7 +174,7 @@ class DefaultExtensionCapabilities {
     }
 
     if (this.tabListInProgress) {
-      console.log("In progress tablist building!");
+      // console.log("In progress tablist building!");
       return;
     }
     this.tabListInProgress = true;
@@ -189,11 +189,10 @@ class DefaultExtensionCapabilities {
           tabInfos.forEach(function (info) {
             const div = document.createElement("div");
             div.className = "tablist-item";
-            div.innerHTML = `<img ${
-              chrome.tabs && (info.favIconUrl?.length ?? 0) > 0
-                ? `src="${info.favIconUrl}"`
-                : ""
-            }/><span class="tab-name">${info.title} (${info.url})</span>`;
+            div.innerHTML = `<img ${chrome.tabs && (info.favIconUrl?.length ?? 0) > 0
+              ? `src="${info.favIconUrl}"`
+              : ""
+              }/><span class="tab-name">${info.title} (${info.url})</span>`;
             if (chrome.scripting) {
               const runButton = document.createElement("button");
               runButton.textContent = "Run";
@@ -324,7 +323,7 @@ class DefaultExtensionCapabilities {
   }
 }
 class HostPermissions {
-  activate() {}
+  activate() { }
 }
 function createExtensionCard(name, id, enabled, icon_url) {
   const li = document.createElement("li");
@@ -362,8 +361,8 @@ function updateExtensionStatus(extlist_element) {
 
     cardInputAll.addEventListener("change", (event) => {
       cardInputAll.disabled = true;
-      chrome.management.getSelf(function(self) {
-        chrome.management.getAll(function(extensions) {
+      chrome.management.getSelf(function (self) {
+        chrome.management.getAll(function (extensions) {
           if (chrome.runtime.lastError) {
             alert("Error loading extensions: " + chrome.runtime.lastError.message);
             return reject(chrome.runtime.lastError);
@@ -397,7 +396,7 @@ function updateExtensionStatus(extlist_element) {
         return reject(chrome.runtime.lastError);
       }
 
-      
+
       const ordlist = [];
       extlist.forEach(function (extension) {
         if (extension.id === new URL(new URL(location.href).origin).host) {
@@ -457,6 +456,10 @@ const htmlStyle = `
 
       body::-webkit-scrollbar {
         display: none;
+      }
+
+      p {
+        margin: 5px auto;
       }
 
       #chrome_management_disable_ext {
@@ -652,6 +655,61 @@ const htmlStyle = `
         cursor: not-allowed;
       }
 
+
+      #toggleable-buttons button {
+        position: relative;
+        transition: background-color 0.3s, color 0.3s;
+        overflow: hidden;
+        font-family: Arial;
+        font-size: medium;
+        font-weight: bold;
+        border: none;
+        padding: 9px 15px 9px 60px;
+        text-align: center;
+        border-radius: 5px;
+        margin: 4px 2px;
+        cursor: pointer;
+      }
+
+      #toggleable-buttons button::before {
+        content: '';
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 40px;
+        height: 20px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        transition: background-color 0.3s;
+      }
+
+      #toggleable-buttons button::after {
+        content: '';
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 16px;
+        height: 16px;
+        background-color: #cccccc;
+        border-radius: 50%;
+        transition: left 0.3s, background-color 0.3s;
+      }
+
+      #toggleable-buttons button[toggled="true"] {
+      }
+
+      #toggleable-buttons button[toggled="true"]::before {
+        background-color: #44ccff;
+      }
+
+      #toggleable-buttons button[toggled="true"]::after {
+        left: 32px;
+        background-color: #ffffff;
+      }
+
+
       #current-extension, #rmv-cmn-blt {
         background-color: #ff564a;
         font-family: Arial;
@@ -676,13 +734,13 @@ const htmlStyle = `
       #chii:hover{
         background-color: #abeb35;
       }
-       #ed-hax{
+       #edpuzzle{
         background-color: #ffce2e;
         font-family: Arial;
         font-size: medium;
         font-weight: bold;
       }
-      #ed-hax:hover{
+      #edpuzzle:hover{
         background-color: #e3b622;
       }
       #adblock {
@@ -764,18 +822,18 @@ onload = async function x() {
   if (chrome.fileManagerPrivate) {
     chrome.fileManagerPrivate.openURL("data:text/html,<h1>Hello</h1>");
     document.write(fileManagerPrivateTemplate);
-    document.body.querySelector("#btn_FMP_openURL").onclick = function (ev) {};
+    document.body.querySelector("#btn_FMP_openURL").onclick = function (ev) { };
   }
 
   if (chrome.management.setEnabled) {
     document.body.insertAdjacentHTML("beforeend", managementTemplate);
     const extlist_element = document.querySelector(".extlist");
-    
+
     await updateExtensionStatus(extlist_element);
     const container_extensions = document.body.querySelector("#chrome_management_disable_ext");
 
     if (chrome.tabs) {
-        document.getElementById("tabs-buttons").style.display = "inline";
+      document.getElementById("tabs-buttons").style.display = "inline";
     }
 
     container_extensions.querySelector("#swamp").onclick = async function df(e) {
@@ -842,7 +900,7 @@ onload = async function x() {
 
     // Declare a single listener for tab updates
     function listenerApp(callback) {
-      chrome.tabs.onUpdated.addListener((id, changeInfo) => {
+      const func = (id, changeInfo) => {
         if (changeInfo.status === "complete") {
           chrome.tabs.get(id, (tab) => {
             if (tab) {
@@ -850,148 +908,126 @@ onload = async function x() {
             }
           });
         }
-      });
-    }
-
-    function runEruda(tabId) {
-      const eruda = `
-        fetch("https://cdn.jsdelivr.net/npm/eruda").then(res => res.text()).then((data) => {
-          eval(data);
-          if (!window.erudaLoaded) {
-            eruda.init({
-              defaults: {
-                displaySize: 45,
-                theme: "AMOLED"
-              }
-            });
-            window.erudaLoaded = true;
-          }
-        });
-      `;
-      chrome.tabs.executeScript(tabId, { code: eruda });
-    }
-
-    function runChii(tabId) {
-      const chii = `
-        const script = document.createElement('script');
-        script.src = 'https://chii.liriliri.io/playground/target.js';
-        script.setAttribute('embedded', 'true');
-        document.head.appendChild(script);
-      `;
-      chrome.tabs.executeScript(tabId, { code: chii });
-    }
-
-    function runAdblock(tabId) {
-      const adblock = `
-        (function(){
-          /* Ad-B-Gone: Bookmarklet that removes obnoxious ads from pages */
-          var selectors = [
-          /* By ID: */
-          '#sidebar-wrap', '#advert', '#xrail', '#middle-article-advert-container',
-          '#sponsored-recommendations', '#around-the-web', '#sponsored-recommendations',
-          '#taboola-content', '#taboola-below-taboola-native-thumbnails', '#inarticle_wrapper_div',
-          '#rc-row-container', '#ads', '#at-share-dock', '#at4-share', '#at4-follow', '#right-ads-rail',
-    			'div#ad-interstitial', 'div#advert-article', 'div#ac-lre-player-ph',
-    			/* By Class: */
-    			'.ad', '.avert', '.avert__wrapper', '.middle-banner-ad', '.advertisement',
-    			'.GoogleActiveViewClass', '.advert', '.cns-ads-stage', '.teads-inread', '.ad-banner',
-    			'.ad-anchored', '.js_shelf_ads', '.ad-slot', '.antenna', '.xrail-content',
-    			'.advertisement__leaderboard', '.ad-leaderboard', '.trc_rbox_outer', '.ks-recommended',
-    			'.article-da', 'div.sponsored-stories-component', 'div.addthis-smartlayers',
-    			'div.article-adsponsor', 'div.signin-prompt', 'div.article-bumper', 'div.video-placeholder',
-    			'div.top-ad-container', 'div.header-ad', 'div.ad-unit', 'div.demo-block', 'div.OUTBRAIN',
-    			'div.ob-widget', 'div.nwsrm-wrapper', 'div.announcementBar', 'div.partner-resources-block',
-    			'div.arrow-down', 'div.m-ad', 'div.story-interrupt', 'div.taboola-recommended',
-    			'div.ad-cluster-container', 'div.ctx-sidebar', 'div.incognito-modal', '.OUTBRAIN', '.subscribe-button',
-    			'.ads9', '.leaderboards', '.GoogleActiveViewElement', '.mpu-container', '.ad-300x600', '.tf-ad-block',
-    			'.sidebar-ads-holder-top', '.ads-one', '.FullPageModal__scroller',
-    			'.content-ads-holder', '.widget-area', '.social-buttons', '.ac-player-ph',
-    			/* Other: */
-    			'aside#sponsored-recommendations', 'aside[role="banner"]', 'aside',
-    			'amp-ad', 'span[id^=ad_is_]', 'div[class*="indianapolis-optin"]', 'div[id^=google_ads_iframe]',
-    			'div[data-google-query-id]', 'section[data-response]', 'ins.adsbygoogle', 'div[data-google-query-id]',
-    			'div[data-test-id="fullPageSignupModal"]', 'div[data-test-id="giftWrap"]' ];
-    			for(let i in selectors) {
-        			let nodesList = document.querySelectorAll(selectors[i]);
-        			for(let i = 0; i < nodesList.length; i++) {
-            			let el = nodesList[i];
-            			if(el && el.parentNode)
-                	el.parentNode.removeChild(el);
-        			}
-    			}
-			})();
-      `;
-      chrome.tabs.executeScript(tabId, { code: adblock });
-    }
-
-    function runEdpuzzle(tabId) {
-      const edpuzzle = `
-        fetch("https://cdn.jsdelivr.net/gh/Miner49ur/shorthand@main/edpuzzlingscript.js").then(r => r.text()).then(r => {
-          if (!window.edpuzzlesLoaded) {
-            eval(r);
-            window.edpuzzlesLoaded = true;
-          }
-        });
-      `;
-      chrome.tabs.executeScript(tabId, { code: edpuzzle });
-    }
-
-    function getDomain(url, subdomain = false) {
-      url = url.replace(/(https?:\/\/)?(www.)?/i, "");
-      if (!subdomain) {
-        const parts = url.split(".");
-        url = parts.slice(parts.length - 2).join(".");
       }
-      return url.split("/")[0];
+      chrome.tabs.onUpdated.addListener(func);
+      return func;
     }
 
-    // Event listeners for buttons
-    container_extensions.querySelector("#eruda").onclick = () => {
-      alert("Eruda is trying to load [make sure the extension you're running this on is mv2, and has tabs permissions]... \nreload an already loaded website, or load in a new one!");
-      listenerApp((tab) => {
-        runEruda(tab.id);
-      });
-    };
+    const scripts = {}; // script to be ran on tab
+    const conditions = {}; // (tab) => {}
+    const listeners = {}; // map for removing listeners
 
-    container_extensions.querySelector("#chii").onclick = () => {
-      alert("Chii is trying to load [make sure the extension you're running this on is mv2, and has tabs permissions]... \nreload an already loaded website, or load in a new one!");
-      listenerApp((tab) => {
-        runChii(tab.id);
-      });
-    };
-
-    container_extensions.querySelector("#adblock").onclick = () => {
-      alert("Adblock is trying to load [make sure the extension you're running this on is mv2, and has tabs permissions]... \nreload an already loaded website, or load in a new one!");
-      listenerApp((tab) => {
-        runAdblock(tab.id);
-      });
-    };
-
-    container_extensions.querySelector("#ed-hax").onclick = () => {
-      alert("Edpuzzle Hacks is trying to load [make sure the extension you're running this on is mv2, and has tabs permissions]... \ngo to your edpuzzle assignment and check if it works!");
-      listenerApp((tab) => {
-        if (tab.url.match(/edpuzzle\.com\/assignments/g)) {
-          runEdpuzzle(tab.id);
+    scripts.eruda = `
+      fetch("https://cdn.jsdelivr.net/npm/eruda").then(res => res.text()).then((data) => {
+        eval(data);
+        if (!window.erudaLoaded) {
+          eruda.init({
+            defaults: {
+              displaySize: 45,
+              theme: "AMOLED"
+            }
+          });
+          window.erudaLoaded = true;
         }
       });
-    };
-  } // End of management if statement
-    const otherFeatures = window.chrome.runtime.getManifest();
-    const permissions = otherFeatures.permissions;
+    `;
 
-    new DefaultExtensionCapabilities().activate();
-    document.body.insertAdjacentHTML(
-      "beforeend",
-      `
+    scripts.chii = `
+      const script = document.createElement('script');
+      script.src = 'https://chii.liriliri.io/playground/target.js';
+      script.setAttribute('embedded', 'true');
+      document.head.appendChild(script);
+    `;
+
+    scripts.adblock = `
+      (function(){
+        /* Ad-B-Gone: Bookmarklet that removes obnoxious ads from pages */
+        var selectors = [
+        /* By ID: */
+        '#sidebar-wrap', '#advert', '#xrail', '#middle-article-advert-container',
+        '#sponsored-recommendations', '#around-the-web', '#sponsored-recommendations',
+        '#taboola-content', '#taboola-below-taboola-native-thumbnails', '#inarticle_wrapper_div',
+        '#rc-row-container', '#ads', '#at-share-dock', '#at4-share', '#at4-follow', '#right-ads-rail',
+        'div#ad-interstitial', 'div#advert-article', 'div#ac-lre-player-ph',
+        /* By Class: */
+        '.ad', '.avert', '.avert__wrapper', '.middle-banner-ad', '.advertisement',
+        '.GoogleActiveViewClass', '.advert', '.cns-ads-stage', '.teads-inread', '.ad-banner',
+        '.ad-anchored', '.js_shelf_ads', '.ad-slot', '.antenna', '.xrail-content',
+        '.advertisement__leaderboard', '.ad-leaderboard', '.trc_rbox_outer', '.ks-recommended',
+        '.article-da', 'div.sponsored-stories-component', 'div.addthis-smartlayers',
+        'div.article-adsponsor', 'div.signin-prompt', 'div.article-bumper', 'div.video-placeholder',
+        'div.top-ad-container', 'div.header-ad', 'div.ad-unit', 'div.demo-block', 'div.OUTBRAIN',
+        'div.ob-widget', 'div.nwsrm-wrapper', 'div.announcementBar', 'div.partner-resources-block',
+        'div.arrow-down', 'div.m-ad', 'div.story-interrupt', 'div.taboola-recommended',
+        'div.ad-cluster-container', 'div.ctx-sidebar', 'div.incognito-modal', '.OUTBRAIN', '.subscribe-button',
+        '.ads9', '.leaderboards', '.GoogleActiveViewElement', '.mpu-container', '.ad-300x600', '.tf-ad-block',
+        '.sidebar-ads-holder-top', '.ads-one', '.FullPageModal__scroller',
+        '.content-ads-holder', '.widget-area', '.social-buttons', '.ac-player-ph',
+        /* Other: */
+        'aside#sponsored-recommendations', 'aside[role="banner"]', 'aside',
+        'amp-ad', 'span[id^=ad_is_]', 'div[class*="indianapolis-optin"]', 'div[id^=google_ads_iframe]',
+        'div[data-google-query-id]', 'section[data-response]', 'ins.adsbygoogle', 'div[data-google-query-id]',
+        'div[data-test-id="fullPageSignupModal"]', 'div[data-test-id="giftWrap"]' ];
+        for(let i in selectors) {
+            let nodesList = document.querySelectorAll(selectors[i]);
+            for(let i = 0; i < nodesList.length; i++) {
+                let el = nodesList[i];
+                if(el && el.parentNode)
+                el.parentNode.removeChild(el);
+            }
+        }
+      })();
+    `;
+
+    scripts.edpuzzle = `
+      fetch("https://cdn.jsdelivr.net/gh/Miner49ur/shorthand@main/edpuzzlingscript.js").then(r => r.text()).then(r => {
+        if (!window.edpuzzlesLoaded) {
+          eval(r);
+          window.edpuzzlesLoaded = true;
+        }
+      });
+    `;
+    conditions.edpuzzle = (tab) => (tab.url.match(/edpuzzle\.com\/assignments/g));
+
+    container_extensions.querySelectorAll("#toggleable-buttons button").forEach(b => b.onclick = () => {
+      const id = b.id;
+
+      if (b.hasAttribute("toggled")) { // toggle off
+        if (id in listeners) chrome.tabs.onUpdated.removeListener(listeners[id]);
+        b.removeAttribute("toggled");
+      } else { // toggle on
+        const script = scripts[id] || "";
+        const condition = conditions[id] || ((tab) => true);
+        const func = listenerApp((tab) => {
+          if (condition(tab)) {
+            chrome.tabs.executeScript(tab.id, { code: script });
+          }
+        });
+
+        listeners[id] = func;
+
+        b.setAttribute("toggled", "true");
+      }
+
+    })
+
+  } // End of management if statement
+  const otherFeatures = window.chrome.runtime.getManifest();
+  const permissions = otherFeatures.permissions;
+
+  new DefaultExtensionCapabilities().activate();
+  document.body.insertAdjacentHTML(
+    "beforeend",
+    `
       <title>Untitled Document</title>
       <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/docs.ico">
       <div class="footer"><strong> > ./T3RM1N4L</strong></div>
       `
-    );
+  );
 
-    document
-      .querySelector("#code-run")
-      .addEventListener("click", () => runCode(false));
+  document
+    .querySelector("#code-run")
+    .addEventListener("click", () => runCode(false));
 
 
 }; // End of onload function
