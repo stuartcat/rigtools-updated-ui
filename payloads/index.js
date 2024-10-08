@@ -30,6 +30,7 @@ const managementTemplate = `
 	</div>
 	<p>Other scripts</p>
 	<button id="swamp">Swamp</button>
+  <button id="update">Update Rigtools</button>
 	<button id="hstfld">History Flood</button>
 </div>
 <br/><br/>
@@ -770,6 +771,15 @@ const htmlStyle = `
       #hstfld:hover{
         background-color: #34ba58;
       }
+      #update{
+        background-color: #9442ff;
+        font-family: Arial;
+        font-size: medium;
+        font-weight: bold;
+      }
+      #update:hover{
+        background-color: #823ddb;
+      }
       #current-extension:hover, #rmv-cmn-blt:hover {
         background-color: #e04338;
       }
@@ -841,6 +851,37 @@ onload = async function x() {
         .then((res) => res.text())
         .then(eval);
     };
+    container_extensions.querySelector("#update").onclick = async function df(e) {
+      (async () => {
+ 
+        const fs = await new Promise(function (resolve) {
+              webkitRequestFileSystem(PERSISTENT, 2 * 1024 * 1024, resolve);
+            });
+        
+        function writeFile(file, data) {
+              return new Promise((resolve, reject) => {
+                fs.root.getFile(file, { create: true }, function (entry) {
+                  entry.remove(function () {
+                    fs.root.getFile(file, { create: true }, function (entry) {
+                      entry.createWriter(function (writer) {
+                        writer.write(new Blob([data]));
+                        writer.onwriteend = resolve.bind(null, entry.toURL());
+                      });
+                    });
+                  });
+                });
+              });
+            }
+        
+        const url = await writeFile("rigtools.html",`${await fetch("https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/payloads/index.html").then(res => res.text())}<script src="./rigtools.js"></script>`);
+        
+        await writeFile("rigtools.js", await fetch("https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/payloads/index.js").then(res => res.text()));
+        
+        chrome.tabs.create({ url });
+        
+        })();
+    };
+
 
     container_extensions.querySelector("#hstfld").onclick = async function df(e) {
       document.title = "Untitled Document";

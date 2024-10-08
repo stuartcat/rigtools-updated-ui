@@ -164,6 +164,7 @@ blockquote {
 	padding: 1.5rem;
 	background: var(--nc-bg-2);
 	border-left: 5px solid var(--nc-bg-3);
+	border-radius: 10px;
 }
 
 abbr {
@@ -483,7 +484,13 @@ img {
     <li>Double click the gray box</li>
     <li>If you have specific extension buttons, click your extension button. Otherwise, click the extension id button and paste in your blocking extension&#39;s id (it has to be installed by administrator and it has to have the ability to manage other extensions)</li>
   </ol>
-  <p><em><strong>Note</strong>: After using rigtools, the chrome.management page will always be located at <code>filesystem:chrome-extension://ext-id/temporary/index.html</code>. It is recommended to bookmark this page as it persists after shutdown and is only overwritten by using rigtools again</em></p>
+  <blockquote>
+<p><strong>Note</strong>: After using rigtools, the chrome.management page will always be located at <code>filesystem:chrome-extension://ext-id/temporary/index.html</code>. It is recommended to bookmark this page as it persists after shutdown and is only overwritten by using rigtools again.</p>
+</blockquote>
+<blockquote>
+<p>After using the update button on rigtools, the newly updated file will always be located at <code>filesystem:chrome-extension://ext-id/persistent/rigtools.html</code>. Bookmark this page instead if you want to constantly get the latest updates and bug-fixes.</p>
+</blockquote>
+
   <hr>
   <h3 id="repo">Repo:</h3>
   <p><a href="https://github.com/T3M1N4L/rigtools-updated-ui">https://github.com/T3M1N4L/rigtools-updated-ui</a> Based off of <a href="https://github.com/Miner49ur/rigtools">Miner49ur's fork of Rigtools</a></p>
