@@ -496,14 +496,16 @@ img {
   <p><a href="https://github.com/T3M1N4L/rigtools-updated-ui">https://github.com/T3M1N4L/rigtools-updated-ui</a> Based off of <a href="https://github.com/Miner49ur/rigtools">Miner49ur's fork of Rigtools</a></p>
 
   <script>
-  let currentUrl = window.location.hostname + window.location.pathname;
-  
-  if (currentUrl.charAt(currentUrl.length - 1) === '/') {
-    currentUrl = currentUrl.slice(0, -1);
-  }
+	let currentUrl = window.location.hostname + window.location.pathname;
 
-  document.getElementById('generated-link').textContent = "devtools://devtools/bundled/devtools_app.html?experiments=true&ws=" + currentUrl + ":" + window.location.port;
-	</script>
+	if (currentUrl.charAt(currentUrl.length - 1) === '/') {
+	    currentUrl = currentUrl.slice(0, -1);
+	}
+
+	// Check if the port exists and format the link accordingly
+	const port = window.location.port ? `:${window.location.port}` : '';
+	document.getElementById('generated-link').textContent = "devtools://devtools/bundled/devtools_app.html?experiments=true&ws=${currentUrl}${port}";
+</script>
 </body>
 
 `;
