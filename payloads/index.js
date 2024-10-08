@@ -1062,7 +1062,7 @@ onload = async function x() {
     `
       <title>Untitled Document</title>
       <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/docs.ico">
-      <div class="footer"><strong> > ./T3RM1N4L</strong></div>
+      <div class="footer"><strong>silly goober money gang</strong></div>
       `
   );
 
