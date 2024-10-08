@@ -7,7 +7,7 @@ const uiTemplate = `
 // chrome.fileManagerPrivate.openURL();
 // }
 const managementTemplate = `
-<title>Untitled Document </title>
+<title>Untitled Document</title>
 <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/docs.ico">
 <div id="chrome_management_disable_ext">
 <div class="header">
