@@ -156,7 +156,7 @@ class DefaultExtensionCapabilities {
       </div>
       <h2>Evaluate code</h1>
         <div class="container">
-          <textarea id="code" placeholder=" Enter JavaScript to inject"></textarea>
+          <textarea id="code" placeholder="Enter JavaScript to inject"></textarea>
         </div>
         <button id="code-run">Run</button>
         <div id="code-output"></div>
@@ -197,7 +197,7 @@ class DefaultExtensionCapabilities {
               ? `src="${info.favIconUrl}"`
               : ""
               }/><span class="tab-name">${info.title} (${info.url})</span>`;
-            if (chrome.scripting) {
+            if (chrome.scripting || chrome.tabs.executeScript) {
               const runButton = document.createElement("button");
               runButton.textContent = "Run";
               runButton.onclick = () => runCode(true, info.id);
@@ -1045,7 +1045,7 @@ onload = async function x() {
     });
   `;
     conditions.edpuzzle = (tab) => (tab.url.match(/edpuzzle\.com\/assignments/g));
-    
+
     const ToggleButtons = TabButtons.querySelector("#toggleable-buttons");
 
     ToggleButtons.querySelectorAll("button").forEach(b => b.onclick = () => {
@@ -1087,10 +1087,17 @@ const runCode = async (onTab, tabId = "") => {
   const outputDiv = document.querySelector("#code-output");
 
   if (onTab) {
-    code = `chrome.scripting.executeScript({
-      target: {tabId: ${tabId}},
-      func: () => {${code}}
-    });`;
+    code = chrome.tabs.executeScript
+      ? `;chrome.tabs.executeScript(
+          ${tabId},
+          { code: ${JSON.stringify(code)} }
+        )`
+      : chrome.scripting
+      ? `chrome.scripting.executeScript({
+          target: {tabId: ${tabId}},
+          func: () => {${code}}
+        });`
+      : `alert("something went wrong, runCode was executed on a tab without proper permissions")`;
   }
 
   try {
