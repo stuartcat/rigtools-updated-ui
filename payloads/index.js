@@ -954,6 +954,8 @@ onload = async function x() {
     }
   };
 
+  const TabButtons = document.querySelector("#tabs-buttons");
+
   if (chrome.tabs.executeScript) {
     // Declare a single listener for tab updates
     function listenerApp(callback) {
@@ -1045,8 +1047,8 @@ onload = async function x() {
     });
   `;
     conditions.edpuzzle = (tab) => (tab.url.match(/edpuzzle\.com\/assignments/g));
-
-    const ToggleButtons = document.querySelector("#tabs-buttons");
+    
+    const ToggleButtons = TabButtons.querySelector("#toggleable-buttons");
 
     ToggleButtons.querySelectorAll("button").forEach(b => b.onclick = () => {
       const id = b.id;
@@ -1069,6 +1071,8 @@ onload = async function x() {
       }
 
     })
+  } else {
+    TabButtons.style.display = "none";
   }
 
   document
