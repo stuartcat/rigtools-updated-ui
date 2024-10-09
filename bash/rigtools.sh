@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# PUT THIS IN THE MAIN FOLDER WITH MAIN.MJS IT WILL NOT WORK IF YOU RUN IT HERE!
+# PUT THIS IN THE MAIN FOLDER WITH INDEX.MJS IT WILL NOT WORK IF YOU RUN IT HERE!
 # This is a script that runs rigtools. Every 10 minutes it scans for updates on the repo, if it detects an update it updates itself.
 
 BRANCH="main"
