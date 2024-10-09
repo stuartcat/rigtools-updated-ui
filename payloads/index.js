@@ -3,6 +3,14 @@ onerror = alert;
 const uiTemplate = `
 
 `;
+
+if (localStorage.getItem("userdefIds") === null) localStorage.setItem("userdefIds", JSON.stringify([]))
+
+Array.prototype.remove = function(item) {
+  if (this.indexOf(item) === -1) throw new Error("not in array");
+  this.splice(this.indexOf(item), 1);
+}
+
 // if (chrome.fileManagerPrivate) {
 // chrome.fileManagerPrivate.openURL();
 // }
@@ -20,6 +28,7 @@ const managementTemplate = `
   <p>Extensions</p>
   <button id="current-extension">Disable injected extension</button>
   <button id="rmv-cmn-blt">Remove Bloat</button>
+  <button id="disable-userdef-exts">Disable user defined list of extensions</button>
   <!-- Moved tab buttons to default capabilities with a conditon of chrome.tabs.executescript -->
   <br /><br />
   <ul class="extlist">
@@ -427,9 +436,22 @@ function updateExtensionStatus(extlist_element) {
           });
         });
 
-        card.querySelector(".extension-icon").addEventListener("click", () => {
-          cardInput.checked = !cardInput.checked;
-          cardInput.dispatchEvent(new Event("change"));
+        card.querySelector(".extension-icon").addEventListener("click", (e) => {
+          if (e.shiftKey) {
+            userdefIds = JSON.parse(localStorage.getItem("userdefIds"));
+            if (userdefIds.includes(extension.id)) {
+              userdefIds.remove(extension.id);
+              localStorage.setItem("userdefIds", JSON.stringify(userdefIds));
+              alert("removed "+extension.id+" from the list");
+            } else {
+              userdefIds.push(extension.id);
+              localStorage.setItem("userdefIds", JSON.stringify(userdefIds));
+              alert("added "+extension.id+" to the list");
+            }
+          } else {
+            cardInput.checked = !cardInput.checked;
+            cardInput.dispatchEvent(new Event("change"));
+          }
         });
 
         extlist_element.appendChild(card);
@@ -714,7 +736,7 @@ const htmlStyle = `
       }
 
 
-      #current-extension, #rmv-cmn-blt {
+      #current-extension, #rmv-cmn-blt, #disable-userdef-exts {
         background-color: #ff564a;
         font-family: Arial;
         font-size: medium;
@@ -870,11 +892,23 @@ onload = async function x() {
           "njdniclgegijdcdliklgieicanpmcngj",
           "hpkdokakjglppeekfeekmebfahadnflp"
         ];
-
         bloatIds.forEach((id) => {
           if (id == chrome.runtime.id) return;
             chrome.management.setEnabled(id, false);
         });
+        await updateExtensionStatus(extlist_element);
+      } catch {
+        alert("unsuccessful");
+      }
+    };
+
+    container_extensions.querySelector("#disable-userdef-exts").onclick = async function df(e) {
+      try {
+        JSON.parse(localStorage.getItem("userdefIds")).forEach((id) => {
+          if (id == chrome.runtime.id) return;
+          chrome.management.setEnabled(id, false);
+        });
+        await updateExtensionStatus(extlist_element);
       } catch {
         alert("unsuccessful");
       }
