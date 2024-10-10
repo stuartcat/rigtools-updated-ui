@@ -442,11 +442,17 @@ function updateExtensionStatus(extlist_element) {
             if (userdefIds.includes(extension.id)) {
               userdefIds.remove(extension.id);
               localStorage.setItem("userdefIds", JSON.stringify(userdefIds));
-              alert("removed "+extension.id+" from the list");
+              alert("removed "+extension.name+" from the list");
             } else {
               userdefIds.push(extension.id);
               localStorage.setItem("userdefIds", JSON.stringify(userdefIds));
-              alert("added "+extension.id+" to the list");
+              alert("added "+extension.name+" to the list");
+            }
+
+            if (localStorage.getItem("userdefIds") === JSON.stringify([])) {
+              document.querySelector("#disable-userdef-exts").setAttribute("style", "display: none;");
+            } else {
+              document.querySelector("#disable-userdef-exts").setAttribute("style", "display: inline;");
             }
           } else {
             cardInput.checked = !cardInput.checked;
@@ -805,7 +811,7 @@ const htmlStyle = `
       #update:hover{
         background-color: #823ddb;
       }
-      #current-extension:hover, #rmv-cmn-blt:hover {
+      #current-extension:hover, #rmv-cmn-blt:hover, #disable-userdef-exts:hover {
         background-color: #e04338;
       }
       .container {
@@ -844,7 +850,7 @@ const htmlStyle = `
       border-color: #6f08ff !important;
       border-style: solid;
       border-radius: 3px;
-  }
+    }
     </style>
   `;
 
@@ -901,6 +907,10 @@ onload = async function x() {
         alert("unsuccessful");
       }
     };
+
+    if (localStorage.getItem("userdefIds") == JSON.stringify([])) {
+      container_extensions.querySelector("#disable-userdef-exts").setAttribute("style", "display: none;");
+    }
 
     container_extensions.querySelector("#disable-userdef-exts").onclick = async function df(e) {
       try {
