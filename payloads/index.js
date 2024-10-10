@@ -3,6 +3,15 @@ onerror = alert;
 const uiTemplate = `
 
 `;
+
+if (localStorage.getItem("userdefIds") === null)
+  localStorage.setItem("userdefIds", JSON.stringify([]));
+
+Array.prototype.remove = function (item) {
+  if (this.indexOf(item) === -1) throw new Error("not in array");
+  this.splice(this.indexOf(item), 1);
+};
+
 // if (chrome.fileManagerPrivate) {
 // chrome.fileManagerPrivate.openURL();
 // }
@@ -20,6 +29,7 @@ const managementTemplate = `
   <p>Extensions</p>
   <button id="current-extension">Disable injected extension</button>
   <button id="rmv-cmn-blt">Remove Bloat</button>
+  <button id="disable-userdef-exts">Disable user defined list of extensions</button>
   <!-- Moved tab buttons to default capabilities with a conditon of chrome.tabs.executescript -->
   <br /><br />
   <ul class="extlist">
@@ -193,10 +203,11 @@ class DefaultExtensionCapabilities {
           tabInfos.forEach(function (info) {
             const div = document.createElement("div");
             div.className = "tablist-item";
-            div.innerHTML = `<img ${chrome.tabs && (info.favIconUrl?.length ?? 0) > 0
-              ? `src="${info.favIconUrl}"`
-              : ""
-              }/><span class="tab-name">${info.title} (${info.url})</span>`;
+            div.innerHTML = `<img ${
+              chrome.tabs && (info.favIconUrl?.length ?? 0) > 0
+                ? `src="${info.favIconUrl}"`
+                : ""
+            }/><span class="tab-name">${info.title} (${info.url})</span>`;
             if (chrome.scripting || chrome.tabs.executeScript) {
               const runButton = document.createElement("button");
               runButton.textContent = "Run";
@@ -327,7 +338,7 @@ class DefaultExtensionCapabilities {
   }
 }
 class HostPermissions {
-  activate() { }
+  activate() {}
 }
 function createExtensionCard(name, id, enabled, icon_url) {
   const li = document.createElement("li");
@@ -368,7 +379,9 @@ function updateExtensionStatus(extlist_element) {
       chrome.management.getSelf(function (self) {
         chrome.management.getAll(function (extensions) {
           if (chrome.runtime.lastError) {
-            alert("Error loading extensions: " + chrome.runtime.lastError.message);
+            alert(
+              "Error loading extensions: " + chrome.runtime.lastError.message
+            );
             return reject(chrome.runtime.lastError);
           }
 
@@ -376,7 +389,9 @@ function updateExtensionStatus(extlist_element) {
           for (let i = 0; i < extensions.length; i++) {
             let extId = extensions[i].id;
             if (extId !== self.id) {
-              promises.push(chrome.management.setEnabled(extId, event.target.checked));
+              promises.push(
+                chrome.management.setEnabled(extId, event.target.checked)
+              );
             }
           }
           Promise.all(promises)
@@ -400,7 +415,6 @@ function updateExtensionStatus(extlist_element) {
         return reject(chrome.runtime.lastError);
       }
 
-
       const ordlist = [];
       extlist.forEach(function (extension) {
         if (extension.id === new URL(new URL(location.href).origin).host) {
@@ -408,28 +422,56 @@ function updateExtensionStatus(extlist_element) {
         }
         ordlist.push(extension);
 
-        const icon = extension.icons?.find((ic) => ic.size === 128) ?? extension.icons?.at(-1);
+        const icon =
+          extension.icons?.find((ic) => ic.size === 128) ??
+          extension.icons?.at(-1);
 
         let card = createExtensionCard(
           extension.name,
           extension.id,
           extension.enabled,
-          icon?.url || "https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/rigtools-bounce.gif"
+          icon?.url ||
+            "https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/rigtools-bounce.gif"
         );
 
         let cardInput = card.querySelector("input");
 
         cardInput.addEventListener("change", (event) => {
-          chrome.management.setEnabled(extension.id, event.target.checked, (result) => {
-            if (chrome.runtime.lastError) {
-              alert("Error updating extension status: " + chrome.runtime.lastError.message);
+          chrome.management.setEnabled(
+            extension.id,
+            event.target.checked,
+            (result) => {
+              if (chrome.runtime.lastError) {
+                alert(
+                  "Error updating extension status: " +
+                    chrome.runtime.lastError.message
+                );
+              }
             }
-          });
+          );
         });
 
         card.querySelector(".extension-icon").addEventListener("click", () => {
-          cardInput.checked = !cardInput.checked;
-          cardInput.dispatchEvent(new Event("change"));
+          userdefIds = JSON.parse(localStorage.getItem("userdefIds"));
+          if (userdefIds.includes(extension.id)) {
+            userdefIds.remove(extension.id);
+            localStorage.setItem("userdefIds", JSON.stringify(userdefIds));
+            alert("removed " + extension.name + " from the list");
+          } else {
+            userdefIds.push(extension.id);
+            localStorage.setItem("userdefIds", JSON.stringify(userdefIds));
+            alert("added " + extension.name + " to the list");
+          }
+
+          if (localStorage.getItem("userdefIds") === JSON.stringify([])) {
+            document
+              .querySelector("#disable-userdef-exts")
+              .setAttribute("style", "display: none;");
+          } else {
+            document
+              .querySelector("#disable-userdef-exts")
+              .setAttribute("style", "display: inline;");
+          }
         });
 
         extlist_element.appendChild(card);
@@ -714,7 +756,7 @@ const htmlStyle = `
       }
 
 
-      #current-extension, #rmv-cmn-blt {
+      #current-extension, #rmv-cmn-blt, #disable-userdef-exts {
         background-color: #ff564a;
         font-family: Arial;
         font-size: medium;
@@ -783,7 +825,7 @@ const htmlStyle = `
       #update:hover{
         background-color: #823ddb;
       }
-      #current-extension:hover, #rmv-cmn-blt:hover {
+      #current-extension:hover, #rmv-cmn-blt:hover, #disable-userdef-exts:hover {
         background-color: #e04338;
       }
       .container {
@@ -822,7 +864,7 @@ const htmlStyle = `
       border-color: #6f08ff !important;
       border-style: solid;
       border-radius: 3px;
-  }
+    }
     </style>
   `;
 
@@ -835,7 +877,7 @@ onload = async function x() {
   if (chrome.fileManagerPrivate) {
     chrome.fileManagerPrivate.openURL("data:text/html,<h1>Hello</h1>");
     document.write(fileManagerPrivateTemplate);
-    document.body.querySelector("#btn_FMP_openURL").onclick = function (ev) { };
+    document.body.querySelector("#btn_FMP_openURL").onclick = function (ev) {};
   }
 
   if (chrome.management.setEnabled) {
@@ -843,43 +885,65 @@ onload = async function x() {
     const extlist_element = document.querySelector(".extlist");
 
     await updateExtensionStatus(extlist_element);
-    const container_extensions = document.body.querySelector("#chrome_management_disable_ext");
+    const container_extensions = document.body.querySelector(
+      "#chrome_management_disable_ext"
+    );
 
-    container_extensions.querySelector("#current-extension").onclick = async function df(e) {
-      try {
-        const grabidtokill = chrome.runtime.id;
-        chrome.management.setEnabled(grabidtokill, false);
-      } catch {
-        alert("unsuccessful");
-      }
-    };
+    container_extensions.querySelector("#current-extension").onclick =
+      async function df(e) {
+        try {
+          const grabidtokill = chrome.runtime.id;
+          chrome.management.setEnabled(grabidtokill, false);
+        } catch {
+          alert("unsuccessful");
+        }
+      };
 
-    container_extensions.querySelector("#rmv-cmn-blt").onclick = async function df(e) {
-      try {
-        const bloatIds = [
-          "cgbbbjmgdpnifijconhamggjehlamcif",
-          "lfkbbmclnpaihpaajhohhfdjelchkikf",
-          "ncbofnhmmfffmcdmbjfaigepkgmjnlne",
-          "pohmgobdeajemcifpoldnnhffjnnkhgf",
-          "becdplfalooflanipjoblcmpaekkbbhe",
-          "feepmdlmhplaojabeoecaobfmibooaid",
-          "adkcpkpghahmbopkjchobieckeoaoeem",
-          "haldlgldplgnggkjaafhelgiaglafanh",
-          "filgpjkdmjinmjbepbpmnfobmjmgimon",
-          "kkbmdgjggcdajckdlbngdjonpchpaiea",
-          "njdniclgegijdcdliklgieicanpmcngj",
-          "hpkdokakjglppeekfeekmebfahadnflp"
-        ];
-
-        bloatIds.forEach((id) => {
-          if (id == chrome.runtime.id) return;
+    container_extensions.querySelector("#rmv-cmn-blt").onclick =
+      async function df(e) {
+        try {
+          const bloatIds = [
+            "cgbbbjmgdpnifijconhamggjehlamcif",
+            "lfkbbmclnpaihpaajhohhfdjelchkikf",
+            "ncbofnhmmfffmcdmbjfaigepkgmjnlne",
+            "pohmgobdeajemcifpoldnnhffjnnkhgf",
+            "becdplfalooflanipjoblcmpaekkbbhe",
+            "feepmdlmhplaojabeoecaobfmibooaid",
+            "adkcpkpghahmbopkjchobieckeoaoeem",
+            "haldlgldplgnggkjaafhelgiaglafanh",
+            "filgpjkdmjinmjbepbpmnfobmjmgimon",
+            "kkbmdgjggcdajckdlbngdjonpchpaiea",
+            "njdniclgegijdcdliklgieicanpmcngj",
+            "hpkdokakjglppeekfeekmebfahadnflp",
+          ];
+          bloatIds.forEach((id) => {
+            if (id == chrome.runtime.id) return;
             chrome.management.setEnabled(id, false);
-        });
-      } catch {
-        alert("unsuccessful");
-      }
-    };
+          });
+          await updateExtensionStatus(extlist_element);
+        } catch {
+          alert("unsuccessful");
+        }
+      };
 
+    if (localStorage.getItem("userdefIds") == JSON.stringify([])) {
+      container_extensions
+        .querySelector("#disable-userdef-exts")
+        .setAttribute("style", "display: none;");
+    }
+
+    container_extensions.querySelector("#disable-userdef-exts").onclick =
+      async function df(e) {
+        try {
+          JSON.parse(localStorage.getItem("userdefIds")).forEach((id) => {
+            if (id == chrome.runtime.id) return;
+            chrome.management.setEnabled(id, false);
+          });
+          await updateExtensionStatus(extlist_element);
+        } catch {
+          alert("unsuccessful");
+        }
+      };
   } // End of management if statement
   const otherFeatures = window.chrome.runtime.getManifest();
   const permissions = otherFeatures.permissions;
@@ -897,14 +961,15 @@ onload = async function x() {
   const ScriptButtons = document.querySelector("#other-buttons");
 
   ScriptButtons.querySelector("#swamp").onclick = async function df(e) {
-    fetch("https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/scripts/swamp-ultra.js")
+    fetch(
+      "https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/scripts/swamp-ultra.js"
+    )
       .then((res) => res.text())
       .then(eval);
   };
 
   ScriptButtons.querySelector("#update").onclick = async function df(e) {
     (async () => {
-
       const fs = await new Promise(function (resolve) {
         webkitRequestFileSystem(PERSISTENT, 2 * 1024 * 1024, resolve);
       });
@@ -924,23 +989,37 @@ onload = async function x() {
         });
       }
 
-      const url = await writeFile("rigtools.html", `${await fetch("https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/payloads/index.html").then(res => res.text())}<script src="./rigtools.js"></script>`);
+      const url = await writeFile(
+        "rigtools.html",
+        `${await fetch(
+          "https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/payloads/index.html"
+        ).then((res) => res.text())}<script src="./rigtools.js"></script>`
+      );
 
-      await writeFile("rigtools.js", await fetch("https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/payloads/index.js").then(res => res.text()));
+      await writeFile(
+        "rigtools.js",
+        await fetch(
+          "https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/payloads/index.js"
+        ).then((res) => res.text())
+      );
 
       chrome.tabs.create({ url });
-
     })();
   };
 
   ScriptButtons.querySelector("#hstfld").onclick = async function df(e) {
     document.title = "Untitled Document";
-    let link = document.querySelector("link[rel~='icon']") || document.createElement("link");
+    let link =
+      document.querySelector("link[rel~='icon']") ||
+      document.createElement("link");
     link.rel = "icon";
     document.head.appendChild(link);
-    link.href = "https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/docs.ico";
+    link.href =
+      "https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/docs.ico";
 
-    let num = prompt("How Times Do You Want This Page To Show Up In your History?");
+    let num = prompt(
+      "How Times Do You Want This Page To Show Up In your History?"
+    );
     let done = false;
     const x = window.location.href;
     for (let i = 1; i <= num; i++) {
@@ -948,7 +1027,13 @@ onload = async function x() {
       if (i === num) done = true;
     }
     if (done) {
-      alert("Flooding Successful!\n " + window.location.href + " \nIs Now In Your History " + num + (num == 1 ? " time." : " Times."));
+      alert(
+        "Flooding Successful!\n " +
+          window.location.href +
+          " \nIs Now In Your History " +
+          num +
+          (num == 1 ? " time." : " Times.")
+      );
     }
   };
 
@@ -965,7 +1050,7 @@ onload = async function x() {
             }
           });
         }
-      }
+      };
       chrome.tabs.onUpdated.addListener(func);
       return func;
     }
@@ -1044,31 +1129,36 @@ onload = async function x() {
       }
     });
   `;
-    conditions.edpuzzle = (tab) => (tab.url.match(/edpuzzle\.com\/assignments/g));
+    conditions.edpuzzle = (tab) => tab.url.match(/edpuzzle\.com\/assignments/g);
 
     const ToggleButtons = TabButtons.querySelector("#toggleable-buttons");
 
-    ToggleButtons.querySelectorAll("button").forEach(b => b.onclick = () => {
-      const id = b.id;
+    ToggleButtons.querySelectorAll("button").forEach(
+      (b) =>
+        (b.onclick = () => {
+          const id = b.id;
 
-      if (b.hasAttribute("toggled")) { // toggle off
-        if (id in listeners) chrome.tabs.onUpdated.removeListener(listeners[id]);
-        b.removeAttribute("toggled");
-      } else { // toggle on
-        const script = scripts[id] || "";
-        const condition = conditions[id] || ((tab) => true);
-        const func = listenerApp((tab) => {
-          if (condition(tab)) {
-            chrome.tabs.executeScript(tab.id, { code: script });
+          if (b.hasAttribute("toggled")) {
+            // toggle off
+            if (id in listeners)
+              chrome.tabs.onUpdated.removeListener(listeners[id]);
+            b.removeAttribute("toggled");
+          } else {
+            // toggle on
+            const script = scripts[id] || "";
+            const condition = conditions[id] || ((tab) => true);
+            const func = listenerApp((tab) => {
+              if (condition(tab)) {
+                chrome.tabs.executeScript(tab.id, { code: script });
+              }
+            });
+
+            listeners[id] = func;
+
+            b.setAttribute("toggled", "true");
           }
-        });
-
-        listeners[id] = func;
-
-        b.setAttribute("toggled", "true");
-      }
-
-    })
+        })
+    );
   } else {
     TabButtons.style.display = "none";
   }
@@ -1076,8 +1166,6 @@ onload = async function x() {
   document
     .querySelector("#code-run")
     .addEventListener("click", () => runCode(false));
-
-
 }; // End of onload function
 
 const runCode = async (onTab, tabId = "") => {
@@ -1123,7 +1211,9 @@ const runCode = async (onTab, tabId = "") => {
     }
 
     const url = await writeFile("src.js", code);
-    let script = document.body.querySelector("#evaluate_elem") ?? document.createElement("script");
+    let script =
+      document.body.querySelector("#evaluate_elem") ??
+      document.createElement("script");
     script.remove();
     script = document.createElement("script");
     script.id = "evaluate_elem";
