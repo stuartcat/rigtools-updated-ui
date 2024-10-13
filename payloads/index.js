@@ -12,6 +12,48 @@ Array.prototype.remove = function (item) {
   this.splice(this.indexOf(item), 1);
 };
 
+// modified from https://github.com/mdn/dom-examples/tree/main/popover-api/toast-popovers
+function makeToast(msg, time) {
+  const popover = document.createElement("article");
+  popover.popover = "manual";
+  popover.classList.add("toast");
+  popover.classList.add("newest");
+  popover.textContent = msg;
+  popover.style.translate = "-50%";
+
+  document.body.appendChild(popover);
+  popover.showPopover();
+
+  setTimeout(() => {
+    popover.hidePopover();
+    setTimeout(() => {
+      popover.remove();
+    }, 500);
+  }, time * 1000);
+
+  popover.addEventListener("toggle", (event) => {
+    if (event.newState === "open") {
+      moveToasts();
+    }
+  });
+}
+
+// modified from https://github.com/mdn/dom-examples/tree/main/popover-api/toast-popovers (CC0-1.0)
+function moveToasts() {
+  const toasts = document.querySelectorAll(".toast");
+
+  toasts.forEach((toast) => {
+    if (toast.classList.contains("newest")) {
+      toast.style.top = `5px`;
+      toast.classList.remove("newest");
+    } else {
+      const prevValue = toast.style.top.replace("px", "");
+      const newValue = parseInt(prevValue) + toast.clientHeight + 10;
+      toast.style.top = `${newValue}px`;
+    }
+  });
+}
+
 // if (chrome.fileManagerPrivate) {
 // chrome.fileManagerPrivate.openURL();
 // }
@@ -456,11 +498,11 @@ function updateExtensionStatus(extlist_element) {
           if (userdefIds.includes(extension.id)) {
             userdefIds.remove(extension.id);
             localStorage.setItem("userdefIds", JSON.stringify(userdefIds));
-            alert("removed " + extension.name + " from the list");
+            makeToast("removed " + extension.shortName + " from the list", 2);
           } else {
             userdefIds.push(extension.id);
             localStorage.setItem("userdefIds", JSON.stringify(userdefIds));
-            alert("added " + extension.name + " to the list");
+            makeToast("added " + extension.shortName + " to the list", 2);
           }
 
           if (localStorage.getItem("userdefIds") === JSON.stringify([])) {
@@ -499,35 +541,28 @@ const htmlStyle = `
         margin: 0;
         padding: 20px;
       }
-
       body::-webkit-scrollbar {
         display: none;
       }
-
       p {
         margin: 5px auto;
       }
-
       #chrome_management_disable_ext {
         max-width: 800px;
         margin: 0 auto;
       }
-
       #ext_default {
         max-width: 1200px;
         margin: 0 auto;
       }
-
       h1 {
         font-size: 24px;
         margin-bottom: 20px;
       }
-
       .description {
         margin-bottom: 20px;
         color: #9aa0a6;
       }
-
       .extension-disabler {
         display: flex;
         justify-content: space-between;
@@ -537,13 +572,11 @@ const htmlStyle = `
         border-radius: 8px;
         margin-bottom: 20px;
       }
-
       ul {
         list-style-type: none;
         padding: 0;
         padding-bottom: 50px;
       }
-
       .extension-card {
       /*   background-color: #0a0a0a; */
         border: 2px solid #0a0a0a;
@@ -554,12 +587,10 @@ const htmlStyle = `
         justify-content: start;
         align-items: center;
       }
-
       .extension-card:has(input:checked) {
         background-color: #0a0a0a;
         border: 2px solid #0000;
       }
-
       .extension-card-all {
       /*   background-color: #0a0a0a; */
         border: 2px solid #0a0a0a;
@@ -570,22 +601,18 @@ const htmlStyle = `
         justify-content: start;
         align-items: center;
       }
-
       .extension-card-all:has(input:checked) {
         background-color: #0a0a0a;
         border: 2px solid #0000;
       }
-
       .extension-icon {
         width: 32px;
         padding-right: 20px;
         cursor: pointer;
       }
-
       .extension-name {
         font-weight: bold;
       }
-
       .toggle-switch {
         margin-left: auto; 
         margin-right: 0;
@@ -594,13 +621,11 @@ const htmlStyle = `
         width: 60px;
         height: 36px;
       }
-
       .toggle-switch input {
         opacity: 0;
         width: 0;
         height: 0;
       }
-
       .slider {
         position: absolute;
         cursor: pointer;
@@ -612,7 +637,6 @@ const htmlStyle = `
         transition: .4s;
         border-radius: 34px;
         border: 2px solid #0a0a0a;
-        
       }
       .header {
         display: flex;
@@ -624,7 +648,6 @@ const htmlStyle = `
         height: auto;
         margin-right: 10px;
       }
-
       .slider:before {
         position: absolute;
         content: "";
@@ -636,16 +659,13 @@ const htmlStyle = `
         transition: .4s;
         border-radius: 50%;
       }
-
       input:checked+.slider {
         background-color: #a200ff;
         border: 2px solid #222;
       }
-
       input:checked+.slider:before {
         transform: translateX(24px);
       }
-
       .tablist-item {
         border: 2px solid #0a0a0a;
         margin-bottom: 10px;
@@ -655,12 +675,10 @@ const htmlStyle = `
         justify-content: start;
         align-items: center;
       }
-      
       .tablist-item img {
         max-width: 25px;
         margin-right: 10px;
       }
-
       .tablist-item span {
         padding: 10px, 0;
         text-overflow: ellipsis;
@@ -668,15 +686,13 @@ const htmlStyle = `
         white-space: nowrap;
         overflow: hidden;
         word-break: break-all;
-        }
-        
-        .tablist-item span:hover{
-          overflow: visible; 
-          white-space: normal;
-          height:auto;  
-        }
-        
-        button {
+      }
+      .tablist-item span:hover {
+        overflow: visible; 
+        white-space: normal;
+        height:auto;  
+      }
+      button {
         background-color: #810aff;
         color: white;
         border: none;
@@ -686,22 +702,16 @@ const htmlStyle = `
         margin: 4px 2px;
         cursor: pointer;
         transition: background-color 0.3s;
-
-        
         text-decoration: none;
         display: inline-block;
       }
-
       button:hover {
         background-color: #A324ED;
       }
-
       button:disabled {
         background-color: #cccccc;
         cursor: not-allowed;
       }
-
-
       #toggleable-buttons button {
         position: relative;
         transition: background-color 0.3s, color 0.3s;
@@ -716,7 +726,6 @@ const htmlStyle = `
         margin: 4px 2px;
         cursor: pointer;
       }
-
       #toggleable-buttons button::before {
         content: '';
         position: absolute;
@@ -729,7 +738,6 @@ const htmlStyle = `
         border-radius: 10px;
         transition: background-color 0.3s;
       }
-
       #toggleable-buttons button::after {
         content: '';
         position: absolute;
@@ -742,25 +750,23 @@ const htmlStyle = `
         border-radius: 50%;
         transition: left 0.3s, background-color 0.3s;
       }
-
       #toggleable-buttons button[toggled="true"] {
       }
-
       #toggleable-buttons button[toggled="true"]::before {
         background-color: #a200ff;
       }
-
       #toggleable-buttons button[toggled="true"]::after {
         left: 32px;
         background-color: #ffffff;
       }
-
-
       #current-extension, #rmv-cmn-blt, #disable-userdef-exts {
         background-color: #ff564a;
         font-family: Arial;
         font-size: medium;
         font-weight: bold;
+      }
+      #disable-userdef-exts {
+        position: relative;
       }
       #eruda{
         background-color: #752bff;
@@ -829,9 +835,9 @@ const htmlStyle = `
         background-color: #e04338;
       }
       .container {
-                  display: flex;
-                  gap: 10px;
-              }
+        display: flex;
+        gap: 10px;
+      }
       #code-run {
         align-self: flex-start;
         background-color: #810aff;
@@ -858,13 +864,38 @@ const htmlStyle = `
       }
       input[type='checkbox'] {
         accent-color: #6f08ff !important;
-    }
-    input[id='TabURLInput'] {
-      background-color: #0a0a0a !important;
-      border-color: #6f08ff !important;
-      border-style: solid;
-      border-radius: 3px;
-    }
+      }
+      input[id='TabURLInput'] {
+        background-color: #0a0a0a !important;
+        border-color: #6f08ff !important;
+        border-style: solid;
+        border-radius: 3px;
+      }
+      .toast[popover]:popover-open {
+        opacity: 1;
+        top: 5px;
+        left: 50%;
+      }
+      @starting-style {
+        .toast[popover]:popover-open {
+          opacity: 0;
+          transform: translateY(-100%);
+        }
+      }
+      .toast[popover] {
+        position: fixed;
+        inset: unset;
+        padding: 5px 10px;
+        text-align: center;
+        border-radius: 5px;
+        opacity: 0;
+        transition: all 0.5s allow-discrete;
+        font-weight: bold;
+        background: #7200f2;
+        color: white;
+        border: 2px solid rgb(255 255 255 / 0.6);
+        white-space: pre-wrap;
+      }
     </style>
   `;
 
@@ -902,6 +933,7 @@ onload = async function x() {
     container_extensions.querySelector("#rmv-cmn-blt").onclick =
       async function df(e) {
         try {
+          let disabledExts = [];
           const bloatIds = [
             "cgbbbjmgdpnifijconhamggjehlamcif",
             "lfkbbmclnpaihpaajhohhfdjelchkikf",
@@ -917,10 +949,26 @@ onload = async function x() {
             "hpkdokakjglppeekfeekmebfahadnflp",
           ];
           bloatIds.forEach((id) => {
-            if (id == chrome.runtime.id) return;
-            chrome.management.setEnabled(id, false);
+            chrome.management.get(id, (e) => {
+              if (e.enabled) {
+                if (id == chrome.runtime.id) return;
+
+                chrome.management.setEnabled(id, false);
+                disabledExts.push(e.shortName);
+              }
+            });
           });
-          await updateExtensionStatus(extlist_element);
+
+          setTimeout(() => {
+            if (!disabledExts.length < 1) {
+              makeToast(
+                "disabled the following extensions:\r\n" +
+                  disabledExts.join("\r\n"),
+                disabledExts.length
+              );
+              updateExtensionStatus(extlist_element);
+            }
+          }, 250);
         } catch {
           alert("unsuccessful");
         }
@@ -935,11 +983,28 @@ onload = async function x() {
     container_extensions.querySelector("#disable-userdef-exts").onclick =
       async function df(e) {
         try {
+          let disabledExts = [];
           JSON.parse(localStorage.getItem("userdefIds")).forEach((id) => {
-            if (id == chrome.runtime.id) return;
-            chrome.management.setEnabled(id, false);
+            chrome.management.get(id, (e) => {
+              if (e.enabled) {
+                if (id == chrome.runtime.id) return;
+
+                disabledExts.push(e.shortName);
+                chrome.management.setEnabled(id, false);
+              }
+            });
           });
-          await updateExtensionStatus(extlist_element);
+
+          setTimeout(() => {
+            if (!disabledExts.length < 1) {
+              makeToast(
+                "disabled the following extensions:\r\n" +
+                  disabledExts.join("\r\n"),
+                disabledExts.length
+              );
+              updateExtensionStatus(extlist_element);
+            }
+          }, 250);
         } catch {
           alert("unsuccessful");
         }
