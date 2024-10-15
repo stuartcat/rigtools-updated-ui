@@ -1205,7 +1205,7 @@ onload = async function x() {
     });
   `;
     scripts.invidious = `
-    fetch("https://raw.githubusercontent.com/htauk/rigtools-updated-ui/refs/heads/main/scripts/invidirect.js").then(r => r.text()).then(r => {
+    fetch("https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/scripts/invidirect.js").then(r => r.text()).then(r => {
       eval(r);
     });
   `;
