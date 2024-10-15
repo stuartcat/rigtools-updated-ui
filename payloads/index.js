@@ -1210,6 +1210,7 @@ onload = async function x() {
     });
   `;
     conditions.edpuzzle = (tab) => tab.url.match(/edpuzzle\.com\/assignments/g);
+    conditions.invidious = (tab) => tab.url.match(/^(?:https?:\/\/)(?:inv|invidious)\.[^\/]+\/.*watch\?v=/);
 
     const ToggleButtons = TabButtons.querySelector("#toggleable-buttons");
 
