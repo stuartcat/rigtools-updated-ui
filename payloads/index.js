@@ -198,6 +198,7 @@ class DefaultExtensionCapabilities {
           <button id="chii">Chii</button>
           <button id="adblock">Adblock</button>
           <button id="edpuzzle">Edpuzzle hax</button>
+          <button id="invidious">Fix Invidious (Invidirect)</button>
         </div>
       </div>
       <div id="other-buttons">
@@ -795,6 +796,15 @@ const htmlStyle = `
       #edpuzzle:hover{
         background-color: #e3b622;
       }
+      #invidious{
+        background-color: #59b6de;
+        font-family: Arial;
+        font-size: medium;
+        font-weight: bold;
+      }
+      #invidious:hover{
+        background-color: #59dedc;
+      }
       #adblock {
         background-color: #ff4d4d;
         font-family: Arial;
@@ -1187,6 +1197,14 @@ onload = async function x() {
   `;
 
     scripts.edpuzzle = `
+    fetch("https://cdn.jsdelivr.net/gh/Miner49ur/shorthand@main/edpuzzlingscript.js").then(r => r.text()).then(r => {
+      if (!window.edpuzzlesLoaded) {
+        eval(r);
+        window.edpuzzlesLoaded = true;
+      }
+    });
+  `;
+    scripts.invidious = `
     fetch("https://cdn.jsdelivr.net/gh/Miner49ur/shorthand@main/edpuzzlingscript.js").then(r => r.text()).then(r => {
       if (!window.edpuzzlesLoaded) {
         eval(r);
