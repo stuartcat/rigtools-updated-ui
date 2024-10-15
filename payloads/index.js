@@ -1205,11 +1205,8 @@ onload = async function x() {
     });
   `;
     scripts.invidious = `
-    fetch("https://cdn.jsdelivr.net/gh/Miner49ur/shorthand@main/edpuzzlingscript.js").then(r => r.text()).then(r => {
-      if (!window.edpuzzlesLoaded) {
-        eval(r);
-        window.edpuzzlesLoaded = true;
-      }
+    fetch("https://raw.githubusercontent.com/htauk/rigtools-updated-ui/refs/heads/main/scripts/invidirect.js").then(r => r.text()).then(r => {
+      eval(r);
     });
   `;
     conditions.edpuzzle = (tab) => tab.url.match(/edpuzzle\.com\/assignments/g);
