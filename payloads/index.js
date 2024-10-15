@@ -797,13 +797,13 @@ const htmlStyle = `
         background-color: #e3b622;
       }
       #invidious{
-        background-color: #59b6de;
+        background-color: #121212;
         font-family: Arial;
         font-size: medium;
         font-weight: bold;
       }
       #invidious:hover{
-        background-color: #59dedc;
+        background-color: #080808;
       }
       #adblock {
         background-color: #ff4d4d;
