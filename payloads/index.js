@@ -255,6 +255,7 @@ class DefaultExtensionCapabilities {
           <button id="chii">Chii</button>
           <button id="adblock">Adblock</button>
           <button id="edpuzzle">Edpuzzle hax</button>
+          <button id="invidious">Fix Invidious (Invidirect)</button>
         </div>
       </div>
       <div id="other-buttons">
@@ -852,6 +853,15 @@ const htmlStyle = `
       #edpuzzle:hover{
         background-color: #e3b622;
       }
+      #invidious{
+        background-color: #121212;
+        font-family: Arial;
+        font-size: medium;
+        font-weight: bold;
+      }
+      #invidious:hover{
+        background-color: #080808;
+      }
       #adblock {
         background-color: #ff4d4d;
         font-family: Arial;
@@ -1343,7 +1353,13 @@ onload = async function x() {
       }
     });
   `;
+    scripts.invidious = `
+    fetch("https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/scripts/invidirect.js").then(r => r.text()).then(r => {
+      eval(r);
+    });
+  `;
     conditions.edpuzzle = (tab) => tab.url.match(/edpuzzle\.com\/assignments/g);
+    conditions.invidious = (tab) => tab.url.match(/^(?:https?:\/\/)(?:inv|invidious)\.[^\/]+\/.*watch\?v=/);
 
     const ToggleButtons = TabButtons.querySelector("#toggleable-buttons");
 
