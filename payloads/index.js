@@ -54,6 +54,61 @@ function moveToasts() {
   });
 }
 
+function makeDialog(title, msg, oncancel, onconfirm) {
+  const dialog = document.createElement("dialog");
+  const confirmBtn = document.createElement("button");
+  const cancelBtn = document.createElement("button");
+  const head = document.createElement("h1");
+  const body = document.createElement("div");
+  const foot = document.createElement("div");
+
+  // put it all together
+  dialog.appendChild(head);
+  dialog.appendChild(body);
+  dialog.appendChild(foot);
+  foot.appendChild(cancelBtn);
+  foot.appendChild(confirmBtn);
+  document.body.appendChild(dialog);
+
+  /*
+   * head
+   */
+  head.style.height = "100%";
+  head.style.color = "white";
+  head.style.fontWeight = "900";
+  head.style.marginBottom = "10px";
+  head.style.marginTop = "0px";
+  head.textContent = title;
+
+  /*
+   * body
+   */
+  body.style.overflowY = "scroll";
+  body.style.height = "stretch";
+  body.style.color = "white";
+  body.style.fontWeight = "bold";
+
+  body.textContent = msg;
+
+  /*
+   * foot
+   */
+  // styling
+  foot.style.height = "fit-content";
+  foot.style.justifyContent = "end";
+
+  // buttons
+  confirmBtn.classList.add("confirmBtn");
+  confirmBtn.onclick = onconfirm;
+  confirmBtn.textContent = "Confirm";
+
+  cancelBtn.classList.add("cancelBtn");
+  cancelBtn.onclick = oncancel;
+  cancelBtn.textContent = "Cancel";
+
+  dialog.showModal();
+}
+
 // if (chrome.fileManagerPrivate) {
 // chrome.fileManagerPrivate.openURL();
 // }
@@ -896,6 +951,74 @@ const htmlStyle = `
         border: 2px solid rgb(255 255 255 / 0.6);
         white-space: pre-wrap;
       }
+      dialog[open] {
+        opacity: 1;
+        transform: scale(1);
+      }
+      dialog {
+        opacity: 0;
+        padding: 20px;
+        border: 2px solid #1d1d1d;
+        transform: scale(0.95);
+        background: #000;
+        border-radius: 10px;
+        transition: overlay 0.7s allow-discrete, display 0.7s allow-discrete, opacity 0.7s allow-discrete, transform 0.5s allow-discrete;
+        min-width: 50vw;
+        min-height: 50vh;
+        max-width: 50vw;
+        max-height: 50vh;
+      }
+      @starting-style {
+        dialog[open] {
+          opacity: 0;
+          transform: scale(0.95);
+        }
+      }
+      dialog::backdrop {
+        background: transparent;
+        backdrop-filter: blur(0px);
+        transition: all 0.5s allow-discrete;
+      }
+      dialog[open]::backdrop {
+        background-color: rgb(0 0 0 / 0.25);
+        backdrop-filter: blur(3px);
+      }
+      @starting-style {
+        dialog[open]::backdrop {
+          background-color: transparent;
+          backdrop-filter: blur(0px);
+        }
+      }
+      dialog div {
+        max-width: auto;
+        min-width: auto;
+        border: 1px solid rgb(255 255 255 / 0.6);
+      }
+      dialog button {
+        border: 2px solid rgb(255 255 255 / 0.6);
+        font-weight: bold;
+        font-family: monospace;
+        transition: background-color 0.2s, border 0.2s, transform 0.05s;
+        margin: 5px;
+      }
+      dialog button:active {
+        transform: scale(0.95);
+      }
+      dialog button:hover {
+        border: 2px solid rgb(255 255 255 / 0.8);
+      }
+      .confirmBtn {
+        background: hsl(268 100 47);
+      }
+      .cancelBtn {
+        background: hsl(2 90 50);
+      }
+      .confirmBtn:hover {
+        background: hsl(268 100 57);
+      }
+      .cancelBtn:hover {
+        background: hsl(2 90 60);
+      }
     </style>
   `;
 
@@ -981,32 +1104,56 @@ onload = async function x() {
     }
 
     container_extensions.querySelector("#disable-userdef-exts").onclick =
-      async function df(e) {
-        try {
-          let disabledExts = [];
-          JSON.parse(localStorage.getItem("userdefIds")).forEach((id) => {
-            chrome.management.get(id, (e) => {
-              if (e.enabled) {
-                if (id == chrome.runtime.id) return;
-
-                disabledExts.push(e.shortName);
-                chrome.management.setEnabled(id, false);
-              }
+      function df(e) {
+        let exts = {};
+        function initExtObj() {
+          let idlist = JSON.parse(localStorage.getItem("userdefIds"));
+          return new Promise((resolve) => {
+            idlist.forEach((id) => {
+              chrome.management.get(id, (e) => {
+                Object.assign(exts, JSON.parse(`{"${e.id}":"${e.shortName}"}`));
+                if (Object.keys(exts).length == idlist.length) resolve();
+              });
             });
           });
+        }
 
-          setTimeout(() => {
-            if (!disabledExts.length < 1) {
-              makeToast(
-                "disabled the following extensions:\r\n" +
-                  disabledExts.join("\r\n"),
-                disabledExts.length
-              );
-              updateExtensionStatus(extlist_element);
-            }
-          }, 250);
-        } catch {
-          alert("unsuccessful");
+        initExtObj().then(() => {
+          makeDialog(
+            "Test title text",
+            "test body text",
+            (dialog) => {},
+            (dialog) => {}
+          );
+        });
+
+        if (false) {
+          try {
+            let disabledExts = [];
+            JSON.parse(localStorage.getItem("userdefIds")).forEach((id) => {
+              chrome.management.get(id, (e) => {
+                if (e.enabled) {
+                  if (id == chrome.runtime.id) return;
+
+                  disabledExts.push(e.shortName);
+                  chrome.management.setEnabled(id, false);
+                }
+              });
+            });
+
+            setTimeout(() => {
+              if (!disabledExts.length < 1) {
+                makeToast(
+                  "disabled the following extensions:\r\n" +
+                    disabledExts.join("\r\n"),
+                  disabledExts.length
+                );
+                updateExtensionStatus(extlist_element);
+              }
+            }, 250);
+          } catch {
+            alert("unsuccessful");
+          }
         }
       };
   } // End of management if statement
