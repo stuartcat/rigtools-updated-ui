@@ -73,15 +73,15 @@ function makeDialog(title, msg, oncancel, onconfirm) {
   /*
    * head
    */
-  head.style.height = "100%";
+  head.style.height = "1rem";
   head.style.color = "white";
-  head.style.fontWeight = "900";
+  head.style.fontWeight = "bold";
   head.style.marginBottom = "10px";
   head.style.marginTop = "0px";
   head.textContent = title;
 
   /*
-   * body
+   * body text
    */
   body.style.overflowY = "scroll";
   body.style.height = "stretch";
@@ -95,7 +95,9 @@ function makeDialog(title, msg, oncancel, onconfirm) {
    */
   // styling
   foot.style.height = "fit-content";
+  foot.style.position = "relative";
   foot.style.justifyContent = "end";
+  foot.style.bottom = "0px";
 
   // buttons
   confirmBtn.classList.add("confirmBtn");
