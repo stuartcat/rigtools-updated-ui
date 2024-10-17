@@ -66,28 +66,21 @@ function makeDialog(title, msg, oncancel, onconfirm) {
   dialog.appendChild(head);
   dialog.appendChild(body);
   dialog.appendChild(foot);
-  foot.appendChild(cancelBtn);
   foot.appendChild(confirmBtn);
+  foot.appendChild(cancelBtn);
   document.body.appendChild(dialog);
 
   /*
    * head
    */
-  head.style.height = "1rem";
-  head.style.color = "white";
-  head.style.fontWeight = "bold";
-  head.style.marginBottom = "10px";
-  head.style.marginTop = "0px";
   head.textContent = title;
 
   /*
    * body text
    */
   body.style.overflowY = "scroll";
-  body.style.height = "stretch";
-  body.style.color = "white";
-  body.style.fontWeight = "bold";
-
+  body.style.color = "rgb(220 220 220)";
+  body.style.fontSize = "1rem";
   body.textContent = msg;
 
   /*
@@ -95,17 +88,23 @@ function makeDialog(title, msg, oncancel, onconfirm) {
    */
   // styling
   foot.style.height = "fit-content";
-  foot.style.position = "relative";
-  foot.style.justifyContent = "end";
-  foot.style.bottom = "0px";
+  foot.style.marginTop = "auto";
+  foot.style.display = "flex";
+  foot.style.flexDirection = "row-reverse";
 
   // buttons
   confirmBtn.classList.add("confirmBtn");
-  confirmBtn.onclick = onconfirm;
+  confirmBtn.addEventListener("click", () => {
+    dialog.close();
+    onconfirm();
+  });
   confirmBtn.textContent = "Confirm";
 
   cancelBtn.classList.add("cancelBtn");
-  cancelBtn.onclick = oncancel;
+  cancelBtn.addEventListener("click", () => {
+    dialog.close();
+    oncancel();
+  });
   cancelBtn.textContent = "Cancel";
 
   dialog.showModal();
@@ -592,6 +591,7 @@ const fileManagerPrivateTemplate = `
 `;
 const htmlStyle = `
     <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
       body {
         font-family: monospace, sans-serif;
         background-color: #000000;
@@ -969,8 +969,8 @@ const htmlStyle = `
       }
       dialog {
         opacity: 0;
-        padding: 20px;
-        border: 2px solid #1d1d1d;
+        padding: 30px;
+        border: 2px solid #2d2d2d;
         transform: scale(0.95);
         background: #000;
         border-radius: 10px;
@@ -979,6 +979,8 @@ const htmlStyle = `
         min-height: 50vh;
         max-width: 50vw;
         max-height: 50vh;
+        display: flex;
+        flex-direction: column;
       }
       @starting-style {
         dialog[open] {
@@ -1002,16 +1004,27 @@ const htmlStyle = `
         }
       }
       dialog div {
-        max-width: auto;
         min-width: auto;
-        border: 1px solid rgb(255 255 255 / 0.6);
+        width: auto;
+        font-family: 'Inter', sans-serif;
+        white-space: pre-wrap;
+        padding: none;
+      }
+      dialog h1 {
+        font-family: 'Inter', sans-serif;
+        font-size: 1.5rem;
+        color: white;
+        font-weight: 800;
+        margin-bottom: 20px;
+        margin-top: 0px;
       }
       dialog button {
         border: 2px solid rgb(255 255 255 / 0.6);
         font-weight: bold;
-        font-family: monospace;
+        font-family: 'Inter', sans-serif;
+        font-size: 1.1rem;
         transition: background-color 0.2s, border 0.2s, transform 0.05s;
-        margin: 5px;
+        margin-left: 5px;
       }
       dialog button:active {
         transform: scale(0.95);
@@ -1132,41 +1145,35 @@ onload = async function x() {
 
         initExtObj().then(() => {
           makeDialog(
-            "Test title text",
-            "test body text",
-            (dialog) => {},
-            (dialog) => {}
+            "Are you sure you want to disable the following extensions?",
+            "place list here",
+            function () {},
+            function () {
+              let disabledExts = [];
+              JSON.parse(localStorage.getItem("userdefIds")).forEach((id) => {
+                chrome.management.get(id, (e) => {
+                  if (e.enabled) {
+                    if (id == chrome.runtime.id) return;
+
+                    disabledExts.push(e.shortName);
+                    chrome.management.setEnabled(id, false);
+                  }
+                });
+              });
+
+              setTimeout(() => {
+                if (!disabledExts.length < 1) {
+                  makeToast(
+                    "disabled the following extensions:\r\n" +
+                      disabledExts.join("\r\n"),
+                    disabledExts.length
+                  );
+                  updateExtensionStatus(extlist_element);
+                }
+              }, 250);
+            }
           );
         });
-
-        if (false) {
-          try {
-            let disabledExts = [];
-            JSON.parse(localStorage.getItem("userdefIds")).forEach((id) => {
-              chrome.management.get(id, (e) => {
-                if (e.enabled) {
-                  if (id == chrome.runtime.id) return;
-
-                  disabledExts.push(e.shortName);
-                  chrome.management.setEnabled(id, false);
-                }
-              });
-            });
-
-            setTimeout(() => {
-              if (!disabledExts.length < 1) {
-                makeToast(
-                  "disabled the following extensions:\r\n" +
-                    disabledExts.join("\r\n"),
-                  disabledExts.length
-                );
-                updateExtensionStatus(extlist_element);
-              }
-            }, 250);
-          } catch {
-            alert("unsuccessful");
-          }
-        }
       };
   } // End of management if statement
   const otherFeatures = window.chrome.runtime.getManifest();
@@ -1359,7 +1366,8 @@ onload = async function x() {
     });
   `;
     conditions.edpuzzle = (tab) => tab.url.match(/edpuzzle\.com\/assignments/g);
-    conditions.invidious = (tab) => tab.url.match(/^(?:https?:\/\/)(?:inv|invidious)\.[^\/]+\/.*watch\?v=/);
+    conditions.invidious = (tab) =>
+      tab.url.match(/^(?:https?:\/\/)(?:inv|invidious)\.[^\/]+\/.*watch\?v=/);
 
     const ToggleButtons = TabButtons.querySelector("#toggleable-buttons");
 
