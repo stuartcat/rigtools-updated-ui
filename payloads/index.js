@@ -71,16 +71,25 @@ function makeDialog(title, msg, oncancel, onconfirm) {
   document.body.appendChild(dialog);
 
   head.textContent = title;
-  body.textContent = msg;
 
   // styling
   body.style.overflowY = "scroll";
   body.style.color = "rgb(220 220 220)";
   body.style.fontSize = "1rem";
-  body.style.border = "solid 2px #2d2d2d";
   body.style.borderRadius = "10px";
   body.style.padding = "10px";
-  body.style.height = "100%";
+
+  if (Array.isArray(msg)) {
+    body.style.border = "solid 2px #1d1d1d";
+    msg.forEach((value) => {
+      let item = document.createElement("p");
+      item.textContent = value;
+      body.appendChild(item);
+    });
+  } else {
+    body.style.border = "solid 2px #2d2d2d";
+    body.textContent = msg;
+  }
 
   foot.style.height = "fit-content";
   foot.style.marginTop = "auto";
@@ -1001,9 +1010,21 @@ const htmlStyle = `
       dialog div {
         min-width: auto;
         width: auto;
+        height: fit-content;
         font-family: 'Inter', sans-serif;
         white-space: pre-wrap;
         padding: none;
+      }
+      dialog p {
+        margin-bottom: 12px;
+        padding: 9px;
+        border: 2px solid rgb(114 0 242 / 0.5);
+        color: inherit;
+        font-family: inherit;
+        font-size: inherit;
+        font-weight: 700;
+        border-radius: 5px;
+        width: auto;
       }
       dialog h1 {
         font-family: 'Inter', sans-serif;
@@ -1093,7 +1114,7 @@ onload = async function x() {
 
       makeDialog(
         "Are you sure you want to disable the following extensions?",
-        Object.values(exts).join("\r\n"),
+        Object.values(exts),
         function () {},
         function () {
           let disabledExts = [];
@@ -1146,7 +1167,7 @@ onload = async function x() {
         initExtObj().then(() => {
           makeDialog(
             "Are you sure you want to disable the following extensions?",
-            Object.values(exts).join("\r\n"),
+            Object.values(exts),
             function () {},
             function () {
               let disabledExts = [];
