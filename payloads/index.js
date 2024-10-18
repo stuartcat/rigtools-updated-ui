@@ -78,6 +78,7 @@ function makeDialog(title, msg, oncancel, onconfirm) {
   body.style.fontSize = "1rem";
   body.style.borderRadius = "10px";
   body.style.padding = "10px";
+  body.style.marginBottom = "10px";
 
   if (Array.isArray(msg)) {
     body.style.border = "solid 2px #1d1d1d";
@@ -976,15 +977,16 @@ const htmlStyle = `
       dialog {
         opacity: 0;
         padding: 30px;
+        padding-bottom: 15px;
         border: 2px solid #2d2d2d;
         transform: scale(0.95);
         background: #000;
         border-radius: 10px;
         transition: overlay 0.7s allow-discrete, display 0.7s allow-discrete, opacity 0.7s allow-discrete, transform 0.5s allow-discrete;
         min-width: 50vw;
-        min-height: 50vh;
+        min-height: 60vh;
         max-width: 50vw;
-        max-height: 50vh;
+        max-height: 60vh;
         display: flex;
         flex-direction: column;
       }
@@ -1018,7 +1020,7 @@ const htmlStyle = `
         padding: none;
       }
       dialog p {
-        margin-bottom: 12px;
+        margin-bottom: 9px;
         padding: 9px;
         border: 2px solid rgb(114 0 242 / 0.5);
         color: inherit;
