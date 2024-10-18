@@ -1095,65 +1095,50 @@ onload = async function x() {
       };
 
     container_extensions.querySelector("#rmv-cmn-blt").onclick = function df() {
-      const bloatIds = [
-        "cgbbbjmgdpnifijconhamggjehlamcif",
-        "lfkbbmclnpaihpaajhohhfdjelchkikf",
-        "ncbofnhmmfffmcdmbjfaigepkgmjnlne",
-        "pohmgobdeajemcifpoldnnhffjnnkhgf",
-        "becdplfalooflanipjoblcmpaekkbbhe",
-        "feepmdlmhplaojabeoecaobfmibooaid",
-        "adkcpkpghahmbopkjchobieckeoaoeem",
-        "haldlgldplgnggkjaafhelgiaglafanh",
-        "filgpjkdmjinmjbepbpmnfobmjmgimon",
-        "kkbmdgjggcdajckdlbngdjonpchpaiea",
-        "njdniclgegijdcdliklgieicanpmcngj",
-        "hpkdokakjglppeekfeekmebfahadnflp",
-      ];
-      alert("h");
-      let exts = {};
-      function initExtObj() {
-        return new Promise((resolve) => {
-          bloatIds.forEach((id) => {
+      const bloatIds = {
+        cgbbbjmgdpnifijconhamggjehlamcif: "name",
+        lfkbbmclnpaihpaajhohhfdjelchkikf: "name",
+        ncbofnhmmfffmcdmbjfaigepkgmjnlne: "name",
+        pohmgobdeajemcifpoldnnhffjnnkhgf: "name",
+        becdplfalooflanipjoblcmpaekkbbhe: "name",
+        feepmdlmhplaojabeoecaobfmibooaid: "name",
+        adkcpkpghahmbopkjchobieckeoaoeem: "name",
+        haldlgldplgnggkjaafhelgiaglafanh: "name",
+        filgpjkdmjinmjbepbpmnfobmjmgimon: "name",
+        kkbmdgjggcdajckdlbngdjonpchpaiea: "name",
+        njdniclgegijdcdliklgieicanpmcngj: "name",
+        hpkdokakjglppeekfeekmebfahadnflp: "name",
+      };
+
+      makeDialog(
+        "Are you sure you want to disable the following extensions?",
+        Object.values(bloatIds),
+        function () {},
+        function () {
+          let disabledExts = [];
+          Object.keys(bloatIds).forEach((id) => {
             chrome.management.get(id, (e) => {
-              Object.assign(exts, JSON.parse(`{"${e.id}":"${e.shortName}"}`));
-              alert(Object.keys(exts).length);
+              if (e.enabled) {
+                if (id == chrome.runtime.id) return;
+
+                disabledExts.push(e.shortName);
+                chrome.management.setEnabled(id, false);
+              }
             });
           });
-          resolve();
-        });
-      }
 
-      initExtObj().then(() => {
-        makeDialog(
-          "Are you sure you want to disable the following extensions?",
-          Object.values(exts),
-          function () {},
-          function () {
-            let disabledExts = [];
-            JSON.parse(localStorage.getItem("userdefIds")).forEach((id) => {
-              chrome.management.get(id, (e) => {
-                if (e.enabled) {
-                  if (id == chrome.runtime.id) return;
-
-                  disabledExts.push(e.shortName);
-                  chrome.management.setEnabled(id, false);
-                }
-              });
-            });
-
-            setTimeout(() => {
-              if (!disabledExts.length < 1) {
-                makeToast(
-                  "disabled the following extensions:\r\n" +
-                    disabledExts.join("\r\n"),
-                  disabledExts.length
-                );
-                updateExtensionStatus(extlist_element);
-              }
-            }, 250);
-          }
-        );
-      });
+          setTimeout(() => {
+            if (!disabledExts.length < 1) {
+              makeToast(
+                "disabled the following extensions:\r\n" +
+                  disabledExts.join("\r\n"),
+                disabledExts.length
+              );
+              updateExtensionStatus(extlist_element);
+            }
+          }, 250);
+        }
+      );
     };
 
     if (localStorage.getItem("userdefIds") == JSON.stringify([])) {
