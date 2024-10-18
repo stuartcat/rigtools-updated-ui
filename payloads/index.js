@@ -1109,16 +1109,17 @@ onload = async function x() {
         "njdniclgegijdcdliklgieicanpmcngj",
         "hpkdokakjglppeekfeekmebfahadnflp",
       ];
-
+      alert("h");
       let exts = {};
       function initExtObj() {
         return new Promise((resolve) => {
           bloatIds.forEach((id) => {
             chrome.management.get(id, (e) => {
               Object.assign(exts, JSON.parse(`{"${e.id}":"${e.shortName}"}`));
-              if (Object.keys(exts).length == idlist.length) resolve();
+              alert(Object.keys(exts).length);
             });
           });
+          resolve();
         });
       }
 
