@@ -1112,9 +1112,8 @@ onload = async function x() {
 
       let exts = {};
       function initExtObj() {
-        let idlist = JSON.parse(localStorage.getItem("userdefIds"));
         return new Promise((resolve) => {
-          idlist.forEach((id) => {
+          bloatIds.forEach((id) => {
             chrome.management.get(id, (e) => {
               Object.assign(exts, JSON.parse(`{"${e.id}":"${e.shortName}"}`));
               if (Object.keys(exts).length == idlist.length) resolve();
@@ -1123,7 +1122,7 @@ onload = async function x() {
         });
       }
 
-      initExtObj.then(() => {
+      initExtObj().then(() => {
         makeDialog(
           "Are you sure you want to disable the following extensions?",
           Object.values(exts),
