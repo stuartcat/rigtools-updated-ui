@@ -1017,7 +1017,7 @@ const htmlStyle = `
         border: 2px solid rgb(255 255 255 / 0.6);
         font-weight: bold;
         font-family: 'Inter', sans-serif;
-        font-size: 1.1rem;
+        font-size: 1rem;
         transition: background-color 0.2s, border 0.2s, transform 0.05s;
         margin-left: 5px;
       }
