@@ -70,23 +70,18 @@ function makeDialog(title, msg, oncancel, onconfirm) {
   foot.appendChild(cancelBtn);
   document.body.appendChild(dialog);
 
-  /*
-   * head
-   */
   head.textContent = title;
+  body.textContent = msg;
 
-  /*
-   * body text
-   */
+  // styling
   body.style.overflowY = "scroll";
   body.style.color = "rgb(220 220 220)";
   body.style.fontSize = "1rem";
-  body.textContent = msg;
+  body.style.border = "solid 2px #2d2d2d";
+  body.style.borderRadius = "10px";
+  body.style.padding = "10px";
+  body.style.height = "100%";
 
-  /*
-   * foot
-   */
-  // styling
   foot.style.height = "fit-content";
   foot.style.marginTop = "auto";
   foot.style.display = "flex";
@@ -1014,9 +1009,9 @@ const htmlStyle = `
         font-family: 'Inter', sans-serif;
         font-size: 1.5rem;
         color: white;
-        font-weight: 800;
-        margin-bottom: 20px;
-        margin-top: 0px;
+        font-weight: 900;
+        margin-bottom: 25px;
+        margin-top: 0;
       }
       dialog button {
         border: 2px solid rgb(255 255 255 / 0.6);
@@ -1078,31 +1073,37 @@ onload = async function x() {
         }
       };
 
-    container_extensions.querySelector("#rmv-cmn-blt").onclick =
-      async function df(e) {
-        try {
+    container_extensions.querySelector("#rmv-cmn-blt").onclick = function df(
+      e
+    ) {
+      const bloatIds = [
+        "cgbbbjmgdpnifijconhamggjehlamcif",
+        "lfkbbmclnpaihpaajhohhfdjelchkikf",
+        "ncbofnhmmfffmcdmbjfaigepkgmjnlne",
+        "pohmgobdeajemcifpoldnnhffjnnkhgf",
+        "becdplfalooflanipjoblcmpaekkbbhe",
+        "feepmdlmhplaojabeoecaobfmibooaid",
+        "adkcpkpghahmbopkjchobieckeoaoeem",
+        "haldlgldplgnggkjaafhelgiaglafanh",
+        "filgpjkdmjinmjbepbpmnfobmjmgimon",
+        "kkbmdgjggcdajckdlbngdjonpchpaiea",
+        "njdniclgegijdcdliklgieicanpmcngj",
+        "hpkdokakjglppeekfeekmebfahadnflp",
+      ];
+
+      makeDialog(
+        "Are you sure you want to disable the following extensions?",
+        Object.values(exts).join("\r\n"),
+        function () {},
+        function () {
           let disabledExts = [];
-          const bloatIds = [
-            "cgbbbjmgdpnifijconhamggjehlamcif",
-            "lfkbbmclnpaihpaajhohhfdjelchkikf",
-            "ncbofnhmmfffmcdmbjfaigepkgmjnlne",
-            "pohmgobdeajemcifpoldnnhffjnnkhgf",
-            "becdplfalooflanipjoblcmpaekkbbhe",
-            "feepmdlmhplaojabeoecaobfmibooaid",
-            "adkcpkpghahmbopkjchobieckeoaoeem",
-            "haldlgldplgnggkjaafhelgiaglafanh",
-            "filgpjkdmjinmjbepbpmnfobmjmgimon",
-            "kkbmdgjggcdajckdlbngdjonpchpaiea",
-            "njdniclgegijdcdliklgieicanpmcngj",
-            "hpkdokakjglppeekfeekmebfahadnflp",
-          ];
-          bloatIds.forEach((id) => {
+          JSON.parse(localStorage.getItem("userdefIds")).forEach((id) => {
             chrome.management.get(id, (e) => {
               if (e.enabled) {
                 if (id == chrome.runtime.id) return;
 
-                chrome.management.setEnabled(id, false);
                 disabledExts.push(e.shortName);
+                chrome.management.setEnabled(id, false);
               }
             });
           });
@@ -1117,10 +1118,9 @@ onload = async function x() {
               updateExtensionStatus(extlist_element);
             }
           }, 250);
-        } catch {
-          alert("unsuccessful");
         }
-      };
+      );
+    };
 
     if (localStorage.getItem("userdefIds") == JSON.stringify([])) {
       container_extensions
@@ -1146,7 +1146,7 @@ onload = async function x() {
         initExtObj().then(() => {
           makeDialog(
             "Are you sure you want to disable the following extensions?",
-            "place list here",
+            Object.values(exts).join("\r\n"),
             function () {},
             function () {
               let disabledExts = [];
