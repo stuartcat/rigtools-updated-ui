@@ -101,6 +101,7 @@ function makeDialog(title, msg, oncancel, onconfirm) {
   confirmBtn.addEventListener("click", () => {
     dialog.close();
     onconfirm();
+    setTimeout(() => dialog.remove(), 1000);
   });
   confirmBtn.textContent = "Confirm";
 
@@ -108,6 +109,7 @@ function makeDialog(title, msg, oncancel, onconfirm) {
   cancelBtn.addEventListener("click", () => {
     dialog.close();
     oncancel();
+    setTimeout(() => dialog.remove(), 1000);
   });
   cancelBtn.textContent = "Cancel";
 
@@ -1096,6 +1098,7 @@ onload = async function x() {
 
     container_extensions.querySelector("#rmv-cmn-blt").onclick = function df() {
       const bloatIds = {
+        // TODO: put the short names (someone please do it)
         cgbbbjmgdpnifijconhamggjehlamcif: "name",
         lfkbbmclnpaihpaajhohhfdjelchkikf: "name",
         ncbofnhmmfffmcdmbjfaigepkgmjnlne: "name",
