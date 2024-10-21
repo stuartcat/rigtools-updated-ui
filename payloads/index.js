@@ -1122,34 +1122,62 @@ onload = async function x() {
         "hpkdokakjglppeekfeekmebfahadnflp",
       ];
 
-      makeDialog(
-        "Are you sure you want to disable the following extensions?",
-        Object.values(bloatIds),
-        function () {},
-        function () {
-          let disabledExts = [];
-          Object.keys(bloatIds).forEach((id) => {
-            chrome.management.get(id, (e) => {
-              if (e.enabled) {
-                if (id == chrome.runtime.id) return;
-
-                disabledExts.push(e.shortName);
-                chrome.management.setEnabled(id, false);
-              }
+      let exts = {};
+      let extlngth = 0;
+      function getLength() {
+        return new Promise((resolve) => {
+          bloatIds.forEach((id, i) => {
+            extensionExists(id).then((res) => {
+              if (res) extlngth++;
+              if (bloatIds.length - 1 === i) resolve();
             });
           });
+        });
+      }
 
-          setTimeout(() => {
-            if (!disabledExts.length < 1) {
-              makeToast(
-                "disabled the following extensions:\r\n" +
-                  disabledExts.join("\r\n"),
-                disabledExts.length
-              );
-              updateExtensionStatus(extlist_element);
+      function initExtObj() {
+        return new Promise((resolve) => {
+          bloatIds.forEach((id) =>
+            chrome.management.get(id, (e) => {
+              Object.assign(exts, JSON.parse(`{"${e.id}":"${e.shortName}"}`));
+              if (Object.keys(exts).length == extlngth) resolve();
+            })
+          );
+        });
+      }
+
+      getLength().then(() =>
+        initExtObj().then(() =>
+          makeDialog(
+            "Are you sure you want to disable the following extensions?",
+            Object.values(exts),
+            function () {},
+            function () {
+              let disabledExts = [];
+              Object.keys(exts).forEach((id) => {
+                chrome.management.get(id, (e) => {
+                  if (e.enabled) {
+                    if (id == chrome.runtime.id) return;
+
+                    disabledExts.push(e.shortName);
+                    chrome.management.setEnabled(id, false);
+                  }
+                });
+              });
+
+              setTimeout(() => {
+                if (!disabledExts.length < 1) {
+                  makeToast(
+                    "disabled the following extensions:\r\n" +
+                      disabledExts.join("\r\n"),
+                    disabledExts.length
+                  );
+                  updateExtensionStatus(extlist_element);
+                }
+              }, 250);
             }
-          }, 250);
-        }
+          )
+        )
       );
     };
 
