@@ -117,6 +117,14 @@ function makeDialog(title, msg, oncancel, onconfirm) {
   dialog.showModal();
 }
 
+async function extensionExists(id) {
+  return new Promise((resolve) =>
+    chrome.management.getAll((extensions) =>
+      resolve(extensions.some((ext) => ext.id === id))
+    )
+  );
+}
+
 // if (chrome.fileManagerPrivate) {
 // chrome.fileManagerPrivate.openURL();
 // }
@@ -1099,21 +1107,20 @@ onload = async function x() {
       };
 
     container_extensions.querySelector("#rmv-cmn-blt").onclick = function df() {
-      const bloatIds = {
-        // TODO: put the short names (someone please do it)
-        cgbbbjmgdpnifijconhamggjehlamcif: "name",
-        lfkbbmclnpaihpaajhohhfdjelchkikf: "name",
-        ncbofnhmmfffmcdmbjfaigepkgmjnlne: "name",
-        pohmgobdeajemcifpoldnnhffjnnkhgf: "name",
-        becdplfalooflanipjoblcmpaekkbbhe: "name",
-        feepmdlmhplaojabeoecaobfmibooaid: "name",
-        adkcpkpghahmbopkjchobieckeoaoeem: "name",
-        haldlgldplgnggkjaafhelgiaglafanh: "name",
-        filgpjkdmjinmjbepbpmnfobmjmgimon: "name",
-        kkbmdgjggcdajckdlbngdjonpchpaiea: "name",
-        njdniclgegijdcdliklgieicanpmcngj: "name",
-        hpkdokakjglppeekfeekmebfahadnflp: "name",
-      };
+      const bloatIds = [
+        "cgbbbjmgdpnifijconhamggjehlamcif",
+        "lfkbbmclnpaihpaajhohhfdjelchkikf",
+        "ncbofnhmmfffmcdmbjfaigepkgmjnlne",
+        "pohmgobdeajemcifpoldnnhffjnnkhgf",
+        "becdplfalooflanipjoblcmpaekkbbhe",
+        "feepmdlmhplaojabeoecaobfmibooaid",
+        "adkcpkpghahmbopkjchobieckeoaoeem",
+        "haldlgldplgnggkjaafhelgiaglafanh",
+        "filgpjkdmjinmjbepbpmnfobmjmgimon",
+        "kkbmdgjggcdajckdlbngdjonpchpaiea",
+        "njdniclgegijdcdliklgieicanpmcngj",
+        "hpkdokakjglppeekfeekmebfahadnflp",
+      ];
 
       makeDialog(
         "Are you sure you want to disable the following extensions?",
