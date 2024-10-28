@@ -8,7 +8,7 @@ function swapDivs() {
         return;
     }
 
-    const messages = ["Please sign in", "This content isn't"];
+    const messages = ["Please sign in", "This content isn't", "This content isn’t available."];
     const boxes = document.querySelectorAll('div.h-box');
 
     boxes.forEach(box => {
