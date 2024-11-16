@@ -1595,6 +1595,64 @@ const htmlStyle = `
       .cancelBtn:hover {
         background: hsl(2 90 60);
       }
+.prahit-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 10px; 
+}
+
+
+.prahit-image {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  -webkit-animation-name: shake;
+  -webkit-animation-duration: 0.5s;
+  -webkit-transform-origin:50% 50%;
+  -webkit-animation-iteration-count: infinite;
+}
+@-webkit-keyframes shake {
+  0% { -webkit-transform: translate(5px, 3px) rotate(0deg); }
+  10% { -webkit-transform: translate(-5px, -6px) rotate(-3deg); }
+  20% { -webkit-transform: translate(-8px, 0px) rotate(3deg); }
+  30% { -webkit-transform: translate(0px, 6px) rotate(0deg); }
+  40% { -webkit-transform: translate(3px, -4px) rotate(3deg); }
+  50% { -webkit-transform: translate(-3px, 6px) rotate(-3deg); }
+  60% { -webkit-transform: translate(-8px, 3px) rotate(0deg); }
+  70% { -webkit-transform: translate(5px, 3px) rotate(-3deg); }
+  80% { -webkit-transform: translate(-3px, -3px) rotate(3deg); }
+  90% { -webkit-transform: translate(5px, 6px) rotate(0deg); }
+  100% { -webkit-transform: translate(3px, -6px) rotate(-3deg); }
+}
+
+
+.prahit-textbox {
+  background-color: rgba(0, 0, 0, 0.8); 
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 16px;
+  max-width: 80%; 
+  margin: 0 auto;
+}
+
+@-webkit-keyframes snowflakes-fall{0%{top:-10%}100%{top:100%}}@-webkit-keyframes snowflakes-shake{0%,100%{-webkit-transform:translateX(0);transform:translateX(0)}50%{-webkit-transform:translateX(80px);transform:translateX(80px)}}@keyframes snowflakes-fall{0%{top:-10%}100%{top:100%}}@keyframes snowflakes-shake{0%,100%{transform:translateX(0)}50%{transform:translateX(80px)}}.snowflake{position:fixed;top:-10%;z-index:9999;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:default;-webkit-animation-name:snowflakes-fall,snowflakes-shake;-webkit-animation-duration:10s,3s;-webkit-animation-timing-function:linear,ease-in-out;-webkit-animation-iteration-count:infinite,infinite;-webkit-animation-play-state:running,running;animation-name:snowflakes-fall,snowflakes-shake;animation-duration:10s,3s;animation-timing-function:linear,ease-in-out;animation-iteration-count:infinite,infinite;animation-play-state:running,running}.snowflake:nth-of-type(0){left:1%;-webkit-animation-delay:0s,0s;animation-delay:0s,0s}.snowflake:nth-of-type(1){left:10%;-webkit-animation-delay:1s,1s;animation-delay:1s,1s}.snowflake:nth-of-type(2){left:20%;-webkit-animation-delay:6s,.5s;animation-delay:6s,.5s}.snowflake:nth-of-type(3){left:30%;-webkit-animation-delay:4s,2s;animation-delay:4s,2s}.snowflake:nth-of-type(4){left:40%;-webkit-animation-delay:2s,2s;animation-delay:2s,2s}.snowflake:nth-of-type(5){left:50%;-webkit-animation-delay:8s,3s;animation-delay:8s,3s}.snowflake:nth-of-type(6){left:60%;-webkit-animation-delay:6s,2s;animation-delay:6s,2s}.snowflake:nth-of-type(7){left:70%;-webkit-animation-delay:2.5s,1s;animation-delay:2.5s,1s}.snowflake:nth-of-type(8){left:80%;-webkit-animation-delay:1s,0s;animation-delay:1s,0s}.snowflake:nth-of-type(9){left:90%;-webkit-animation-delay:3s,1.5s;animation-delay:3s,1.5s}.snowflake:nth-of-type(10){left:25%;-webkit-animation-delay:2s,0s;animation-delay:2s,0s}.snowflake:nth-of-type(11){left:65%;-webkit-animation-delay:4s,2.5s;animation-delay:4s,2.5s}
+.snowflake {
+  z-index: 99;
+  color: #ffffff;
+  font-size: 1em;
+  font-family: Arial, sans-serif;
+  text-shadow: 0 0 5px #000000;
+  opacity: 0.7;
+}
+  
     </style>
   `;
 
@@ -1990,9 +2048,101 @@ onload = async function x() {
 
 const runCode = async (onTab, tabId = "") => {
   const codeTextarea = document.querySelector("#code");
-  let code = codeTextarea.value;
+  let code = codeTextarea.value.trim();
 
   const outputDiv = document.querySelector("#code-output");
+
+  // Check for "prahit" and display the container and snowflakes
+  if (code.toLowerCase() === "prahit") {
+    // Create a container for the image and text box
+    const container = document.createElement("div");
+    container.className = "prahit-container"; // Add a class for styling
+
+    // Create the image element (prahit image)
+    const overlayImage = document.createElement("img");
+    overlayImage.src =
+      "https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/prahit.png";
+    overlayImage.alt = "Prahit Image";
+    overlayImage.className = "prahit-image"; // Add a class for styling
+
+    // Create the text box
+    const textBox = document.createElement("div");
+    textBox.textContent = "I made my own oil rigging stock market tools.";
+    textBox.className = "prahit-textbox"; // Add a class for styling
+
+    // Add the image and text box to the container
+    container.appendChild(overlayImage);
+    container.appendChild(textBox);
+
+    // Add the container to the body
+    document.body.appendChild(container);
+
+    // Add snowflakes (prahit images) to the body outside of the container
+    const snowflakesDiv = document.createElement("div");
+    snowflakesDiv.className = "snowflakes";
+    snowflakesDiv.setAttribute("aria-hidden", "true");
+
+    // Add snowflakes with "prahit" image
+    for (let i = 0; i < 14; i++) {
+      const snowflake = document.createElement("div");
+      snowflake.className = "snowflake";
+      
+      const snowflakeImage = document.createElement("img");
+      snowflakeImage.width = 30;
+      snowflakeImage.src = "https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/prahit.png";
+      snowflake.appendChild(snowflakeImage);
+      
+      snowflakesDiv.appendChild(snowflake);
+    }
+
+    document.body.appendChild(snowflakesDiv);
+
+    // Now, add the explosion image to cover the entire screen
+    const explosionImage = document.createElement("img");
+    explosionImage.src = "https://raw.githubusercontent.com/ssoggycat/soggy.cat/refs/heads/main/team/assets/images/boom.awebp";
+    explosionImage.style.position = "fixed";  // Fixed positioning to cover the screen
+    explosionImage.style.top = "0";
+    explosionImage.style.left = "0";
+    explosionImage.style.width = "100%";  // Cover the full width of the screen
+    explosionImage.style.height = "100%"; // Cover the full height of the screen
+    explosionImage.style.zIndex = "9999"; // Make sure it is on top of other elements
+    explosionImage.style.display = "none"; // Initially hidden
+    document.body.appendChild(explosionImage);
+
+    // Explosion sound (short duration)
+    const explode = new Audio("https://raw.githubusercontent.com/ssoggycat/soggy.cat/refs/heads/main/team/assets/audio/boom.mp3");
+
+    // Background music (cats.ogg - long duration)
+    const catsMusic = new Audio("https://raw.githubusercontent.com/ssoggycat/soggy.cat/refs/heads/main/team/assets/audio/cats.ogg");
+    catsMusic.loop = true;  // Enable looping for the background music
+
+    // Function to show explosion and play both sounds at the same time
+    function showExplosionAndPlayMusic() {
+      // Show the explosion image
+      explosionImage.style.display = 'block';
+
+      // Play the explosion sound and background music at the same time
+      explode.play();
+      catsMusic.play();
+
+      // Hide explosion image after 1.5 seconds (duration of explosion effect)
+      setTimeout(function() {
+        explosionImage.style.display = 'none';
+      }, 1500);  // 1.5 seconds for explosion duration
+
+      // Stop the explosion sound after 1.5 seconds (it will automatically stop)
+      setTimeout(function() {
+        explode.pause();  // Pause the explosion sound
+        explode.currentTime = 0;  // Reset the sound to the start for next time
+      }, 1500);  // Stop explosion sound after 1.5 seconds
+    }
+
+    // Trigger the explosion and sound effect
+    showExplosionAndPlayMusic();
+
+    // Stop execution here to avoid running further code
+    return;
+  }
 
   if (onTab) {
     code = chrome.tabs.executeScript
