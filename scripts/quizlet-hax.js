@@ -1,17 +1,18 @@
 // ==UserScript==
-// @name         Quizlet
-// @namespace    http://tampermonkey.net/
-// @version      1.0.4
-// @description  A shig for quizlet live
-// @author       T3RM1N4L
+// @name         Quizlet Hack
+// @version      1.0.5
+// @namespace    https://github.com/jokeri2222
+// @description  A hack for quizlet live
+// @updateURL    https://github.com/jokeri2222/Quizlet-Hack/raw/main/QuizletHack.meta.js
+// @downloadURL  https://github.com/jokeri2222/Quizlet-Hack/raw/main/QuizletHack.user.js
+// @author       jokeri2222; https://github.com/jokeri2222
 // @match        https://quizlet.com/live/*
 // @match        https://quizlet.com/live
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=quizlet.com
 // @grant        none
-// skidded from jokeri2222
 // ==/UserScript==
 
-var Version = '1.0.4'
+var Version = '1.0.5'
 
 var autoAnswer = false;
 var showAnswers = false;
@@ -46,7 +47,7 @@ uiElement.style.zIndex = '9999';
 const handle = document.createElement('div');
 handle.className = 'handle';
 handle.style.fontSize = '1.5vw';
-handle.textContent = 'Quizlet';
+handle.textContent = 'Quizlet Hack!';
 handle.style.color = 'white';
 handle.style.width = '97.5%';
 handle.style.height = '2.5vw';
@@ -261,7 +262,7 @@ input:checked + .slider:before {
 document.head.appendChild(style);
 
 const versionLabel = document.createElement('h1');
-versionLabel.textContent = 'Quizlet V' + Version;
+versionLabel.textContent = 'Quizlet Hack! V' + Version;
 versionLabel.style.fontSize = '2.5vw';
 versionLabel.style.display = 'block';
 versionLabel.style.textAlign = 'center';
@@ -283,8 +284,8 @@ githubLabel.style.color = 'white';
 githubContainer.appendChild(githubLabel);
 
 const githubUrl = document.createElement('a');
-githubUrl.textContent = 'T3RM1N4L';
-githubUrl.href = 'https://github.com/T3M1N4L';
+githubUrl.textContent = 'jokeri2222';
+githubUrl.href = 'https://github.com/jokeri2222';
 githubUrl.target = '_blank';
 githubUrl.style.fontSize = '1.5vw';
 githubUrl.style.margin = '0 1vw';
@@ -404,10 +405,8 @@ function highlight(index) {
     document.querySelectorAll(".a1w6enf9").forEach(function(elem, idx) {
         if (idx == index) {
             elem.style.color = 'rgb(152, 241, 209)'
-            elem.style.backgroundColor = 'rgb(46, 56, 86)'
         } else {
             elem.style.color = 'rgb(218, 69, 67)'
-            elem.style.backgroundColor = 'rgb(10, 9, 45)'
         }
 
     })
