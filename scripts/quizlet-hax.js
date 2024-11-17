@@ -1,15 +1,3 @@
-// ==UserScript==
-// @name         Quizlet Hack
-// @namespace    http://tampermonkey.net/
-// @version      1.0.7
-// @description  A hack for quizlet live
-// @author       jokeri2222
-// @match        https://quizlet.com/live/*
-// @match        https://quizlet.com/live
-// @icon         https://www.google.com/s2/favicons?sz=64&domain=quizlet.com
-// @grant        none
-// ==/UserScript==
-
 var Version = '1.0.7'
 
 var autoAnswer = false;
@@ -35,9 +23,10 @@ uiElement.className = 'floating-ui';
 uiElement.style.position = 'absolute';
 uiElement.style.top = '5%';
 uiElement.style.left = '5%';
-uiElement.style.width = '33vw';
+uiElement.style.width = '20vw';
 uiElement.style.height = 'auto';
-uiElement.style.backgroundColor = '#423ed8';
+uiElement.style.fontFamily = 'monospace';
+uiElement.style.backgroundColor = '#000';
 uiElement.style.borderRadius = '1vw';
 uiElement.style.boxShadow = '0px 0px 10px 0px rgba(0, 0, 0, 0.5)';
 uiElement.style.zIndex = '9999';
@@ -45,15 +34,18 @@ uiElement.style.zIndex = '9999';
 const handle = document.createElement('div');
 handle.className = 'handle';
 handle.style.fontSize = '1.5vw';
-handle.textContent = 'Quizlet Hack!';
+handle.textContent = '// Quizlet';
 handle.style.color = 'white';
 handle.style.width = '97.5%';
 handle.style.height = '2.5vw';
-handle.style.backgroundColor = '#282e3e';
+handle.style.backgroundColor = '#000';
 handle.style.borderRadius = '1vw 1vw 0 0';
 handle.style.cursor = 'grab';
+handle.style.fontWeight = '700';
 handle.style.textAlign = 'left';
 handle.style.paddingLeft = '2.5%';
+handle.style.marginLeft = '2.5%';
+handle.style.marginTop = '2.5%';
 handle.style.lineHeight = '2vw';
 uiElement.appendChild(handle);
 
@@ -65,47 +57,31 @@ closeButton.style.top = '0';
 closeButton.style.right = '0';
 closeButton.style.width = '12.5%';
 closeButton.style.height = '2.5vw';
-closeButton.style.backgroundColor = 'red';
-closeButton.style.color = 'white';
+closeButton.style.color = '#ff386a';
 closeButton.style.borderRadius = '0 1vw 0 0';
 closeButton.style.display = 'flex';
 closeButton.style.justifyContent = 'center';
 closeButton.style.alignItems = 'center';
 closeButton.style.cursor = 'pointer';
+closeButton.style.fontWeight = '500';
 handle.appendChild(closeButton);
 
 const minimizeButton = document.createElement('div');
 minimizeButton.className = 'minimize-button';
 minimizeButton.textContent = '─';
-minimizeButton.style.color = 'white';
+minimizeButton.style.color = '#3b3b3b';
 minimizeButton.style.position = 'absolute';
 minimizeButton.style.top = '0';
 minimizeButton.style.right = '12.5%';
 minimizeButton.style.width = '12.5%';
 minimizeButton.style.height = '2.5vw';
-minimizeButton.style.backgroundColor = 'gray';
+minimizeButton.style.fontWeight = '500';
 minimizeButton.style.borderRadius = '0 0 0 0';
 minimizeButton.style.display = 'flex';
 minimizeButton.style.justifyContent = 'center';
 minimizeButton.style.alignItems = 'center';
 minimizeButton.style.cursor = 'pointer';
 handle.appendChild(minimizeButton);
-
-const header3 = document.createElement('h2');
-header3.textContent = 'ANSWERING';
-header3.style.display = 'block';
-header3.style.margin = '1vw';
-header3.style.textAlign = 'center';
-header3.style.fontSize = '2vw';
-header3.style.color = 'white';
-header3.style.textShadow = `
-  -1px -1px 0 rgb(47, 47, 47),
-  1px -1px 0 rgb(47, 47, 47),
-  -1px 1px 0 rgb(47, 47, 47),
-  1px 1px 0 rgb(47, 47, 47)
-`;
-
-uiElement.appendChild(header3);
 
 const autoAnswerSwitchContainer = document.createElement('div');
 autoAnswerSwitchContainer.className = 'switch-container';
@@ -115,11 +91,13 @@ autoAnswerSwitchContainer.style.justifyContent = 'center';
 uiElement.appendChild(autoAnswerSwitchContainer);
 
 const autoAnswerLabel = document.createElement('span');
-autoAnswerLabel.textContent = 'Auto Answer';
+autoAnswerLabel.textContent = 'Auto';
 autoAnswerLabel.className = 'switch-label';
 autoAnswerLabel.style.fontSize = '1.5vw';
 autoAnswerLabel.style.color = 'white';
-autoAnswerLabel.style.margin = '2.5vw'
+autoAnswerLabel.style.marginTop = '2.5vw';
+autoAnswerLabel.style.marginBottom = '2.5vw';
+autoAnswerLabel.style.marginRight = '2.5vw';
 autoAnswerSwitchContainer.appendChild(autoAnswerLabel);
 
 const autoAnswerSwitch = document.createElement('label');
@@ -145,11 +123,13 @@ showAnswersSwitchContainer.style.justifyContent = 'center';
 uiElement.appendChild(showAnswersSwitchContainer);
 
 const showAnswersLabel = document.createElement('span');
-showAnswersLabel.textContent = 'Show Answers';
+showAnswersLabel.textContent = 'Show';
 showAnswersLabel.className = 'switch-label';
 showAnswersLabel.style.fontSize = '1.5vw';
 showAnswersLabel.style.color = 'white';
-showAnswersLabel.style.margin = '2.5vw'
+showAnswersLabel.style.marginTop = '2.5vw';
+showAnswersLabel.style.marginBottom = '2.5vw';
+showAnswersLabel.style.marginRight = '2.5vw';
 showAnswersSwitchContainer.appendChild(showAnswersLabel);
 
 const showAnswersSwitch = document.createElement('label');
@@ -167,7 +147,6 @@ const showAnswersSlider = document.createElement('span');
 showAnswersSlider.className = 'slider';
 showAnswersSwitch.appendChild(showAnswersSlider);
 
-
 const style = document.createElement('style');
 style.textContent = `
 .custom-slider {
@@ -175,30 +154,28 @@ style.textContent = `
     border: none;
     outline: none;
     cursor: ew-resize;
-    appearance: none; /* Remove default appearance */
-    height: 0; /* Set the height to match the thumb height */
+    appearance: none; 
+    height: 0; 
 }
 
 .custom-slider::-webkit-slider-thumb {
-    appearance: none; /* Remove default appearance */
-    width: 1.75vw; /* Set width of the slider handle */
-    height: 1.75vw; /* Set height of the slider handle */
-    background-color: rgb(47, 47, 47); /* Set handle color to dark gray */
-    border-radius: 50%; /* Create a circle for the handle */
-    cursor: ew-resize; /* Horizontal resize cursor */
-    margin-top: -0.5vw; /* Adjust margin-top to vertically center the thumb */
+    appearance: none; 
+    width: 1.75vw; 
+    height: 1.75vw; 
+    background-color: rgb(47, 47, 47); 
+    border-radius: 50%; 
+    cursor: ew-resize; 
+    margin-top: -0.5vw; 
 }
 
 .custom-slider::-webkit-slider-runnable-track {
-    width: 100%; /* Set track width to 100% */
-    height: 0.75vw; /* Set track height to match the thumb height */
-    background-color: white; /* Set track color to white */
-    cursor: ew-resize; /* Horizontal resize cursor */
-    border-radius: 1vw; /* Set rounded corners for the track */
-    background: linear-gradient(to right, red, yellow, limegreen); /* Gradient from red to yellow to green */
+    width: 100%; 
+    height: 0.75vw; 
+    background-color: white; 
+    cursor: ew-resize; 
+    border-radius: 1vw; 
+    background: linear-gradient(to right, red, yellow, limegreen); 
 }
-
-
 
 :root {
   --switch-width: 5.9vw;
@@ -227,9 +204,9 @@ style.textContent = `
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: red;
+  background-color: #ff386a;
   transition: 0.8s;
-  border-radius: .5vw
+  border-radius: 1vw
 }
 
 .slider:before {
@@ -239,17 +216,17 @@ style.textContent = `
   width: var(--slider-size);
   left: calc(var(--slider-thumb-size) / 3);
   bottom: calc(var(--slider-thumb-size) / 3);
-  background-color: rgb(43, 43, 43);
+  background-color: #fff;
   transition: 0.8s;
-  border-radius: .5vw
+  border-radius: 1vw
 }
 
 input:checked + .slider {
-  background-color: green;
+  background-color: #4aff95;
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px green;
+  box-shadow: 0 0 1px #4aff95;
 }
 
 input:checked + .slider:before {
@@ -258,49 +235,6 @@ input:checked + .slider:before {
 
 `;
 document.head.appendChild(style);
-
-const versionLabel = document.createElement('h1');
-versionLabel.textContent = 'Quizlet Hack! V' + Version;
-versionLabel.style.fontSize = '2.5vw';
-versionLabel.style.display = 'block';
-versionLabel.style.textAlign = 'center';
-versionLabel.style.marginTop = '3.5vw';
-versionLabel.style.marginLeft = '1vw';
-versionLabel.style.marginRight = '1vw';
-versionLabel.style.color = 'white';
-uiElement.appendChild(versionLabel);
-
-const githubContainer = document.createElement('div');
-githubContainer.style.textAlign = 'center';
-githubContainer.style.marginTop = '1vw';
-
-const githubLabel = document.createElement('span');
-githubLabel.textContent = 'GitHub: ';
-githubLabel.style.fontSize = '1.5vw';
-githubLabel.style.margin = '0 1vw';
-githubLabel.style.color = 'white';
-githubContainer.appendChild(githubLabel);
-
-const githubUrl = document.createElement('a');
-githubUrl.textContent = 'jokeri2222';
-githubUrl.href = 'https://github.com/jokeri2222';
-githubUrl.target = '_blank';
-githubUrl.style.fontSize = '1.5vw';
-githubUrl.style.margin = '0 1vw';
-githubUrl.style.color = 'white';
-githubContainer.appendChild(githubUrl);
-
-const githubUrl2 = document.createElement('a');
-githubUrl2.textContent = 'Epic0001';
-githubUrl2.href = 'https://github.com/Epic0001';
-githubUrl2.target = '_blank';
-githubUrl2.style.fontSize = '1.5vw';
-githubUrl2.style.margin = '0 1vw';
-githubUrl2.style.color = 'white';
-githubContainer.appendChild(githubUrl2);
-
-uiElement.appendChild(githubContainer);
-
 closeButton.addEventListener('click', () => {
     document.body.removeChild(uiElement);
     autoAnswer = false;
@@ -313,9 +247,6 @@ minimizeButton.addEventListener('click', () => {
     isMinimized = !isMinimized;
 
     if (isMinimized) {
-        header3.style.display = 'none';
-        versionLabel.style.display = 'none';
-        githubContainer.style.display = 'none';
 
         autoAnswerSwitchContainer.style.display = 'none';
         showAnswersSwitchContainer.style.display = 'none';
@@ -325,10 +256,6 @@ minimizeButton.addEventListener('click', () => {
         closeButton.style.height = '100%';
         minimizeButton.style.height = '100%';
     } else {
-        header3.style.display = 'block';;
-        versionLabel.style.display = 'block';
-        githubContainer.style.display = 'block';
-
         handle.style.height = '2.5vw';
         uiElement.style.height = 'auto';
         closeButton.style.height = '2.5vw';
@@ -363,7 +290,6 @@ document.addEventListener('mousemove', (e) => {
 document.addEventListener('mouseup', () => {
     isDragging = false;
 });
-
 
 function getPair(str) {
     result = undefined
@@ -418,7 +344,7 @@ const originalXhrOpen = XMLHttpRequest.prototype.open;
 const originalXhrSend = XMLHttpRequest.prototype.send;
 
 XMLHttpRequest.prototype.open = function (method, url, ...rest) {
-  this._interceptedUrl = url; // Store the URL for logging
+  this._interceptedUrl = url; 
   return originalXhrOpen.call(this, method, url, ...rest);
 };
 
@@ -458,3 +384,24 @@ setInterval(function() {
         }
     }
 }, 1)
+let isUIVisible = true; 
+
+function toggleUIVisibility() {
+    isUIVisible = !isUIVisible; 
+
+    uiElement.style.display = isUIVisible ? 'block' : 'none';
+
+    if (!isUIVisible) {
+        autoAnswer = false;
+        showAnswers = false;
+
+        if (autoAnswerInput) autoAnswerInput.checked = false;
+        if (showAnswersInput) showAnswersInput.checked = false;
+    }
+}
+
+document.addEventListener('keydown', (event) => {
+    if (event.altKey && event.key.toLowerCase() === 'x') {
+        toggleUIVisibility(); 
+    }
+});
