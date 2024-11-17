@@ -231,7 +231,7 @@
                         return;
                     }
                 }
-                let path = 'manifest.json';
+                let path = '//manifest.json';
                 let is_pdf = false;
                 let injected = payload ?? payload_swamp.toString();
                 if (x === pdfId) {
