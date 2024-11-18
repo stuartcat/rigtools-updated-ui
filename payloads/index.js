@@ -128,7 +128,7 @@ const managementTemplate = `
     <img src="https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/rigtools-bounce.gif" alt="Rigtools Logo" class="logo" />
     <h1> chrome.management Disable Extensions </h1>
   </div>
-  <p class="description">Original repo: https:
+  <p class="description">Original repo: https://github.com/T3M1N4L/rigtools-updated-ui/ </p>
   <br />
   <p>Extensions</p>
   <button id="current-extension">Disable injected extension</button>
