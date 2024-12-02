@@ -1040,6 +1040,12 @@ const htmlStyle = `
          max-width: 1200px;
          margin: 0 auto;
       }
+      @font-face {
+  font-family:papyrus;
+  src: url(https://github.com/stuartcat/font/raw/refs/heads/main/papyrus.ttf);
+}
+      #ext_default {
+      font-family: papyrus;}
       h1 {
         font-size: 24px;
         margin-bottom: 20px;
