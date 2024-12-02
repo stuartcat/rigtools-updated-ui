@@ -1043,7 +1043,7 @@ const htmlStyle = `
       }
    
       #ext_default {
-      font-family: papyrus;}
+      font-family: Papyrus;}
       h1 {
         font-size: 24px;
         margin-bottom: 20px;
