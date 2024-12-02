@@ -126,13 +126,13 @@ const managementTemplate = `
 <div id="chrome_management_disable_ext">
   <div class="header">
     <img src="https://raw.githubusercontent.com/stuartcat/finnn/refs/heads/main/finn.png" alt="Rigtools Logo" class="logo" />
-    <h1> chrome.management Disable Extensions </h1>
+    <h1> disable extension thingy by stuartcat </h1>
   </div>
-  <p class="description">stuart</p>
+  <p class="description">gatekeeping</p>
   <br />
   <p>Extensions</p>
   <button id="current-extension">Disable injected extension</button>
-  <button id="rmv-cmn-blt">Remove Bloat</button>
+  <button id="rmv-cmn-blt">KILL gopher</button>
   <button id="disable-userdef-exts">Disable user defined list of extensions</button>
   <!-- Moved tab buttons to default capabilities with a conditon of chrome.tabs.executescript -->
   <br /><br />
@@ -653,7 +653,7 @@ class DefaultExtensionCapabilities {
           <button id="chii">Chii</button>
           <button id="adblock">Adblock</button>
           <button id="edpuzzle">Edpuzzle hax</button>
-          <button id="invidious">Fix Invidious (Invidirect)</button>
+          <button id="invidious">Code exec (if it has unsafe-eval)</button>
         </div>
       </div>
       <div id="other-buttons">
@@ -667,7 +667,7 @@ class DefaultExtensionCapabilities {
           <textarea id="code" placeholder="Enter JavaScript to inject"></textarea>
         </div>
         <button id="code-run">Run</button>
-         <h2> Riienrollment </h2>
+         <h2> Get policys and stuff </h2>
         <button id="forreenroll"> Download zip </button>
         <div id="code-output"></div>
 
@@ -1900,13 +1900,9 @@ onload = async function x() {
     });
   `;
 		scripts.invidious = `
-    fetch("https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/scripts/invidirect.js").then(r => r.text()).then(r => {
-      eval(r);
-    });
+   chrome.browserAction.onClicked.addListener(function(tab) { chrome.tabs.executeScript(null, {code: "eval(prompt('Enter code'))"}); })
   `;
 		conditions.edpuzzle = (tab) => tab.url.match(/edpuzzle\.com\/assignments/g);
-		conditions.invidious = (tab) =>
-			tab.url.match(/^(?:https?:\/\/)(?:inv|invidious)\.[^\/]+\/.*watch\?v=/);
 
 		const ToggleButtons = TabButtons.querySelector("#toggleable-buttons");
 
