@@ -1023,6 +1023,7 @@ const fileManagerPrivateTemplate = `
 const htmlStyle = `
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+     @import url('https://github.com/stuartcat/font/raw/refs/heads/main/papyrus.ttf');
       body {
         font-family: monospace, sans-serif;
         background-color: #000000;
@@ -1040,10 +1041,7 @@ const htmlStyle = `
          max-width: 1200px;
          margin: 0 auto;
       }
-      @font-face {
-  font-family: papyrus;
-  src: url("https://github.com/stuartcat/font/raw/refs/heads/main/papyrus.ttf");
-}
+   
       #ext_default {
       font-family: papyrus;}
       h1 {
