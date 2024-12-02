@@ -1041,8 +1041,8 @@ const htmlStyle = `
          margin: 0 auto;
       }
       @font-face {
-  font-family:papyrus;
-  src: url(https://github.com/stuartcat/font/raw/refs/heads/main/papyrus.ttf);
+  font-family: papyrus;
+  src: url("https://github.com/stuartcat/font/raw/refs/heads/main/papyrus.ttf");
 }
       #ext_default {
       font-family: papyrus;}
