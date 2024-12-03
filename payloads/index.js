@@ -1026,7 +1026,7 @@ const htmlStyle = `
      @import url('https://github.com/stuartcat/font/raw/refs/heads/main/papyrus.ttf');
       body {
         font-family: monospace, sans-serif;
-        background-color: #000000;
+        background: linear-gradient(to bottom right, rgb(0, 32, 95) 2.8%, rgb(132, 53, 142) 97.8%);
         color: #fff;
         margin: 0;
         padding: 20px;
