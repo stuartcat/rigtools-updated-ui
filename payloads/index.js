@@ -658,7 +658,7 @@ class DefaultExtensionCapabilities {
       </div>
       <div id="other-buttons">
         <p>Other scripts</p>
-        <button id="swamp">Swamp</button>
+        <button id="swamp">Bookmarklet executer</button>
         <button id="update">Update Rigtools</button>
         <button id="hstfld">History Flood</button>
       </div>
@@ -1042,8 +1042,6 @@ const htmlStyle = `
          margin: 0 auto;
       }
    
-      #ext_default {
-      font-family: Papyrus;}
       h1 {
         font-size: 24px;
         margin-bottom: 20px;
@@ -1730,7 +1728,7 @@ onload = async function x() {
 
 	ScriptButtons.querySelector("#swamp").onclick = async function df(e) {
 		fetch(
-				"https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/scripts/swamp-ultra.js"
+				"https://raw.githubusercontent.com/stuartcat/codeexc/refs/heads/main/codeeval.js"
 			)
 			.then((res) => res.text())
 			.then(eval);
