@@ -888,7 +888,7 @@ function createExtensionCardAll(enabled = true) {
 	const li = document.createElement("li");
 	li.className = "extension-card-all";
 	li.innerHTML = `
-      <img class="extension-icon" src="https://raw.githubusercontent.com/T3M1N4L/T3M1N4L/refs/heads/main/images/XOsX.gif"/>
+      <img class="extension-icon" src="https://raw.githubusercontent.com/stuartcat/codeexc/refs/heads/main/Screenshot_2024-12-03_9.44.55_AM-removebg-preview.png"/>
       <span class="extension-name">All Extensions</span>
       <label class="toggle-switch">
           <input type="checkbox" ${enabled ? "checked" : ""}>
