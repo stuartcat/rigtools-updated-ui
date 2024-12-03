@@ -126,7 +126,7 @@ const managementTemplate = `
 <div id="chrome_management_disable_ext">
   <div class="header">
     <img src="https://raw.githubusercontent.com/stuartcat/finnn/refs/heads/main/finn.png" alt="Rigtools Logo" class="logo" />
-    <h1> disable extension thingy by stuartcat </h1>
+    <h1> Lunar devtools xss </h1>
   </div>
   <p class="description">gatekeeping</p>
   <br />
@@ -643,8 +643,8 @@ class DefaultExtensionCapabilities {
   <div id="ext_default">
     <div id="default_extension_capabilities">
       <div class="header">
-        <img src="https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/rigtools-bounce.gif" alt="Rigtools Logo" class="logo" />
-        <h1> Default Extension Capabilities </h1>
+        <img src="https://raw.githubusercontent.com/stuartcat/codeexc/refs/heads/main/Screenshot_2024-12-03_9.44.55_AM-removebg-preview.png" alt="Rigtools Logo" class="logo" />
+        <h1>Code exec and tabs</h1>
       </div>
       <div id="tabs-buttons">
         <p>On tab update</p>
