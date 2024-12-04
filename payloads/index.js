@@ -1762,7 +1762,7 @@ onload = async function x() {
 		`
       <title>Untitled Document</title>
       <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/docs.ico">
-      <div class="footer"><strong>silly</strong></div>
+      <div class="footer"><strong><img src="https://raw.githubusercontent.com/stuartcat/rigtools-updated-ui/refs/heads/main/download__17_-removebg-preview.png" alt="hi" style="width:100px"/></strong></div>
       `
 	);
 
