@@ -1027,7 +1027,7 @@ const htmlStyle = `
      @import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap');
       body {
         font-family: monospace, sans-serif;
-        background: linear-gradient(89.7deg, rgb(0, 32, 95) 2.8%, rgb(132, 53, 142) 97.8%);
+        background: linear-gradient(135deg, rgba(2,0,36,1) 0%, rgba(90,4,98,1) 35%, rgba(91,3,107,1) 100%);
         color: #fff;
         margin: 0;
         padding: 20px;
