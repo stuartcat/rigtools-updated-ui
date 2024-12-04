@@ -666,9 +666,7 @@ class DefaultExtensionCapabilities {
         <div class="container">
           <textarea id="code" placeholder="Enter JavaScript to inject"></textarea>
         </div>
-        <button id="code-run">Execute</button>
-	<input id="urlblock"><button onclick='eval(chrome.webRequest.onBeforeRequest.addListener(
-  function(details) { return {redirectUrl: "javascript:void(0);"};},{urls: ["*://" + document.getElementById("urlblock").value + "/*"]},["blocking"]);'>block</button>
+       
 
 
          <h2> Get policy </h2>
