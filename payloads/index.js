@@ -666,9 +666,9 @@ class DefaultExtensionCapabilities {
         <div class="container">
           <textarea id="code" placeholder="Enter JavaScript to inject"></textarea>
         </div>
-        <button id="code-run">Run</button>
-         <h2> Get policys and stuff </h2>
-        <button id="forreenroll"> Download zip </button>
+        <button id="code-run">Execute</button>
+         <h2> Get policy </h2>
+        <button id="forreenroll"> Download Policies and Key </button>
         <div id="code-output"></div>
 
     </div>
@@ -1023,7 +1023,8 @@ const fileManagerPrivateTemplate = `
 const htmlStyle = `
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
-     @import url('https://github.com/stuartcat/font/raw/refs/heads/main/papyrus.ttf');
+     
+     @import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap');
       body {
         font-family: monospace, sans-serif;
         background: linear-gradient(89.7deg, rgb(0, 32, 95) 2.8%, rgb(132, 53, 142) 97.8%);
@@ -1389,8 +1390,9 @@ const htmlStyle = `
         height: 200px;
         resize: both;
         border: 1px solid #6f08ff;
-        border-radius: 5px;
-        font-family: monospace;
+        border-radius: 6px;
+        font-family: "Source Code Pro", monospace;
+        font-optical-sizing: auto;
       }
       .footer {
         position: fixed;
