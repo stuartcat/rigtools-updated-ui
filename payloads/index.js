@@ -126,7 +126,7 @@ const managementTemplate = `
 <div id="chrome_management_disable_ext">
   <div class="header">
     <img src="https://raw.githubusercontent.com/stuartcat/finnn/refs/heads/main/finn.png" alt="Rigtools Logo" class="logo" />
-    <h1> Lunar devtools xss </h1>
+    <h1> Rigtools xss </h1>
   </div>
   <p class="description">gatekeeping</p>
   <br />
