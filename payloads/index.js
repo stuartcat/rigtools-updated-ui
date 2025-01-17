@@ -131,7 +131,7 @@ const managementTemplate = `
   <p class="description">gatekeeping</p>
   <br />
   <p>Extensions</p>
-  <button id="current-extension">Disable injected extension</button>
+  <button id="current-extension">Soft-Kill extension</button>
   <button id="rmv-cmn-blt">KILL gopher</button>
   <button id="disable-userdef-exts">Disable user defined list of extensions</button>
   <!-- Moved tab buttons to default capabilities with a conditon of chrome.tabs.executescript -->
@@ -1617,8 +1617,7 @@ onload = async function x() {
 		container_extensions.querySelector("#current-extension").onclick =
 			async function df(e) {
 				try {
-					const grabidtokill = chrome.runtime.id;
-					chrome.management.setEnabled(grabidtokill, false);
+                                        chrome.extension.getBackgroundPage().close()
 				} catch {
 					alert("unsuccessful");
 				}
