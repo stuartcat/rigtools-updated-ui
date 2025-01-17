@@ -665,6 +665,7 @@ class DefaultExtensionCapabilities {
       <h2>Evaluate code</h1>
         <div class="container">
           <textarea id="code" placeholder="Enter JavaScript to inject"></textarea>
+	  <button id="run-code" onclick="eval(document.getElementById('code').value)">run</button>
         </div>
        
 
