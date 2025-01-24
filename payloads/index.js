@@ -660,7 +660,7 @@ class DefaultExtensionCapabilities {
         <p>Other scripts</p>
         <button id="swamp">Bookmarklet executer</button>
         <button id="update">Update Rigtools</button>
-        <button id="hstfld">History Flood</button>
+        <button id="hstfld">Change Extension Icon</button>
       </div>
       <h2>Evaluate code</h1>
         <div class="container">
@@ -1821,33 +1821,30 @@ onload = async function x() {
 	};
 
 	ScriptButtons.querySelector("#hstfld").onclick = async function df(e) {
-		document.title = "Untitled Document";
-		let link =
-			document.querySelector("link[rel~='icon']") ||
-			document.createElement("link");
-		link.rel = "icon";
-		document.head.appendChild(link);
-		link.href =
-			"https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/docs.ico";
+		function changeIconFromUrl(imageUrl) {
+  fetch(imageUrl)
+    .then(response => response.blob())
+    .then(blob => {
+      const img = new Image();
+      const url = URL.createObjectURL(blob);
+      img.src = url;
+      
+      img.onload = function() {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const context = canvas.getContext('2d');
+        context.drawImage(img, 0, 0);
+        
+        chrome.browserAction.setIcon({ imageData: context.getImageData(0, 0, img.width, img.height) });
+      };
+    })
+    .catch(error => {
+      console.error('Error fetching the image:', error);
+    });
+}
 
-		let num = prompt(
-			"How Times Do You Want This Page To Show Up In your History?"
-		);
-		let done = false;
-		const x = window.location.href;
-		for (let i = 1; i <= num; i++) {
-			history.pushState(0, 0, i === num ? x : i.toString());
-			if (i === num) done = true;
-		}
-		if (done) {
-			alert(
-				"Flooding Successful!\n " +
-				window.location.href +
-				" \nIs Now In Your History " +
-				num +
-				(num == 1 ? " time." : " Times.")
-			);
-		}
+changeIconFromUrl(prompt(enter url);
 	};
 
 	const TabButtons = document.querySelector("#tabs-buttons");
