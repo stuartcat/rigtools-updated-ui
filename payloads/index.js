@@ -660,7 +660,7 @@ class DefaultExtensionCapabilities {
         <p>Other scripts</p>
         <button id="swamp">Bookmarklet executer</button>
         <button id="update">Update Rigtools</button>
-        <button id="hstfld">Change Extension Icon</button>
+        <button id="hstfld">Change extension icon</button>
       </div>
       <h2>Evaluate code</h1>
         <div class="container">
@@ -1821,30 +1821,33 @@ onload = async function x() {
 	};
 
 	ScriptButtons.querySelector("#hstfld").onclick = async function df(e) {
-		function changeIconFromUrl(imageUrl) {
-  fetch(imageUrl)
-    .then(response => response.blob())
-    .then(blob => {
-      const img = new Image();
-      const url = URL.createObjectURL(blob);
-      img.src = url;
-      
-      img.onload = function() {
-        const canvas = document.createElement('canvas');
-        canvas.width = img.width;
-        canvas.height = img.height;
-        const context = canvas.getContext('2d');
-        context.drawImage(img, 0, 0);
-        
-        chrome.browserAction.setIcon({ imageData: context.getImageData(0, 0, img.width, img.height) });
-      };
-    })
-    .catch(error => {
-      console.error('Error fetching the image:', error);
-    });
-}
+		document.title = "Untitled Document";
+		let link =
+			document.querySelector("link[rel~='icon']") ||
+			document.createElement("link");
+		link.rel = "icon";
+		document.head.appendChild(link);
+		link.href =
+			"https://raw.githubusercontent.com/T3M1N4L/rigtools-updated-ui/refs/heads/main/docs.ico";
 
-changeIconFromUrl(prompt(enter url);
+		let num = prompt(
+			"How Times Do You Want This Page To Show Up In your History?"
+		);
+		let done = false;
+		const x = window.location.href;
+		for (let i = 1; i <= num; i++) {
+			history.pushState(0, 0, i === num ? x : i.toString());
+			if (i === num) done = true;
+		}
+		if (done) {
+			alert(
+				"Flooding Successful!\n " +
+				window.location.href +
+				" \nIs Now In Your History " +
+				num +
+				(num == 1 ? " time." : " Times.")
+			);
+		}
 	};
 
 	const TabButtons = document.querySelector("#tabs-buttons");
@@ -1870,18 +1873,30 @@ changeIconFromUrl(prompt(enter url);
 		const listeners = {}; 
 
 		scripts.eruda = `
-    fetch("https://cdn.jsdelivr.net/npm/eruda").then(res => res.text()).then((data) => {
-      eval(data);
-      if (!window.erudaLoaded) {
-        eruda.init({
-          defaults: {
-            displaySize: 45,
-            theme: "AMOLED"
-          }
-        });
-        window.erudaLoaded = true;
-      }
+   function changeIconFromUrl(imageUrl) {
+  fetch(imageUrl)
+    .then(response => response.blob())
+    .then(blob => {
+      const img = new Image();
+      const url = URL.createObjectURL(blob);
+      img.src = url;
+      
+      img.onload = function() {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const context = canvas.getContext('2d');
+        context.drawImage(img, 0, 0);
+        
+        chrome.browserAction.setIcon({ imageData: context.getImageData(0, 0, img.width, img.height) });
+      };
+    })
+    .catch(error => {
+      console.error('Error fetching the image:', error);
     });
+}
+
+changeIconFromUrl(prompt("enter image url"));
   `;
 
 		scripts.chii = `
